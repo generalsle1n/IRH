@@ -1,4 +1,4 @@
-﻿using IRH.Commands;
+﻿using IRH.Commands.LDAPMonitor;
 using Serilog;
 using Serilog.Core;
 using System.CommandLine;

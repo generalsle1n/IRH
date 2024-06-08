@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace IRH.Commands
+namespace IRH.Commands.LDAPMonitor
 {
     internal class LDAPMonitor
     {
@@ -79,9 +79,12 @@ namespace IRH.Commands
             Command.SetHandler((DomainValue, UsernameValue, PasswordValue, PortValue) =>
             {
                 RegisterLdap(DomainValue, PortValue, UsernameValue, PasswordValue);
+
                 string RootDN = GetDSNRoot();
+                _logger.Information($"Root DN found: {RootDN}");
+
                 CreateMonitor(RootDN);
-                
+
                 //ObjectChanged += new EventHandler<ObjectChangedEventArgs>(notifier_ObjectChanged);
 
                 Console.WriteLine("Waiting for changes...");
@@ -116,54 +119,42 @@ namespace IRH.Commands
 
         private void CreateMonitor(string DN)
         {
-            //_connection.Directory.
-            //SearchRequest request = new SearchRequest(
-            ////"DC=CoolDomain,DC=de", //root the search here
-            //null
-            //"(objectClass=*)",
-            //SearchScope.Subtree,
-            //null
-            ////);
-            ////var filter = 
-            //var request = new SearchRequest(null, filter, SearchScope.Base, null);
-            ////GetWin
-            //var a = _connection.SendRequest(request);
-            ////register our search
-            //request.Controls.Add(new DirectoryNotificationControl());
 
-            //we will send this async and register our callback
-            ////note how we would like to have partial results
-            //IAsyncResult result = _connection.BeginSendRequest(
-            //    request,
-            //    TimeSpan.FromDays(1), //set timeout to a day...
-            //    PartialResultProcessing.ReturnPartialResultsAndNotifyCallback,
-            //    //Notify,
-            //    request
-            //    );
+            SearchRequest Request = new SearchRequest(DN, _ldapMatchAll, SearchScope.Subtree, null);
+
+            _connection.BeginSendRequest(
+                Request,
+                TimeSpan.FromDays(1),
+                PartialResultProcessing.ReturnPartialResultsAndNotifyCallback,
+                ProcessAllObjects,
+                Request
+                );
+
+
 
             //store the hash for disposal later
             //_results.Add(result);
         }
         //    HashSet<IAsyncResult> _results = new HashSet<IAsyncResult>();
 
-        //    private void Notify(IAsyncResult result)
-        //    {
-        //        //since our search is long running, we don't want to use EndSendRequest
-        //        PartialResultsCollection prc = _connection.GetPartialResults(result);
+        private void ProcessAllObjects(IAsyncResult result)
+        {
+            //since our search is long running, we don't want to use EndSendRequest
+            PartialResultsCollection prc = _connection.GetPartialResults(result);
 
-        //        foreach (SearchResultEntry entry in prc)
-        //        {
-        //            OnObjectChanged(new ObjectChangedEventArgs(entry));
-        //        }
-        //    }
+            foreach (SearchResultEntry entry in prc)
+            {
+                //OnObjectChanged(new ObjectChangedEventArgs(entry));
+            }
+        }
 
-        //    private void OnObjectChanged(ObjectChangedEventArgs args)
+        //private void OnObjectChanged(ObjectChangedEventArgs args)
+        //{
+        //    if (ObjectChanged != null)
         //    {
-        //        if (ObjectChanged != null)
-        //        {
-        //            ObjectChanged(this, args);
-        //        }
+        //        ObjectChanged(this, args);
         //    }
+        //}
 
         //    static void notifier_ObjectChanged(object sender, ObjectChangedEventArgs e)
         //    {
