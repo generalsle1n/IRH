@@ -111,20 +111,19 @@ namespace IRH.Commands.LDAPMonitor
             }
         }
 
-        private void ProcessLdapEvent(object sender, LDAPChangeEvent e)
+        private void ProcessLdapEvent(object sender, LDAPChangeEvent Event)
         {
-            Console.WriteLine(e.Result.DistinguishedName);
+            _logger.Information($"Action on {Event.Result.DistinguishedName}");
 
-            foreach (string attrib in e.Result.Attributes.AttributeNames)
+            foreach (string Attribute in Event.Result.Attributes.AttributeNames)
             {
-                foreach (var item in e.Result.Attributes[attrib].GetValues(typeof(string)))
+                foreach (string Value in Event.Result.Attributes[Attribute].GetValues(typeof(string)))
                 {
-                    Console.WriteLine("\t{0}: {1}", attrib, item);
+                    _logger.Information($"| | | {Attribute}:{Value}");
                 }
             }
-            Console.WriteLine();
-            Console.WriteLine("====================");
-            Console.WriteLine();
+
+            _logger.Information("-----------------------------------------");
         }
 
         internal Command CreateCommand(RootCommand RootCommand)
