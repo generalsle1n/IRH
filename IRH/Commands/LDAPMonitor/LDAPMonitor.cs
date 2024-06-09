@@ -1,15 +1,8 @@
 ﻿using Serilog.Core;
-using System;
-using System.Collections.Generic;
 using System.CommandLine;
 using System.DirectoryServices.Protocols;
-using System.Linq;
 using System.Net;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace IRH.Commands.LDAPMonitor
 {
