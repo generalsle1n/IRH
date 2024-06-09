@@ -44,6 +44,89 @@ namespace IRH.Commands.LDAPMonitor
             _logger = Logger;
         }
 
+        private void RegisterLdap(string Server, int Port, string Username, string Password)
+        {
+            LdapDirectoryIdentifier Identifier = new LdapDirectoryIdentifier(Server, Port);
+            NetworkCredential Credential = new NetworkCredential(Username, Password);
+
+            _logger.Debug($"Create Connection to {Server}:{Port} with {Username}");
+            _connection = new LdapConnection(Identifier, Credential);
+            try
+            {
+                _logger.Information($"Try to Conect to {Server}:{Port} with {Username}");
+                _connection.Bind();
+                _logger.Information($"Connected to Server");
+            }
+            catch (LdapException e)
+            {
+                _logger.Fatal($"{e.Message} (Bind Data {Server}:{Port})");
+            }
+            _connection.Bind();
+        }
+
+        private string GetDSNRoot()
+        {
+            SearchRequest Request = new SearchRequest(null, _ldapMatchAll, SearchScope.Base, null);
+            SearchResponse Response = (SearchResponse)_connection.SendRequest(Request);
+            DirectoryAttribute RootDomain = Response.Entries[0].Attributes[_rootDSEAttribute];
+            string DNRoot = (string)RootDomain.GetValues(typeof(string))[0];
+
+            return DNRoot;
+        }
+
+        private void CreateMonitor(string DN)
+        {
+            RegisterLdapEvent(DN);
+
+            _objectChangeHandler += new EventHandler<LDAPChangeEvent>(ProcessLdapEvent);
+
+            Console.WriteLine("Waiting for changes...");
+            Console.WriteLine();
+            Console.ReadLine();
+        }
+
+        private void RegisterLdapEvent(string DN)
+        {
+            SearchRequest Request = new SearchRequest(DN, _ldapMatchAll, SearchScope.Subtree, null);
+            Request.Controls.Add(new DirectoryNotificationControl());
+
+            IAsyncResult Result = _connection.BeginSendRequest(Request, TimeSpan.FromDays(1), PartialResultProcessing.ReturnPartialResultsAndNotifyCallback, LdapEventNotifier, Request);
+        }
+
+        private void LdapEventNotifier(IAsyncResult Result)
+        {
+            PartialResultsCollection ResultCollection = _connection.GetPartialResults(Result);
+
+            foreach (SearchResultEntry Entry in ResultCollection)
+            {
+                LDAPOnChangeObject(new LDAPChangeEvent(Entry));
+            }
+        }
+
+        private void LDAPOnChangeObject(LDAPChangeEvent Args)
+        {
+            if (_objectChangeHandler != null)
+            {
+                _objectChangeHandler(this, Args);
+            }
+        }
+
+        private void ProcessLdapEvent(object sender, LDAPChangeEvent e)
+        {
+            Console.WriteLine(e.Result.DistinguishedName);
+
+            foreach (string attrib in e.Result.Attributes.AttributeNames)
+            {
+                foreach (var item in e.Result.Attributes[attrib].GetValues(typeof(string)))
+                {
+                    Console.WriteLine("\t{0}: {1}", attrib, item);
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("====================");
+            Console.WriteLine();
+        }
+
         internal Command CreateCommand(RootCommand RootCommand)
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
@@ -77,112 +160,11 @@ namespace IRH.Commands.LDAPMonitor
                 _logger.Information($"Root DN found: {RootDN}");
 
                 CreateMonitor(RootDN);
-
-                //ObjectChanged += new EventHandler<ObjectChangedEventArgs>(notifier_ObjectChanged);
-
-                Console.WriteLine("Waiting for changes...");
-                Console.WriteLine();
                 Console.ReadLine();
-                //}
+
             }, Domain, Username, Password, Port);
 
             return Command;
-        }
-
-        //public event EventHandler<ObjectChangedEventArgs> ObjectChanged;
-        private void RegisterLdap(string Server, int Port, string Username, string Password)
-        {
-            LdapDirectoryIdentifier Identifier = new LdapDirectoryIdentifier(Server, Port);
-            NetworkCredential Credential = new NetworkCredential(Username, Password);
-
-            _logger.Debug($"Create Connection to {Server}:{Port} with {Username}");
-            _connection = new LdapConnection(Identifier, Credential);
-            try
-            {
-                _logger.Information($"Try to Conect to {Server}:{Port} with {Username}");
-                _connection.Bind();
-                _logger.Information($"Connected to Server");
-            }
-            catch (LdapException e)
-            {
-                _logger.Fatal($"{e.Message} (Bind Data {Server}:{Port})");
-            }
-            _connection.Bind();
-        }
-
-        private string GetDSNRoot()
-        {
-            SearchRequest Request = new SearchRequest(null, _ldapMatchAll, SearchScope.Base, null);
-            SearchResponse Response = (SearchResponse)_connection.SendRequest(Request);
-            DirectoryAttribute RootDomain = Response.Entries[0].Attributes[_rootDSEAttribute];
-            string DNRoot = (string)RootDomain.GetValues(typeof(string))[0];
-
-            return DNRoot;
-        }
-
-        private void CreateMonitor(string DN)
-        {
-
-            SearchRequest Request = new SearchRequest(DN, _ldapMatchAll, SearchScope.Subtree, null);
-
-            _connection.BeginSendRequest(
-                Request,
-                TimeSpan.FromDays(1),
-                PartialResultProcessing.ReturnPartialResultsAndNotifyCallback,
-                ProcessAllObjects,
-                Request
-                );
-
-
-
-            //store the hash for disposal later
-            //_results.Add(result);
-        }
-        //    HashSet<IAsyncResult> _results = new HashSet<IAsyncResult>();
-
-        private void ProcessAllObjects(IAsyncResult result)
-        {
-            //since our search is long running, we don't want to use EndSendRequest
-            PartialResultsCollection prc = _connection.GetPartialResults(result);
-
-            foreach (SearchResultEntry entry in prc)
-            {
-                //OnObjectChanged(new ObjectChangedEventArgs(entry));
-            }
-        }
-
-        //private void OnObjectChanged(ObjectChangedEventArgs args)
-        //{
-        //    if (ObjectChanged != null)
-        //    {
-        //        ObjectChanged(this, args);
-        //    }
-        //}
-
-        //    static void notifier_ObjectChanged(object sender, ObjectChangedEventArgs e)
-        //    {
-        //        Console.WriteLine(e.Result.DistinguishedName);
-        //        foreach (string attrib in e.Result.Attributes.AttributeNames)
-        //        {
-        //            foreach (var item in e.Result.Attributes[attrib].GetValues(typeof(string)))
-        //            {
-        //                Console.WriteLine("\t{0}: {1}", attrib, item);
-        //            }
-        //        }
-        //        Console.WriteLine();
-        //        Console.WriteLine("====================");
-        //        Console.WriteLine();
-        //    }
-        //}
-
-        private string GetDSNRoot()
-        {
-            SearchRequest Request = new SearchRequest(null, _ldapMatchAll, SearchScope.Base, null);
-            SearchResponse Response = (SearchResponse)_connection.SendRequest(Request);
-            DirectoryAttribute RootDomain = Response.Entries[0].Attributes[_rootDSEAttribute];
-            string DNRoot = (string)RootDomain.GetValues(typeof(string))[0];
-
-            return DNRoot;
         }
     }
 }
