@@ -39,7 +39,6 @@ namespace IRH.Commands.LDAPMonitor
 
         private event EventHandler<LDAPChangeEvent> _objectChangeHandler;
 
-
         internal LDAPMonitor(Logger Logger)
         {
             _logger = Logger;
@@ -109,6 +108,16 @@ namespace IRH.Commands.LDAPMonitor
                 _logger.Fatal($"{e.Message} (Bind Data {Server}:{Port})");
             }
             _connection.Bind();
+        }
+
+        private string GetDSNRoot()
+        {
+            SearchRequest Request = new SearchRequest(null, _ldapMatchAll, SearchScope.Base, null);
+            SearchResponse Response = (SearchResponse)_connection.SendRequest(Request);
+            DirectoryAttribute RootDomain = Response.Entries[0].Attributes[_rootDSEAttribute];
+            string DNRoot = (string)RootDomain.GetValues(typeof(string))[0];
+
+            return DNRoot;
         }
 
         private void CreateMonitor(string DN)
