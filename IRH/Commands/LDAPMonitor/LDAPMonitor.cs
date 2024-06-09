@@ -37,6 +37,7 @@ namespace IRH.Commands.LDAPMonitor
         private readonly Logger _logger;
         private LdapConnection _connection;
 
+        private event EventHandler<LDAPChangeEvent> _objectChangeHandler;
 
 
         internal LDAPMonitor(Logger Logger)
