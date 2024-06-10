@@ -12,7 +12,7 @@ Logger Logger = new LoggerConfiguration()
 RootCommand RootCommand = new RootCommand();
 
 LDAPMonitor LM = new LDAPMonitor(Logger);
-SetupDeployment SD = new SetupDeployment();
+SetupDeployment SD = new SetupDeployment(Logger);
 
 Command LdapMonitor = LM.CreateCommand(RootCommand);
 Command SetupDeployment = SD.CreateCommand(RootCommand);
