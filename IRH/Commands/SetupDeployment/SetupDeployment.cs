@@ -48,6 +48,7 @@ namespace IRH.Commands.SetupDeployment
         {
             _logger = logger;
         }
+
         internal Command CreateCommand(RootCommand RootCommand)
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
