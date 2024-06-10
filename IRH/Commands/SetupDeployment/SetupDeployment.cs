@@ -34,6 +34,7 @@ namespace IRH.Commands.SetupDeployment
         private const string _computerDescription = "The PCs where the binary should be deployed (Can be comma seperated)";
         private const string _computerAlias = "--PC";
         private const bool _computerIsRequired = true;
+        private const string _computerSeperator = ",";
 
         private const string _deploymentTypeName = "-T";
         private const string _deploymentTypeDescription = "The Method to use to connect to the pcs";
@@ -87,6 +88,7 @@ namespace IRH.Commands.SetupDeployment
                 switch (DeploymentTypeValue)
                 {
                     case SetupType.WMISMB:
+                        string[] AllComputer = ComputerValue.Split(",");
 
                         break;
                 }
