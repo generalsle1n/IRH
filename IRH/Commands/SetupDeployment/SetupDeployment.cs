@@ -14,6 +14,12 @@ namespace IRH.Commands.SetupDeployment
         private const string _binaryPathAlias = "--Path";
         private const bool _binaryPathIsRequired = true;
 
+        private const string _binaryParameterName = "-p";
+        private const string _binaryParameterDescription = "Enter the Parameters to deploy";
+        private const string _binaryParameterAlias = "--Parameter";
+        private const bool _binaryParameterIsRequired = true;
+        private const string _binaryParameterDefaultValue = "";
+
         private const string _userName = "-U";
         private const string _userDescription = "Enter the Username to connect";
         private const string _userNameAlias = "--User";
@@ -39,35 +45,41 @@ namespace IRH.Commands.SetupDeployment
             Command Command = new Command(name: _commandName, description: _commandDescription);
 
             Option<string> BinaryPath = new Option<string>(name: _binaryPathName, description: _binaryPathDescription);
+            Option<string> BinaryParameter = new Option<string>(name: _binaryParameterName, description: _binaryParameterDescription);
             Option<string> Username = new Option<string>(name: _userName, description: _userDescription);
             Option<string> Password = new Option<string>(name: _passwordName, description: _passwordDescription);
             Option<string> Computer = new Option<string>(name: _computerName, description: _computerDescription);
             Option<SetupType> DeploymentType = new Option<SetupType>(name: _deploymentTypeName, description: _deploymentTypeDescription);
 
             BinaryPath.AddAlias(_binaryPathAlias);
+            BinaryParameter.AddAlias(_binaryParameterAlias);
             Username.AddAlias(_userNameAlias);
             Password.AddAlias(_passwordNameAlias);
             Computer.AddAlias(_computerNameAlias);
             DeploymentType.AddAlias(_deploymentTypeAlias);
 
             BinaryPath.IsRequired = _binaryPathIsRequired;
+            BinaryParameter.IsRequired = _binaryParameterIsRequired;
             Username.IsRequired = _userIsRequired;
             Password.IsRequired = _passwordIsRequired;
             Computer.IsRequired = _computerIsRequired;
 
+            BinaryParameter.SetDefaultValue(_binaryParameterDefaultValue);
             DeploymentType.SetDefaultValue(_deploymentTypeDefaultValue);
 
             Command.AddOption(BinaryPath);
+            Command.AddOption(BinaryParameter);
             Command.AddOption(Username);
             Command.AddOption(Password);
             Command.AddOption(Computer);
             Command.AddOption(DeploymentType);
 
-            Command.SetHandler((BinaryPathValue, UsernameValue, PasswordValue, ComputerValue, DeploymentTypeValue) =>
+            Command.SetHandler(async (BinaryPathValue, BinaryParameterValue, UsernameValue, PasswordValue, ComputerValue, DeploymentTypeValue) =>
             {
                 
 
             }, BinaryPath, Username, Password, Computer, DeploymentType);
+            }, BinaryPath, BinaryParameter, Username, Password, Computer, DeploymentType);
 
             return Command;
         }
