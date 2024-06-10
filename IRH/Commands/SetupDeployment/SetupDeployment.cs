@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IRH.Commands.SetupDeployment.Types;
+using Serilog.Core;
 using System.CommandLine;
 
 namespace IRH.Commands.SetupDeployment
