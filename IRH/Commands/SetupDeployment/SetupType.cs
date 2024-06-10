@@ -1,4 +1,4 @@
-namespace IRH.Commands.SetupDeployment
+﻿namespace IRH.Commands.SetupDeployment
 {
     internal enum SetupType
     {
