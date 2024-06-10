@@ -15,7 +15,13 @@ namespace IRH.Commands.SetupDeployment.Types
         public string Password { get; set; }
         public Logger Logger { get; set; }
 
-        public bool Install()
+        private const string _wmiNamespace = @"root\cimv2";
+        private const string _wmiProcessClass = "Win32_Process";
+        private const string _wmiProcessMethodName = "Create";
+        private const string _createParameterName = "CommandLine";
+        private const string _wmiProcessIDPropertyName = "ProcessId";
+        private const string _wmiDialect = "WQL";
+        private const int _sleepTimeForWait = 2500;
         {
             //Impersonation a = new Impersonation()
             File.Copy(SourceBinary, @$"\\{DestinationPC}\c$\temp\lol");
