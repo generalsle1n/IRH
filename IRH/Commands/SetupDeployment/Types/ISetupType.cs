@@ -12,6 +12,6 @@ namespace IRH.Commands.SetupDeployment.Types
 
         public Logger Logger { get; set; }
 
-        public bool Install();
+        public void Install();
     }
 }
