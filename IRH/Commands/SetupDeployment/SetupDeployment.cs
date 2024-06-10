@@ -32,7 +32,7 @@ namespace IRH.Commands.SetupDeployment
 
         private const string _computerName = "-C";
         private const string _computerDescription = "The PCs where the binary should be deployed (Can be comma seperated)";
-        private const string _computerNameAlias = "--PC";
+        private const string _computerAlias = "--PC";
         private const bool _computerIsRequired = true;
 
         private const string _deploymentTypeName = "-T";
@@ -55,7 +55,7 @@ namespace IRH.Commands.SetupDeployment
             BinaryParameter.AddAlias(_binaryParameterAlias);
             Username.AddAlias(_userNameAlias);
             Password.AddAlias(_passwordNameAlias);
-            Computer.AddAlias(_computerNameAlias);
+            Computer.AddAlias(_computerAlias);
             DeploymentType.AddAlias(_deploymentTypeAlias);
 
             BinaryPath.IsRequired = _binaryPathIsRequired;
