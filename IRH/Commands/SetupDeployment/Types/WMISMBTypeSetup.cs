@@ -1,10 +1,8 @@
-﻿using Serilog.Core;
+﻿using Microsoft.Management.Infrastructure;
+using Microsoft.Win32.SafeHandles;
+using Serilog.Core;
 using SimpleImpersonation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Principal;
 
 namespace IRH.Commands.SetupDeployment.Types
 {
