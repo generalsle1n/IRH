@@ -89,6 +89,19 @@ namespace IRH.Commands.SetupDeployment
                 {
                     case SetupType.WMISMB:
                         string[] AllComputer = ComputerValue.Split(",");
+                        foreach(string ComputerName in AllComputer)
+                        {
+                            WMISMBTypeSetup Setup = new WMISMBTypeSetup()
+                            {
+                                SourceBinary = BinaryPathValue,
+                                Parameters = BinaryParameterValue,
+                                DestinationPC = ComputerValue,
+                                Username = UsernameValue,
+                                Password = PasswordValue,
+                                Logger = _logger
+                            };
+                            Setup.Install();
+                        }
 
                         break;
                 }
