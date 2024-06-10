@@ -2,7 +2,6 @@
 using System.CommandLine;
 using System.DirectoryServices.Protocols;
 using System.Net;
-using System.Xml.Linq;
 
 namespace IRH.Commands.LDAPMonitor
 {
