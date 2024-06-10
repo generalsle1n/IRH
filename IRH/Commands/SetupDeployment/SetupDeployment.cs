@@ -84,8 +84,12 @@ namespace IRH.Commands.SetupDeployment
             Command.SetHandler(async (BinaryPathValue, BinaryParameterValue, UsernameValue, PasswordValue, ComputerValue, DeploymentTypeValue) =>
             {
                 
+                switch (DeploymentTypeValue)
+                {
+                    case SetupType.WMISMB:
 
-            }, BinaryPath, Username, Password, Computer, DeploymentType);
+                        break;
+                }
             }, BinaryPath, BinaryParameter, Username, Password, Computer, DeploymentType);
 
             return Command;
