@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.DirectoryServices.Protocols;
+﻿using System.DirectoryServices.Protocols;
 
 namespace IRH.Commands.LDAPMonitor
 {
