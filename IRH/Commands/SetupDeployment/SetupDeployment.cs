@@ -40,6 +40,13 @@ namespace IRH.Commands.SetupDeployment
         private const string _deploymentTypeAlias = "--Type";
         private const SetupType _deploymentTypeDefaultValue = SetupType.WinRM;
 
+        private readonly Logger _logger;
+        
+
+        internal SetupDeployment(Logger logger)
+        {
+            _logger = logger;
+        }
         internal Command CreateCommand(RootCommand RootCommand)
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
