@@ -38,7 +38,7 @@ namespace IRH.Commands.SetupDeployment
         private const string _deploymentTypeName = "-T";
         private const string _deploymentTypeDescription = "The Method to use to connect to the pcs";
         private const string _deploymentTypeAlias = "--Type";
-        private const SetupType _deploymentTypeDefaultValue = SetupType.WinRM;
+        private const SetupType _deploymentTypeDefaultValue = SetupType.WMISMB;
 
         private readonly Logger _logger;
         
