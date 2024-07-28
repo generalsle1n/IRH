@@ -1,7 +1,5 @@
 ﻿using Serilog.Core;
 using System.CommandLine;
-using System.DirectoryServices.Protocols;
-using System.Net;
 
 namespace IRH.Commands.LDAPMonitor
 {
@@ -31,7 +29,7 @@ namespace IRH.Commands.LDAPMonitor
 
             Command.SetHandler((GroupValue) =>
             {
-              
+                
 
             }, Group);
 
