@@ -12,11 +12,11 @@ namespace IRH.Commands.LDAPMonitor
         private const string _commandDescription = "Get All Users and there MFA Count and Print";
 
         private const string _filterOnGroup = "-G";
-        private const string _filterOnGroupDescription = "Enter the ID for the Group or multiple seperated by comma";
+        private const string _filterOnGroupDescription = "Enter the ID for the Group or multiple seperated by whitespace";
         private const string _filterOnGroupAlias = "--Group";
 
         private const string _permissionScopes = "-P";
-        private const string _permissionScopesDescription = "Enter the custom permission to access the api";
+        private const string _permissionScopesDescription = "Enter the custom permission to access the api, serpated by whitespace";
         private const string _permissionScopesAlias = "--PermissionScope";
         private string[] _permissionScopesDefaultValue = new string[] { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
 
@@ -46,13 +46,16 @@ namespace IRH.Commands.LDAPMonitor
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
 
-            Option<string> Group = new Option<string>(name: _filterOnGroup, description: _filterOnGroupDescription);
+            Option<string[]> Group = new Option<string[]>(name: _filterOnGroup, description: _filterOnGroupDescription);
             Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
             Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
             Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
             Option<string> ReportType = new Option<string>(name: _reportType, description: _reportTypeDescription);
 
             AppID.IsRequired = _publicAppIDIsRequired;
+
+            Group.AllowMultipleArgumentsPerToken = true;
+            Scopes.AllowMultipleArgumentsPerToken = true;
 
             Group.AddAlias(_filterOnGroupAlias);
             Scopes.AddAlias(_permissionScopesAlias);
