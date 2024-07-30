@@ -1,4 +1,7 @@
-﻿using Serilog.Core;
+﻿using Azure.Identity;
+using IRH.Commands.AzureMFA.Reporting;
+using Microsoft.Graph;
+using Serilog.Core;
 using System.CommandLine;
 
 namespace IRH.Commands.LDAPMonitor
