@@ -82,7 +82,9 @@ namespace IRH.Commands.LDAPMonitor
                     },
                 };
 
-            }, Group);
+                DeviceCodeCredential Credentials = new DeviceCodeCredential(Options);
+                GraphServiceClient Client = new GraphServiceClient(Credentials, ScopesValue);
+            }, Group, Scopes, AppID, TenantID);
 
             return Command;
         }
