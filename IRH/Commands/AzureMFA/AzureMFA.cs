@@ -27,6 +27,11 @@ namespace IRH.Commands.LDAPMonitor
         private const string _publicTenantIDAlias = "--Tenant";
         private const string _publicTenantIDDefaultValue = "common";
 
+        private const string _reportType = "-R";
+        private const string _reportTypeDescription = "How to Report the Data";
+        private const string _reportTypeAlias = "--Report";
+        private const ReportType _reportTypeDefaultValue = ReportType.CLI;
+
         private readonly Logger _logger;
 
         internal AzureMFA(Logger Logger)
@@ -42,6 +47,7 @@ namespace IRH.Commands.LDAPMonitor
             Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
             Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
             Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
+            Option<string> ReportType = new Option<string>(name: _reportType, description: _reportTypeDescription);
 
             AppID.IsRequired = _publicAppIDIsRequired;
 
@@ -49,9 +55,11 @@ namespace IRH.Commands.LDAPMonitor
             Scopes.AddAlias(_permissionScopesAlias);
             AppID.AddAlias(_publicAppIDAlias);
             TenantID.AddAlias(_publicTenantIDAlias);
+            ReportType.AddAlias(_reportTypeAlias);
 
             Scopes.SetDefaultValue(_permissionScopesDefaultValue);
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
+            ReportType.SetDefaultValue(_reportTypeDefaultValue);
                 
             Command.AddOption(Group);
             Command.AddOption(Scopes);
