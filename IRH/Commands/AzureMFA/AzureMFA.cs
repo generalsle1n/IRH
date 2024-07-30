@@ -106,7 +106,7 @@ namespace IRH.Commands.LDAPMonitor
 
                 UserCollectionResponse Users = await GetUsers(Client, GroupValue);
 
-            }, Group, Scopes, AppID, TenantID);
+                List<UserMFA> AllUsers = await GetAllUsersMFA(Client, Users);
                 switch (ReportTypeValue)
                 {
                     case ReportType.CLI:
