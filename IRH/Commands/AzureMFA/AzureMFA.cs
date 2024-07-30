@@ -175,6 +175,52 @@ namespace IRH.Commands.LDAPMonitor
             }
 
             return Result;
+        }
+
+
+        private async Task PrintResult(List<UserMFA> Result, ReportPrintLevel Level)
+        {
+            foreach (UserMFA SingleUser in Result)
+            {
+                _logger.Information($"User: {SingleUser.User.UserPrincipalName} -> Count {SingleUser.AllMFACount})");
+
+                if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                {
+                    foreach (AuthenticationMethod SingleMethod in SingleUser.MFA)
+                    {
+                        _logger.Information($" | {SingleMethod.GetType().ToString().Split(".").Last()}");
+                        if(Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                        {
+                            PropertyInfo[] AllProperties = SingleMethod.GetType().GetProperties();
+                            IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
+
+                            foreach(PropertyInfo StringVal in AllStringVal)
+                            {
+                                string Value = (string)StringVal.GetValue(SingleMethod);
+                                if (Value is not null)
+                                {
+                                    _logger.Information($" | |{StringVal.Name}: {Value}");
+                                }
+                            }
+                            
+                            if(Level == ReportPrintLevel.Hacky)
+                            {
+                                IEnumerable<PropertyInfo> AllNonStringVal = AllProperties.Where(prop => !prop.PropertyType.Name.Equals("String"));
+
+                                foreach (PropertyInfo NonStringVal in AllNonStringVal)
+                                {
+                                    object Value = NonStringVal.GetValue(SingleMethod);
+                                    if (Value is not null)
+                                    { 
+                                        _logger.Information($" | | | {NonStringVal.Name}: {Value.ToString()}");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
     }
