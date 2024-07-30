@@ -107,6 +107,15 @@ namespace IRH.Commands.LDAPMonitor
                 UserCollectionResponse Users = await GetUsers(Client, GroupValue);
 
             }, Group, Scopes, AppID, TenantID);
+                switch (ReportTypeValue)
+                {
+                    case ReportType.CLI:
+                        await PrintResult(AllUsers, PrintLevelValue);
+                        break;
+                    case ReportType.Json:
+                        await ExportToJson(AllUsers);
+                        break;
+                }
 
             }, Group, Scopes, AppID, TenantID, ReportTypeOption, PrintLevel);
 
