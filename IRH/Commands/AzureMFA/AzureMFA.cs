@@ -39,6 +39,11 @@ namespace IRH.Commands.LDAPMonitor
         private const string _reportTypeAlias = "--Report";
         private const ReportType _reportTypeDefaultValue = ReportType.CLI;
 
+        private const string _printLevel = "-PL";
+        private const string _printLevelDescription = "How detailed to be printed";
+        private const string _printLevelAlias = "--PrintLevel";
+        private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
+
         private readonly Logger _logger;
 
         internal AzureMFA(Logger Logger)
@@ -55,6 +60,7 @@ namespace IRH.Commands.LDAPMonitor
             Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
             Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
             Option<string> ReportType = new Option<string>(name: _reportType, description: _reportTypeDescription);
+            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
 
             AppID.IsRequired = _publicAppIDIsRequired;
 
@@ -66,18 +72,21 @@ namespace IRH.Commands.LDAPMonitor
             AppID.AddAlias(_publicAppIDAlias);
             TenantID.AddAlias(_publicTenantIDAlias);
             ReportType.AddAlias(_reportTypeAlias);
+            PrintLevel.AddAlias(_printLevelAlias);
 
             Scopes.SetDefaultValue(_permissionScopesDefaultValue);
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             ReportType.SetDefaultValue(_reportTypeDefaultValue);
+            PrintLevel.SetDefaultValue(_printLevelDefaultValue);
                 
             Command.AddOption(Group);
             Command.AddOption(Scopes);
             Command.AddOption(AppID);
             Command.AddOption(TenantID);
             Command.AddOption(ReportType);
+            Command.AddOption(PrintLevel);
 
-            Command.SetHandler(async (GroupValue, ScopesValue, AppIDValue, TenantIDValue) =>
+            Command.SetHandler(async (GroupValue, ScopesValue, AppIDValue, TenantIDValue, ReportTypeValue, PrintLevelValue) =>
             {
                 DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
                 {
@@ -98,6 +107,8 @@ namespace IRH.Commands.LDAPMonitor
                 await GetUsers(Client, GroupValue);
 
             }, Group, Scopes, AppID, TenantID);
+
+            }, Group, Scopes, AppID, TenantID, ReportTypeOption, PrintLevel);
 
             return Command;
         }
