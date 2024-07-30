@@ -222,6 +222,23 @@ namespace IRH.Commands.LDAPMonitor
             }
         }
 
+        private async Task ExportToJson(List<UserMFA> Result)
+        {
+            _logger.Information("Converting List into Json");
+            string lol = JsonSerializer.Serialize(Result);
+            using(MemoryStream Stream = new MemoryStream())
+            {
+                await JsonSerializer.SerializeAsync(Stream, Result);
+                string FilePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
 
+                using(FileStream FileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    Stream.Position = 0;
+                    await Stream.CopyToAsync(FileStream);
+
+                    _logger.Information($"Result saved to {FilePath}");
+                }
+            }
+        }
     }
 }
