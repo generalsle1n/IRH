@@ -39,12 +39,24 @@ namespace IRH.Commands.LDAPMonitor
             Command Command = new Command(name: _commandName, description: _commandDescription);
 
             Option<string> Group = new Option<string>(name: _filterOnGroup, description: _filterOnGroupDescription);
+            Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
+            Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
+            Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
+
+            AppID.IsRequired = _publicAppIDIsRequired;
 
             Group.AddAlias(_filterOnGroupAlias);
+            Scopes.AddAlias(_permissionScopesAlias);
+            AppID.AddAlias(_publicAppIDAlias);
+            TenantID.AddAlias(_publicTenantIDAlias);
 
-            Command.SetHandler((GroupValue) =>
-            {
+            Scopes.SetDefaultValue(_permissionScopesDefaultValue);
+            TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
                 
+            Command.AddOption(Group);
+            Command.AddOption(Scopes);
+            Command.AddOption(AppID);
+            Command.AddOption(TenantID);
 
             }, Group);
 
