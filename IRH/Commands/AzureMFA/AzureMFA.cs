@@ -65,6 +65,8 @@ namespace IRH.Commands.LDAPMonitor
             Command.AddOption(Scopes);
             Command.AddOption(AppID);
             Command.AddOption(TenantID);
+            Command.AddOption(ReportType);
+
             Command.SetHandler(async (GroupValue, ScopesValue, AppIDValue, TenantIDValue) =>
             {
                 DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
