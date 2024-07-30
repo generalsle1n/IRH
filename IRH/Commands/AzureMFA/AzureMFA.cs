@@ -59,7 +59,7 @@ namespace IRH.Commands.LDAPMonitor
             Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
             Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
             Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
-            Option<string> ReportType = new Option<string>(name: _reportType, description: _reportTypeDescription);
+            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, description: _reportTypeDescription);
             Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
 
             AppID.IsRequired = _publicAppIDIsRequired;
@@ -71,12 +71,12 @@ namespace IRH.Commands.LDAPMonitor
             Scopes.AddAlias(_permissionScopesAlias);
             AppID.AddAlias(_publicAppIDAlias);
             TenantID.AddAlias(_publicTenantIDAlias);
-            ReportType.AddAlias(_reportTypeAlias);
+            ReportTypeOption.AddAlias(_reportTypeAlias);
             PrintLevel.AddAlias(_printLevelAlias);
 
             Scopes.SetDefaultValue(_permissionScopesDefaultValue);
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
-            ReportType.SetDefaultValue(_reportTypeDefaultValue);
+            ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
             PrintLevel.SetDefaultValue(_printLevelDefaultValue);
                 
             Command.AddOption(Group);
