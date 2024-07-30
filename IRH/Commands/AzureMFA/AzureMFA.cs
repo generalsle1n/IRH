@@ -121,15 +121,16 @@ namespace IRH.Commands.LDAPMonitor
                 search.QueryParameters.Expand = new string[] { "memberOf" };
             });
 
-            if(GroupIDs.Length > 0){
+            if (GroupIDs.Length > 0)
+            {
                 _logger.Information("Start on filtering User");
                 int Count = 1;
 
                 UserCollectionResponse CleanUser = new UserCollectionResponse();
                 CleanUser.Value = new List<User>();
-                foreach(User SingleUser in AllUsers.Value)
+                foreach (User SingleUser in AllUsers.Value)
                 {
-                    foreach(DirectoryObject SingleGroup in SingleUser.MemberOf)
+                    foreach (DirectoryObject SingleGroup in SingleUser.MemberOf)
                     {
                         bool Result = GroupIDs.Contains(SingleGroup.Id);
                         if (Result)
@@ -150,6 +151,7 @@ namespace IRH.Commands.LDAPMonitor
                 return AllUsers;
             }
         }
+
         private async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers)
         {
             List<UserMFA> Result = new List<UserMFA>();
