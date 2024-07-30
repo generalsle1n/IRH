@@ -78,7 +78,7 @@ namespace IRH.Commands.LDAPMonitor
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
             PrintLevel.SetDefaultValue(_printLevelDefaultValue);
-                
+
             Command.AddOption(Group);
             Command.AddOption(Scopes);
             Command.AddOption(AppID);
