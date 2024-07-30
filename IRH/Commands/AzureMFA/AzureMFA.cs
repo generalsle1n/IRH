@@ -104,7 +104,7 @@ namespace IRH.Commands.LDAPMonitor
                 DeviceCodeCredential Credentials = new DeviceCodeCredential(Options);
                 GraphServiceClient Client = new GraphServiceClient(Credentials, ScopesValue);
 
-                await GetUsers(Client, GroupValue);
+                UserCollectionResponse Users = await GetUsers(Client, GroupValue);
 
             }, Group, Scopes, AppID, TenantID);
 
