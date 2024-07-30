@@ -65,6 +65,20 @@ namespace IRH.Commands.LDAPMonitor
             Command.AddOption(Scopes);
             Command.AddOption(AppID);
             Command.AddOption(TenantID);
+            Command.SetHandler(async (GroupValue, ScopesValue, AppIDValue, TenantIDValue) =>
+            {
+                DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
+                {
+                    AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
+                    ClientId = AppIDValue,
+                    TenantId = TenantIDValue,
+
+                    DeviceCodeCallback = (code, cancellation) =>
+                    {
+                        Console.WriteLine(code.Message);
+                        return Task.FromResult(0);
+                    },
+                };
 
             }, Group);
 
