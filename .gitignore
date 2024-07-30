@@ -12,6 +12,7 @@
 
 #Custom
 app_id.dat
+launchSettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
