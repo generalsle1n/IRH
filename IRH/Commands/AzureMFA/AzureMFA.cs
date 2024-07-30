@@ -183,11 +183,11 @@ namespace IRH.Commands.LDAPMonitor
 
                 Result.Add(SingleUserResult);
                 _logger.Information($"Process MFA {Count} from {AllUsers.Value.Count}");
+                Count++;
             }
 
             return Result;
         }
-
 
         private async Task PrintResult(List<UserMFA> Result, ReportPrintLevel Level)
         {
