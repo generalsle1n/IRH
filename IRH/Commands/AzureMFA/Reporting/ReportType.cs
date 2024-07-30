@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace IRH.Commands.AzureMFA.Reporting
 {
-    internal class ReportType
+    internal enum ReportType
     {
+        CLI,
+        Json
     }
 }
