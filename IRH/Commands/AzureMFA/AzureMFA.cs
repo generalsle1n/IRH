@@ -150,5 +150,32 @@ namespace IRH.Commands.LDAPMonitor
                 return AllUsers;
             }
         }
+        private async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers)
+        {
+            List<UserMFA> Result = new List<UserMFA>();
+            _logger.Information($"Start getting MFA Methods for {AllUsers.Value.Count} Users");
+
+            int Count = 1;
+
+            foreach (User SingleUser in AllUsers.Value)
+            {
+                AuthenticationMethodCollectionResponse AuthMethods = await Client.Users[SingleUser.Id].Authentication.Methods.GetAsync();
+
+                UserMFA SingleUserResult = new UserMFA()
+                {
+                    User = SingleUser,
+                    MFA = new List<AuthenticationMethod>(),
+                    AllMFACount = AuthMethods.Value.Count
+                };
+
+                SingleUserResult.MFA.AddRange(AuthMethods.Value);
+
+                Result.Add(SingleUserResult);
+                _logger.Information($"Process MFA {Count} from {AllUsers.Value.Count}");
+            }
+
+            return Result;
+
+
     }
 }
