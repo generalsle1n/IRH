@@ -104,10 +104,17 @@ namespace IRH.Commands.Azure.AuditLog
 
             Command.SetHandler(async (ScopesValue, AppIDValue, TenantIDValue, StartDateValue, EndDateValue, ActivitiesValue, WaitTimeValue) =>
             {
+                AzureAuth Auth = new AzureAuth();
                 
-            }, Scopes, AppID, TenantID);
+                //Set Latest Possbile Date on day
+                EndDateValue = EndDateValue.AddDays(1).AddTicks(-1);
+
+                GraphServiceClient Client = Auth.GetClientBeta(AppIDValue, TenantIDValue, ScopesValue);
+                AuditLogQuery CreatedQuery = await CreateQuery(Client, StartDateValue, EndDateValue, ActivitiesValue);
+                await WaitOnQuery(Client, CreatedQuery, WaitTimeValue);
 
             }, Scopes, AppID, TenantID, StartDate,EndDate, Activities, WaitTime);
+
             return Command;
         }
     }
