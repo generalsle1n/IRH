@@ -88,21 +88,9 @@ namespace IRH.Commands.Azure.MFA
 
             Command.SetHandler(async (GroupValue, ScopesValue, AppIDValue, TenantIDValue, ReportTypeValue, PrintLevelValue) =>
             {
-                DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
-                {
-                    AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
-                    ClientId = AppIDValue,
-                    TenantId = TenantIDValue,
+                AzureAuth Auth = new AzureAuth();
 
-                    DeviceCodeCallback = (code, cancellation) =>
-                    {
-                        Console.WriteLine(code.Message);
-                        return Task.FromResult(0);
-                    },
-                };
-
-                DeviceCodeCredential Credentials = new DeviceCodeCredential(Options);
-                GraphServiceClient Client = new GraphServiceClient(Credentials, ScopesValue);
+                GraphServiceClient Client = Auth.GetClient(AppIDValue, TenantIDValue, ScopesValue);
 
                 UserCollectionResponse Users = await GetUsers(Client, GroupValue);
 
