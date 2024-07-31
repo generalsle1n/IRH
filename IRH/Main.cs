@@ -1,4 +1,5 @@
-﻿using IRH.Commands.LDAPMonitor;
+﻿using IRH.Commands.Azure.MFA;
+using IRH.Commands.LDAPMonitor;
 using IRH.Commands.SetupDeployment;
 using Serilog;
 using Serilog.Core;
