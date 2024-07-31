@@ -1,4 +1,7 @@
-﻿using Serilog.Core;
+﻿using IRH.Commands.AzureMFA.Reporting;
+using Microsoft.Graph.Beta;
+using Microsoft.Graph.Beta.Models.Security;
+using Serilog.Core;
 using System.CommandLine;
 
 namespace IRH.Commands.Azure.AuditLog
