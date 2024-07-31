@@ -5,8 +5,8 @@ namespace IRH.Commands.Azure.AuditLog
 {
     internal class AzureAuditLog
     {
-        private const string _commandName = "-AAudit";
-        private const string _commandDescription = "Get All Audit Logs";
+        private const string _commandName = "-ARules";
+        private const string _commandDescription = "Get All Audit Logs for new TransportRules or Inboxrules";
 
         private const string _permissionScopes = "-P";
         private const string _permissionScopesDescription = "Enter the custom permission to access the api, serpated by whitespace";
