@@ -69,27 +69,45 @@ namespace IRH.Commands.Azure.AuditLog
             Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
             Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
             Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
+            Option<DateTime> StartDate = new Option<DateTime>(name: _startDate, description: _startDateDescription);
+            Option<DateTime> EndDate = new Option<DateTime>(name: _endDate, description: _endDateDescription);
+            Option<string[]> Activities = new Option<string[]>(name: _defaultActivities, description: _defaultActivitiesDescription);
+            Option<int> WaitTime = new Option<int>(name: _waitQueryTime, description: _waitQueryTimeDescription);
 
             AppID.IsRequired = _publicAppIDIsRequired;
+            StartDate.IsRequired = _startDateIsRequired;
+            EndDate.IsRequired = _endDateIsRequired;
 
             Scopes.AllowMultipleArgumentsPerToken = true;
+            Activities.AllowMultipleArgumentsPerToken = true;
 
             Scopes.AddAlias(_permissionScopesAlias);
             AppID.AddAlias(_publicAppIDAlias);
             TenantID.AddAlias(_publicTenantIDAlias);
+            StartDate.AddAlias(_startDateAlias);
+            EndDate.AddAlias(_endDateAlias);
+            Activities.AddAlias(_defaultActivitiesAlias);
+            WaitTime.AddAlias(_waitQueryTimeAlias);
 
             Scopes.SetDefaultValue(_permissionScopesDefaultValue);
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
+            Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
+            WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
 
             Command.AddOption(Scopes);
             Command.AddOption(AppID);
             Command.AddOption(TenantID);
+            Command.AddOption(StartDate);
+            Command.AddOption(EndDate);
+            Command.AddOption(Activities);
+            Command.AddOption(WaitTime);
 
-            Command.SetHandler(async (ScopesValue, AppIDValue, TenantIDValue) =>
+            Command.SetHandler(async (ScopesValue, AppIDValue, TenantIDValue, StartDateValue, EndDateValue, ActivitiesValue, WaitTimeValue) =>
             {
                 
             }, Scopes, AppID, TenantID);
 
+            }, Scopes, AppID, TenantID, StartDate,EndDate, Activities, WaitTime);
             return Command;
         }
     }
