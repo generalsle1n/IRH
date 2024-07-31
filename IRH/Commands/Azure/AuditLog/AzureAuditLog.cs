@@ -117,5 +117,35 @@ namespace IRH.Commands.Azure.AuditLog
 
             return Command;
         }
+
+        private async Task<AuditLogQuery> CreateQuery(GraphServiceClient Client, DateTime Start, DateTime End, string[] Activities)
+        {
+            Guid Id = Guid.NewGuid();
+
+            AuditLogQuery Query = new AuditLogQuery()
+            {
+                FilterStartDateTime = Start,
+                FilterEndDateTime = End,
+                OperationFilters = Activities.ToList()
+            };
+            Query.DisplayName = $"Created by IRH_Scanner {Id}";
+            
+            _logger.Information($"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id}");
+
+            AuditLogQuery Processed = await Client.Security.AuditLog.Queries.PostAsync(Query);
+            return Processed;
+        }
+
+        private async Task WaitOnQuery(GraphServiceClient Client, AuditLogQuery Query, int WaitTime)
+        {
+            _logger.Information($"Start for Waiting Query (This can take some minutes): {Query.DisplayName}");
+            
+            while (Query.Status == AuditLogQueryStatus.NotStarted || Query.Status == AuditLogQueryStatus.Running )
+            {
+                _logger.Information($"Query not finished, current State: {Query.Status}");
+                await Task.Delay(WaitTime * _timeMultiplyer);
+                Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync();
+            }
+        }
     }
 }
