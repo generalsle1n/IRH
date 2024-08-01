@@ -135,15 +135,15 @@ namespace IRH.Commands.Azure.AuditLog
                     );
 
                 AuditLogQuery CreatedQuery = await CreateQuery(
-                    Client, 
+                    Client,
                     Parser.GetValueForOption<DateTime>(StartDate),
-                    EndDateValue, 
+                    EndDateValue,
                     Parser.GetValueForOption<string[]>(Activities)
                     );
 
                 CreatedQuery = await WaitOnQuery(
-                    Client, 
-                    CreatedQuery, 
+                    Client,
+                    CreatedQuery,
                     Parser.GetValueForOption<int>(WaitTime)
                     );
 
@@ -174,7 +174,7 @@ namespace IRH.Commands.Azure.AuditLog
                 OperationFilters = Activities.ToList()
             };
             Query.DisplayName = $"Created by IRH_Scanner {Id}";
-            
+
             _logger.Information($"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id}");
 
             AuditLogQuery Processed = await Client.Security.AuditLog.Queries.PostAsync(Query);
@@ -184,7 +184,7 @@ namespace IRH.Commands.Azure.AuditLog
         private async Task<AuditLogQuery> WaitOnQuery(GraphServiceClient Client, AuditLogQuery Query, int WaitTime)
         {
             _logger.Information($"Start for Waiting Query (This can take some minutes): {Query.DisplayName}");
-            
+
             while (Query.Status == AuditLogQueryStatus.NotStarted || Query.Status == AuditLogQueryStatus.Running)
             {
                 _logger.Information($"Query not finished, current State: {Query.Status}");
@@ -293,7 +293,7 @@ namespace IRH.Commands.Azure.AuditLog
                     await Stream.CopyToAsync(FileStream);
 
                     _logger.Information($"Result saved to {FilePath}");
-        }
+                }
             }
         }
     }
