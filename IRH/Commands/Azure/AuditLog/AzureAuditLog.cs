@@ -178,6 +178,11 @@ namespace IRH.Commands.Azure.AuditLog
                 _logger.Information($"Query not finished, current State: {Query.Status}");
                 await Task.Delay(WaitTime * _timeMultiplyer);
                 Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync();
+        private async Task<AuditLogRecordCollectionResponse> GetResultFromQuery(GraphServiceClient Client, AuditLogQuery Query)
+        {
+            return await Client.Security.AuditLog.Queries[Query.Id].Records.GetAsync();
+        }
+
         private async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level)
         {
             foreach (AuditLogRecord SingleRecord in Result.Value)
