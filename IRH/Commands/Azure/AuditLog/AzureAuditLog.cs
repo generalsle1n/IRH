@@ -76,6 +76,8 @@ namespace IRH.Commands.Azure.AuditLog
             Option<DateTime> EndDate = new Option<DateTime>(name: _endDate, description: _endDateDescription);
             Option<string[]> Activities = new Option<string[]>(name: _defaultActivities, description: _defaultActivitiesDescription);
             Option<int> WaitTime = new Option<int>(name: _waitQueryTime, description: _waitQueryTimeDescription);
+            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, description: _reportTypeDescription);
+            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
 
             AppID.IsRequired = _publicAppIDIsRequired;
             StartDate.IsRequired = _startDateIsRequired;
@@ -91,11 +93,15 @@ namespace IRH.Commands.Azure.AuditLog
             EndDate.AddAlias(_endDateAlias);
             Activities.AddAlias(_defaultActivitiesAlias);
             WaitTime.AddAlias(_waitQueryTimeAlias);
+            ReportTypeOption.AddAlias(_reportTypeAlias);
+            PrintLevel.AddAlias(_printLevelAlias);
 
             Scopes.SetDefaultValue(_permissionScopesDefaultValue);
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
             WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
+            ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
+            PrintLevel.SetDefaultValue(_printLevelDefaultValue);
 
             Command.AddOption(Scopes);
             Command.AddOption(AppID);
@@ -104,6 +110,8 @@ namespace IRH.Commands.Azure.AuditLog
             Command.AddOption(EndDate);
             Command.AddOption(Activities);
             Command.AddOption(WaitTime);
+            Command.AddOption(ReportTypeOption);
+            Command.AddOption(PrintLevel);
 
             Command.SetHandler(async (ScopesValue, AppIDValue, TenantIDValue, StartDateValue, EndDateValue, ActivitiesValue, WaitTimeValue) =>
             {
