@@ -8,7 +8,7 @@ using System.CommandLine;
 using System.Reflection;
 using System.Text.Json;
 
-namespace IRH.Commands.LDAPMonitor
+namespace IRH.Commands.Azure.MFA
 {
     internal class AzureMFA
     {
@@ -88,21 +88,9 @@ namespace IRH.Commands.LDAPMonitor
 
             Command.SetHandler(async (GroupValue, ScopesValue, AppIDValue, TenantIDValue, ReportTypeValue, PrintLevelValue) =>
             {
-                DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
-                {
-                    AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
-                    ClientId = AppIDValue,
-                    TenantId = TenantIDValue,
+                AzureAuth Auth = new AzureAuth();
 
-                    DeviceCodeCallback = (code, cancellation) =>
-                    {
-                        Console.WriteLine(code.Message);
-                        return Task.FromResult(0);
-                    },
-                };
-
-                DeviceCodeCredential Credentials = new DeviceCodeCredential(Options);
-                GraphServiceClient Client = new GraphServiceClient(Credentials, ScopesValue);
+                GraphServiceClient Client = Auth.GetClient(AppIDValue, TenantIDValue, ScopesValue);
 
                 UserCollectionResponse Users = await GetUsers(Client, GroupValue);
 
@@ -200,12 +188,12 @@ namespace IRH.Commands.LDAPMonitor
                     foreach (AuthenticationMethod SingleMethod in SingleUser.MFA)
                     {
                         _logger.Information($" | {SingleMethod.GetType().ToString().Split(".").Last()}");
-                        if(Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                        if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                         {
                             PropertyInfo[] AllProperties = SingleMethod.GetType().GetProperties();
                             IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
 
-                            foreach(PropertyInfo StringVal in AllStringVal)
+                            foreach (PropertyInfo StringVal in AllStringVal)
                             {
                                 string Value = (string)StringVal.GetValue(SingleMethod);
                                 if (Value is not null)
@@ -213,8 +201,8 @@ namespace IRH.Commands.LDAPMonitor
                                     _logger.Information($" | |{StringVal.Name}: {Value}");
                                 }
                             }
-                            
-                            if(Level == ReportPrintLevel.Hacky)
+
+                            if (Level == ReportPrintLevel.Hacky)
                             {
                                 IEnumerable<PropertyInfo> AllNonStringVal = AllProperties.Where(prop => !prop.PropertyType.Name.Equals("String"));
 
@@ -222,7 +210,7 @@ namespace IRH.Commands.LDAPMonitor
                                 {
                                     object Value = NonStringVal.GetValue(SingleMethod);
                                     if (Value is not null)
-                                    { 
+                                    {
                                         _logger.Information($" | | | {NonStringVal.Name}: {Value.ToString()}");
                                     }
                                 }
@@ -236,13 +224,12 @@ namespace IRH.Commands.LDAPMonitor
         private async Task ExportToJson(List<UserMFA> Result)
         {
             _logger.Information("Converting List into Json");
-            string lol = JsonSerializer.Serialize(Result);
-            using(MemoryStream Stream = new MemoryStream())
+            using (MemoryStream Stream = new MemoryStream())
             {
                 await JsonSerializer.SerializeAsync(Stream, Result);
                 string FilePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
 
-                using(FileStream FileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (FileStream FileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     Stream.Position = 0;
                     await Stream.CopyToAsync(FileStream);
