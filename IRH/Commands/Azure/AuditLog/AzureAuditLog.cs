@@ -63,6 +63,7 @@ namespace IRH.Commands.Azure.AuditLog
         private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
 
         private const int _timeMultiplyer = 1000;
+        private const string _methodToStringName = "ToString";
 
         private readonly Logger _logger;
 
@@ -177,6 +178,21 @@ namespace IRH.Commands.Azure.AuditLog
                 _logger.Information($"Query not finished, current State: {Query.Status}");
                 await Task.Delay(WaitTime * _timeMultiplyer);
                 Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync();
+        private bool TestIfToStringIsOverwritten(Type Typename)
+        {
+            bool Result = false;
+            try
+            {
+                MethodInfo Info = Typename.GetMethod(_methodToStringName);
+            }
+            catch (AmbiguousMatchException Exception)
+            {
+                Result = true;
+            }
+
+            return Result;
+        }
+        }
             }
         }
     }
