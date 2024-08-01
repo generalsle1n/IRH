@@ -178,6 +178,58 @@ namespace IRH.Commands.Azure.AuditLog
                 _logger.Information($"Query not finished, current State: {Query.Status}");
                 await Task.Delay(WaitTime * _timeMultiplyer);
                 Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync();
+        private async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level)
+        {
+            foreach (AuditLogRecord SingleRecord in Result.Value)
+            {
+                _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
+                if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                {
+                    PropertyInfo[] AllProperties = SingleRecord.GetType().GetProperties();
+                    IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
+
+                    foreach (PropertyInfo StringVal in AllStringVal)
+                    {
+                        string Value = (string)StringVal.GetValue(SingleRecord);
+                        _logger.Information($" | {StringVal.Name} -> {Value}");
+                    }
+                    if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                    {
+                        IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => TestIfToStringIsOverwritten(filter.Value.GetType()));
+
+                        foreach (KeyValuePair<string, object> SingleKey in FilterResult)
+                        {
+                            _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
+                        }
+                        
+                        if(Level == ReportPrintLevel.Hacky)
+                        {
+                            FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
+                            foreach (KeyValuePair<string, object> SingleKey in FilterResult)
+                            {
+                                if (SingleKey.Value is UntypedObject)
+                                {
+                                    List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUnTypedObject(SingleKey.Value as UntypedObject);
+                                    foreach(KeyValuePair<string,string> SinglePair in ExtractedResult)
+                                    {
+                                        _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
+                                    }
+                                }
+                                else if (SingleKey.Value is UntypedArray)
+                                {
+                                    List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedArray(SingleKey.Value as UntypedArray);
+                                    foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
+                                    {
+                                        _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private bool TestIfToStringIsOverwritten(Type Typename)
         {
             bool Result = false;
