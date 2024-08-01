@@ -224,7 +224,6 @@ namespace IRH.Commands.Azure.MFA
         private async Task ExportToJson(List<UserMFA> Result)
         {
             _logger.Information("Converting List into Json");
-            string lol = JsonSerializer.Serialize(Result);
             using (MemoryStream Stream = new MemoryStream())
             {
                 await JsonSerializer.SerializeAsync(Stream, Result);
