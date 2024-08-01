@@ -122,30 +122,42 @@ namespace IRH.Commands.Azure.AuditLog
 
             Command.SetHandler(async (Context) =>
             {
+                ParseResult Parser = Context.ParseResult;
                 AzureAuth Auth = new AzureAuth();
 
                 //Set Latest Possbile Date on day
-                DateTime EndDateValue = Context.ParseResult.GetValueForOption<DateTime>(EndDate).AddDays(1).AddTicks(-1);
+                DateTime EndDateValue = Parser.GetValueForOption<DateTime>(EndDate).AddDays(1).AddTicks(-1);
 
                 GraphServiceClient Client = Auth.GetClientBeta(
-                    Context.ParseResult.GetValueForOption<string>(AppID), 
-                    Context.ParseResult.GetValueForOption<string>(TenantID), 
-                    Context.ParseResult.GetValueForOption<string[]>(Scopes)
+                    Parser.GetValueForOption<string>(AppID),
+                    Parser.GetValueForOption<string>(TenantID),
+                    Parser.GetValueForOption<string[]>(Scopes)
                     );
 
                 AuditLogQuery CreatedQuery = await CreateQuery(
                     Client, 
-                    Context.ParseResult.GetValueForOption<DateTime>(StartDate), 
+                    Parser.GetValueForOption<DateTime>(StartDate),
                     EndDateValue, 
-                    Context.ParseResult.GetValueForOption<string[]>(Activities)
+                    Parser.GetValueForOption<string[]>(Activities)
                     );
 
-                await WaitOnQuery(
+                CreatedQuery = await WaitOnQuery(
                     Client, 
                     CreatedQuery, 
-                    Context.ParseResult.GetValueForOption<int>(WaitTime)
+                    Parser.GetValueForOption<int>(WaitTime)
                     );
 
+                AuditLogRecordCollectionResponse Result = await GetResultFromQuery(Client, CreatedQuery);
+                
+                switch (Parser.GetValueForOption<ReportType>(ReportTypeOption))
+                {
+                    case ReportType.CLI:
+                        await PrintResult(Result, Parser.GetValueForOption<ReportPrintLevel>(PrintLevel));
+                        break;
+                    case ReportType.Json:
+                        await ExportToJson(Result);
+                        break;
+                }
             });
 
             return Command;
