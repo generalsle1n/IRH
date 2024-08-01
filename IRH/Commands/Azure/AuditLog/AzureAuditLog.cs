@@ -181,15 +181,21 @@ namespace IRH.Commands.Azure.AuditLog
             return Processed;
         }
 
-        private async Task WaitOnQuery(GraphServiceClient Client, AuditLogQuery Query, int WaitTime)
+        private async Task<AuditLogQuery> WaitOnQuery(GraphServiceClient Client, AuditLogQuery Query, int WaitTime)
         {
             _logger.Information($"Start for Waiting Query (This can take some minutes): {Query.DisplayName}");
             
-            while (Query.Status == AuditLogQueryStatus.NotStarted || Query.Status == AuditLogQueryStatus.Running )
+            while (Query.Status == AuditLogQueryStatus.NotStarted || Query.Status == AuditLogQueryStatus.Running)
             {
                 _logger.Information($"Query not finished, current State: {Query.Status}");
                 await Task.Delay(WaitTime * _timeMultiplyer);
-                Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync();
+                Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync(a => a.QueryParameters.Expand = new string[] { "*" });
+            }
+
+            _logger.Information($"Query finished: {Query.DisplayName}");
+            return Query;
+        }
+
         private async Task<AuditLogRecordCollectionResponse> GetResultFromQuery(GraphServiceClient Client, AuditLogQuery Query)
         {
             return await Client.Security.AuditLog.Queries[Query.Id].Records.GetAsync();
