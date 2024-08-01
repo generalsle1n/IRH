@@ -192,6 +192,32 @@ namespace IRH.Commands.Azure.AuditLog
 
             return Result;
         }
+
+        private async Task ExportToJson(AuditLogRecordCollectionResponse Result)
+        {
+            _logger.Information("Converting List into Json");
+            List<AuditRecord> GeneratedResults = new List<AuditRecord>();
+
+            foreach (var ResultRecord in Result.Value)
+            {
+                GeneratedResults.Add(new AuditRecord
+                {
+                    Record = ResultRecord,
+                    ExtensionData = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(ResultRecord)
+                });
+            }
+
+            using (MemoryStream Stream = new MemoryStream())
+            {
+                await JsonSerializer.SerializeAsync(Stream, GeneratedResults);
+                string FilePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+
+                using (FileStream FileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    Stream.Position = 0;
+                    await Stream.CopyToAsync(FileStream);
+
+                    _logger.Information($"Result saved to {FilePath}");
         }
             }
         }
