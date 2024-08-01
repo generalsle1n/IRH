@@ -116,7 +116,7 @@ namespace IRH.Commands.Azure.AuditLog
             Command.SetHandler(async (Context) =>
             {
                 AzureAuth Auth = new AzureAuth();
-                
+
                 //Set Latest Possbile Date on day
                 DateTime EndDateValue = Context.ParseResult.GetValueForOption<DateTime>(EndDate).AddDays(1).AddTicks(-1);
 
