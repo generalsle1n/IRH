@@ -1,8 +1,14 @@
-﻿using IRH.Commands.AzureMFA.Reporting;
+﻿using IRH.Commands.Azure.Helper;
+using IRH.Commands.Azure.Reporting.Model;
+using IRH.Commands.AzureMFA.Reporting;
 using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
+using Microsoft.Kiota.Abstractions.Serialization;
 using Serilog.Core;
 using System.CommandLine;
+using System.CommandLine.Parsing;
+using System.Reflection;
+using System.Text.Json;
 
 namespace IRH.Commands.Azure.AuditLog
 {
