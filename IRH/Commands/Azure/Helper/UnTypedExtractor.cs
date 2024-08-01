@@ -8,6 +8,27 @@ namespace IRH.Commands.Azure.Helper
     {
 
         private const string _untypedStringValueProperty = "_value";
+
+        internal static async Task<List<KeyValuePair<string, string>>> ExtractUntypedDataFromAuditLogRecord(AuditLogRecord Record)
+        {
+            IEnumerable<KeyValuePair<string,object>> Types = Record.AuditData.AdditionalData.Where(type => type.Value is UntypedArray || type.Value is UntypedObject);
+            List<KeyValuePair<string, string>> Result = new List<KeyValuePair<string, string>>();
+
+            foreach (KeyValuePair<string, object> SingleType in Types)
+            {
+                if (SingleType.Value is UntypedArray)
+                {
+                    Result.AddRange(await ExtractUntypedArray(SingleType.Value as UntypedArray));
+                }
+                else if(SingleType.Value is UntypedObject)
+                {
+                    Result.AddRange(await ExtractUnTypedObject(SingleType.Value as UntypedObject));
+                }
+            }
+
+            return Result;
+        }
+
         internal static async Task<List<KeyValuePair<string, string>>> ExtractUntypedArray(UntypedArray Array)
         {
             IEnumerable<UntypedNode> Values = Array.GetValue();
