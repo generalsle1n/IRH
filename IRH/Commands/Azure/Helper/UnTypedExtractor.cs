@@ -1,10 +1,6 @@
-﻿using Microsoft.Kiota.Abstractions.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Graph.Beta.Models.Security;
+using Microsoft.Kiota.Abstractions.Serialization;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IRH.Commands.Azure.Helper
 {
