@@ -113,18 +113,33 @@ namespace IRH.Commands.Azure.AuditLog
             Command.AddOption(ReportTypeOption);
             Command.AddOption(PrintLevel);
 
-            Command.SetHandler(async (ScopesValue, AppIDValue, TenantIDValue, StartDateValue, EndDateValue, ActivitiesValue, WaitTimeValue) =>
+            Command.SetHandler(async (Context) =>
             {
                 AzureAuth Auth = new AzureAuth();
                 
                 //Set Latest Possbile Date on day
-                EndDateValue = EndDateValue.AddDays(1).AddTicks(-1);
+                DateTime EndDateValue = Context.ParseResult.GetValueForOption<DateTime>(EndDate).AddDays(1).AddTicks(-1);
 
-                GraphServiceClient Client = Auth.GetClientBeta(AppIDValue, TenantIDValue, ScopesValue);
-                AuditLogQuery CreatedQuery = await CreateQuery(Client, StartDateValue, EndDateValue, ActivitiesValue);
-                await WaitOnQuery(Client, CreatedQuery, WaitTimeValue);
+                GraphServiceClient Client = Auth.GetClientBeta(
+                    Context.ParseResult.GetValueForOption<string>(AppID), 
+                    Context.ParseResult.GetValueForOption<string>(TenantID), 
+                    Context.ParseResult.GetValueForOption<string[]>(Scopes)
+                    );
 
-            }, Scopes, AppID, TenantID, StartDate,EndDate, Activities, WaitTime);
+                AuditLogQuery CreatedQuery = await CreateQuery(
+                    Client, 
+                    Context.ParseResult.GetValueForOption<DateTime>(StartDate), 
+                    EndDateValue, 
+                    Context.ParseResult.GetValueForOption<string[]>(Activities)
+                    );
+
+                await WaitOnQuery(
+                    Client, 
+                    CreatedQuery, 
+                    Context.ParseResult.GetValueForOption<int>(WaitTime)
+                    );
+
+            });
 
             return Command;
         }
