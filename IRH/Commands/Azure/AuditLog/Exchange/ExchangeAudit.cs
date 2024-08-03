@@ -1,3 +1,4 @@
+﻿using IRH.Commands.Azure.Auth;
 ﻿using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting.Model;
 using IRH.Commands.AzureMFA.Reporting;

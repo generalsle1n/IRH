@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRH.Commands.Azure
+namespace IRH.Commands.Azure.Auth
 {
     internal class AzureAuth
     {
-        internal GraphServiceClient GetClient(string AppIDValue, string TenantIDValue, string[] ScopesValue)
+        internal GraphServiceClient GetDeviceClient(string AppIDValue, string TenantIDValue, string[] ScopesValue)
         {
             DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
             {
@@ -31,7 +31,7 @@ namespace IRH.Commands.Azure
 
             return Client;
         }
-        internal BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue)
+        internal BGraphServiceClient GetDeviceClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue)
         {
             DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
             {
