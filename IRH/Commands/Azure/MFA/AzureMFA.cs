@@ -1,7 +1,7 @@
 ﻿using Azure.Identity;
 using IRH.Commands.Azure.Auth;
-using IRH.Commands.AzureMFA.Reporting;
-using IRH.Commands.AzureMFA.Reporting.Model;
+using IRH.Commands.Azure.Reporting;
+using IRH.Commands.Azure.Reporting.Model;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Serilog.Core;
@@ -91,7 +91,7 @@ namespace IRH.Commands.Azure.MFA
             {
                 AzureAuth Auth = new AzureAuth();
 
-                GraphServiceClient Client = Auth.GetClient(AppIDValue, TenantIDValue, ScopesValue);
+                GraphServiceClient Client = Auth.GetDeviceClient(AppIDValue, TenantIDValue, ScopesValue);
 
                 UserCollectionResponse Users = await GetUsers(Client, GroupValue);
 
