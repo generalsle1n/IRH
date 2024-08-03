@@ -1,6 +1,5 @@
 ﻿using Microsoft.Graph.Beta.Models.Security;
 using Microsoft.Kiota.Abstractions.Serialization;
-using System.Reflection;
 
 namespace IRH.Commands.Azure.Helper
 {
