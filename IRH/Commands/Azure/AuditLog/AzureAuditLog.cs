@@ -40,7 +40,7 @@ namespace IRH.Commands.Azure.AuditLog
         private const string _endDate = "-E";
         private const string _endDateDescription = "Enter the End of the Investigation (Just in Format DD.MM.YYYY)";
         private const string _endDateAlias = "--End";
-        private const bool _endDateIsRequired = true;
+        private DateTime _endDateDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(1).AddTicks(-1);
 
         private const string _defaultActivities = "-AC";
         private const string _defaultActivitiesDescription = "Enter the Default Activities that should be searched in the Audit Logs (Seperated By Whitespace)";
@@ -88,7 +88,6 @@ namespace IRH.Commands.Azure.AuditLog
 
             AppID.IsRequired = _publicAppIDIsRequired;
             StartDate.IsRequired = _startDateIsRequired;
-            EndDate.IsRequired = _endDateIsRequired;
 
             Scopes.AllowMultipleArgumentsPerToken = true;
             Activities.AllowMultipleArgumentsPerToken = true;
@@ -107,6 +106,7 @@ namespace IRH.Commands.Azure.AuditLog
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
             WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
+            EndDate.SetDefaultValue(_endDateDefaultValue);
             ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
             PrintLevel.SetDefaultValue(_printLevelDefaultValue);
 
@@ -126,7 +126,8 @@ namespace IRH.Commands.Azure.AuditLog
                 AzureAuth Auth = new AzureAuth();
 
                 //Set Latest Possbile Date on day
-                DateTime EndDateValue = Parser.GetValueForOption<DateTime>(EndDate).AddDays(1).AddTicks(-1);
+                DateTime Date = Parser.GetValueForOption<DateTime>(EndDate);
+                DateTime EndDateValue = new DateTime(Date.Year, Date.Month, Date.Day).AddDays(1).AddTicks(-1);
 
                 GraphServiceClient Client = Auth.GetClientBeta(
                     Parser.GetValueForOption<string>(AppID),
