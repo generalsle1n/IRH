@@ -45,7 +45,11 @@ namespace IRH.Commands.Azure.AuditLog
                     foreach (PropertyInfo StringVal in AllStringVal)
                     {
                         string Value = (string)StringVal.GetValue(SingleRecord);
+                        if(await IsFilterMatching(StringVal.Name, Regex))
+                        {
                         _logger.Information($" | {StringVal.Name} -> {Value}");
+                    }
+                        
                     }
                     if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                     {
@@ -53,7 +57,10 @@ namespace IRH.Commands.Azure.AuditLog
 
                         foreach (KeyValuePair<string, object> SingleKey in FilterResult)
                         {
+                            if(await IsFilterMatching(SingleKey.Key, Regex))
+                            {
                             _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
+                        }
                         }
 
                         if (Level == ReportPrintLevel.Hacky)
@@ -66,18 +73,30 @@ namespace IRH.Commands.Azure.AuditLog
                                     List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUnTypedObject(SingleKey.Value as UntypedObject);
                                     foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
                                     {
+                                        if(await IsFilterMatching(SinglePair.Key, Regex))
+                                        {
                                         _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
                                     }
+                                }
                                 }
                                 else if (SingleKey.Value is UntypedArray)
                                 {
                                     List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedArray(SingleKey.Value as UntypedArray);
                                     foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
                                     {
+                                        if(await IsFilterMatching(SinglePair.Key, Regex))
+                                        {
                                         _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
                                     }
                                 }
                             }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         internal async Task<bool> IsFilterMatching(string Value, List<Regex> Filter)
         {
             if(Filter.Count == 0)
