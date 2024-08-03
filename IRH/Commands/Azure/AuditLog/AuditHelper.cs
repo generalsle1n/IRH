@@ -78,9 +78,26 @@ namespace IRH.Commands.Azure.AuditLog
                                     }
                                 }
                             }
+        internal async Task<bool> IsFilterMatching(string Value, List<Regex> Filter)
+        {
+            if(Filter.Count == 0)
+            {
+                return true;
                         }
+            else
+            {
+                bool Matched = false;
+                foreach(Regex SingleReg in Filter)
+                {
+                    Match Match = SingleReg.Match(Value);
+                    if (Match.Success)
+                    {
+                        Matched = true;
+                        break;
                     }
                 }
+
+                return Matched;
             }
         }
 
