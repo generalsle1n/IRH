@@ -1,4 +1,5 @@
 ﻿using Azure.Identity;
+using IRH.Commands.Azure.Auth;
 using IRH.Commands.AzureMFA.Reporting;
 using IRH.Commands.AzureMFA.Reporting.Model;
 using Microsoft.Graph;
