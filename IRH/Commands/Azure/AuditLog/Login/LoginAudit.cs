@@ -127,6 +127,7 @@ namespace IRH.Commands.Azure.AuditLog.Login
                     Parser.GetValueForOption(TenantID),
                     Parser.GetValueForOption(Scopes)
                     );
+
                 AuditLogQuery CreatedQuery;
 
                 if (Parser.GetValueForOption(ExistingQuery) is not null)
