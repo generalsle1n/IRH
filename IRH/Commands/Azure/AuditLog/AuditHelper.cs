@@ -135,7 +135,7 @@ namespace IRH.Commands.Azure.AuditLog
             };
             Query.DisplayName = $"Created by IRH_Scanner {Id}";
 
-            _logger.Information($"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id}");
+            _logger.Information($"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id} and in Timeframe {Start} - {End}");
 
             AuditLogQuery Processed = await Client.Security.AuditLog.Queries.PostAsync(Query);
             return Processed;
