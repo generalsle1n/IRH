@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRH.Commands.Azure.Reporting
+namespace IRH.Commands.Azure.Auth
 {
-    internal enum ReportType
+    internal enum AuthType
     {
-        CLI,
-        Json,
-        CLIAndJson
+        DeviceCode,
+        Interactive
     }
 }

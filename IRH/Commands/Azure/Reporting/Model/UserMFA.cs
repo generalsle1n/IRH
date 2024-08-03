@@ -1,6 +1,6 @@
 ﻿using Microsoft.Graph.Models;
 
-namespace IRH.Commands.AzureMFA.Reporting.Model
+namespace IRH.Commands.Azure.Reporting.Model
 {
     public class UserMFA
     {
