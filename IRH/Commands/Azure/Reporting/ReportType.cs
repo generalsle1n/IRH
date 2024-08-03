@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRH.Commands.AzureMFA.Reporting
+namespace IRH.Commands.Azure.Reporting
 {
     internal enum ReportType
     {
