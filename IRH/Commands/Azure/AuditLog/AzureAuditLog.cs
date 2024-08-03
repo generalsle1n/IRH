@@ -28,6 +28,8 @@ namespace IRH.Commands.Azure.AuditLog
             Option<string[]> FilterOnParameter = new Option<string[]>(name: _filterOnAttributes, description: _filterOnAttributesDescription);
             FilterOnParameter.AddAlias(_filterOnAttributesAlias);
 
+            FilterOnParameter.AllowMultipleArgumentsPerToken = true;
+
             Command.AddGlobalOption(FilterOnParameter);
 
             ExchangeAudit ExchangeAuditCommand = new ExchangeAudit(_logger);
