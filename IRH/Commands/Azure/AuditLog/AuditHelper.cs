@@ -13,6 +13,7 @@ using Microsoft.Kiota.Abstractions.Serialization;
 using Serilog.Core;
 using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
+using System.Text.RegularExpressions;
 
 namespace IRH.Commands.Azure.AuditLog
 {
@@ -29,8 +30,10 @@ namespace IRH.Commands.Azure.AuditLog
             _logger = Logger;
         }
 
-        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level)
+        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level, string[] Filter)
         {
+            List<Regex> Regex = await CreateRegexFilter(Filter);
+
             foreach (AuditLogRecord SingleRecord in Result.Value)
             {
                 _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
@@ -42,7 +45,11 @@ namespace IRH.Commands.Azure.AuditLog
                     foreach (PropertyInfo StringVal in AllStringVal)
                     {
                         string Value = (string)StringVal.GetValue(SingleRecord);
+                        if(await IsFilterMatching(StringVal.Name, Regex))
+                        {
                         _logger.Information($" | {StringVal.Name} -> {Value}");
+                    }
+                        
                     }
                     if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                     {
@@ -50,7 +57,10 @@ namespace IRH.Commands.Azure.AuditLog
 
                         foreach (KeyValuePair<string, object> SingleKey in FilterResult)
                         {
+                            if(await IsFilterMatching(SingleKey.Key, Regex))
+                            {
                             _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
+                        }
                         }
 
                         if (Level == ReportPrintLevel.Hacky)
@@ -63,22 +73,66 @@ namespace IRH.Commands.Azure.AuditLog
                                     List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUnTypedObject(SingleKey.Value as UntypedObject);
                                     foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
                                     {
+                                        if(await IsFilterMatching(SinglePair.Key, Regex))
+                                        {
                                         _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
                                     }
+                                }
                                 }
                                 else if (SingleKey.Value is UntypedArray)
                                 {
                                     List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedArray(SingleKey.Value as UntypedArray);
                                     foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
                                     {
+                                        if(await IsFilterMatching(SinglePair.Key, Regex))
+                                        {
                                         _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
                                     }
                                 }
+                            }
                             }
                         }
                     }
                 }
             }
+        }
+
+        internal async Task<bool> IsFilterMatching(string Value, List<Regex> Filter)
+        {
+            if(Filter.Count == 0)
+            {
+                return true;
+                        }
+            else
+            {
+                bool Matched = false;
+                foreach(Regex SingleReg in Filter)
+                {
+                    Match Match = SingleReg.Match(Value);
+                    if (Match.Success)
+                    {
+                        Matched = true;
+                        break;
+                    }
+                }
+
+                return Matched;
+            }
+        }
+
+        internal async Task<List<Regex>> CreateRegexFilter (string[] Filter)
+        {
+            List<Regex> Result = new List<Regex>();
+            
+            foreach(string Value in Filter)
+            {
+                string CurrentPattern = $"^{Value.Replace("*", ".*")}$";
+                Result.Add(new Regex(CurrentPattern, RegexOptions.IgnoreCase));
+
+                _logger.Information($"Created Filter for {CurrentPattern}");
+            }
+
+            return Result;
         }
 
         internal bool TestIfToStringIsOverwritten(Type Typename)
@@ -145,13 +199,13 @@ namespace IRH.Commands.Azure.AuditLog
 
         internal async Task<AuditLogQuery> WaitOnQuery(GraphServiceClient Client, AuditLogQuery Query, int WaitTime)
         {
-            _logger.Information($"Start for Waiting Query (This can take some minutes): {Query.DisplayName}");
+            _logger.Information($"Start for Waiting Query (This can take some minutes, up to 10min): {Query.DisplayName}");
 
             while (Query.Status == AuditLogQueryStatus.NotStarted || Query.Status == AuditLogQueryStatus.Running)
             {
                 _logger.Information($"Query not finished, current State: {Query.Status}");
                 await Task.Delay(WaitTime * _timeMultiplyer);
-                Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync(a => a.QueryParameters.Expand = new string[] { "*" });
+                Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync(req => req.QueryParameters.Expand = new string[] { "*" });
             }
 
             _logger.Information($"Query finished: {Query.DisplayName}");

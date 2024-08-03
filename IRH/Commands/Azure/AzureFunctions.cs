@@ -45,6 +45,7 @@ namespace IRH.Commands.Azure
 
             AppID.AddAlias(_publicAppIDAlias);
             TenantID.AddAlias(_publicTenantIDAlias);
+            AuthType.AddAlias(_authClientProviderAlias);
 
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             AuthType.SetDefaultValue(_authClientProviderDefaultValue);
