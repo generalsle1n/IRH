@@ -160,5 +160,20 @@ namespace IRH.Commands.Azure.AuditLog
         {
             return await Client.Security.AuditLog.Queries[Query.Id].Records.GetAsync();
         }
+
+        internal async Task<AuditLogQuery> GetQueryFromName(GraphServiceClient Client, string QueryName)
+        {
+            AuditLogQueryCollectionResponse Collection = await Client.Security.AuditLog.Queries.GetAsync();
+
+            IEnumerable<AuditLogQuery> Result = Collection.Value.Where(item => item.DisplayName.Equals(QueryName));
+            if(Result.Count() >= 1)
+            {
+                return Result.First();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
