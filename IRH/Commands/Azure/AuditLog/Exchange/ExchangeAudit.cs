@@ -129,14 +129,14 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
                 ParseResult Parser = Context.ParseResult;
                 AzureAuth Auth = new AzureAuth();
                 AuditHelper Helper = new AuditHelper(_logger);
-
+                
                 GraphServiceClient Client = Auth.GetClientBeta(
                     Parser.GetValueForOption(AppID),
                     Parser.GetValueForOption(TenantID),
                     Parser.GetValueForOption(Scopes)
                     );
                 AuditLogQuery CreatedQuery;
-
+                
                 if (Parser.GetValueForOption(ExistingQuery) is not null)
                 {
                     CreatedQuery = await Helper.GetQueryFromName(Client, Parser.GetValueForOption(ExistingQuery));
@@ -144,13 +144,13 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
                 else
                 {
                     CreatedQuery = await Helper.CreateQuery(
-                    Client,
-                    Parser.GetValueForOption(StartDate),
+                        Client,
+                        Parser.GetValueForOption(StartDate),
                         Parser.GetValueForOption(EndDate),
-                    Parser.GetValueForOption(Activities)
-                    );
+                        Parser.GetValueForOption(Activities)
+                   );
                 }
-
+                
                 CreatedQuery = await Helper.WaitOnQuery(
                     Client,
                     CreatedQuery,
