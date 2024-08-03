@@ -88,7 +88,6 @@ namespace IRH.Commands.Azure.AuditLog
 
             AppID.IsRequired = _publicAppIDIsRequired;
             StartDate.IsRequired = _startDateIsRequired;
-            EndDate.IsRequired = _endDateIsRequired;
 
             Scopes.AllowMultipleArgumentsPerToken = true;
             Activities.AllowMultipleArgumentsPerToken = true;
