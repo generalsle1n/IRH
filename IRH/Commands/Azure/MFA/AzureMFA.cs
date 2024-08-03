@@ -82,10 +82,11 @@ namespace IRH.Commands.Azure.MFA
 
                 AzureAuth Auth = new AzureAuth();
 
-                GraphServiceClient Client = Auth.GetDeviceClient(
+                GraphServiceClient Client = Auth.GetClient(
                     Parser.GetValueForOption(AppID),
                     Parser.GetValueForOption(TenantID),
-                    Parser.GetValueForOption(Scopes)
+                    Parser.GetValueForOption(Scopes),
+                    Parser.GetValueForOption(AuthProviderType)
                     );
 
                 UserCollectionResponse Users = await GetUsers(Client, Parser.GetValueForOption(Group));
