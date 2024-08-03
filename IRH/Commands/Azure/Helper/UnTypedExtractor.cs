@@ -47,7 +47,42 @@ namespace IRH.Commands.Azure.Helper
             
             foreach(KeyValuePair<string, UntypedNode> Pair in Values)
             {
-                Result.Add(new KeyValuePair<string, string>(Pair.Key, await ExtractUnTypedString(Pair.Value)));
+                Result.Add(new KeyValuePair<string, string>(Pair.Key, await ExtractUntypeUnknownType(Pair.Value)));
+            }
+
+            return Result;
+        }
+
+        internal static async Task<string> ExtractUntypeUnknownType(UntypedNode Node)
+        {
+            string Result = null;
+
+            switch (Node)
+            {
+                case UntypedString:
+                    Result = await ExtractUnTypedString(Node);
+                    break;
+                case UntypedInteger:
+                    Result = await ExtractUnTypedInteger(Node);
+                    break;
+                case UntypedBoolean:
+                    Result = await ExtractUnTypedBoolean(Node);
+                    break;
+                case UntypedDecimal:
+                    Result = await ExtractUnTypedDecimal(Node);
+                    break;
+                case UntypedDouble:
+                    Result = await ExtractUnTypedDouble(Node);
+                    break;
+                case UntypedFloat:
+                    Result = await ExtractUnTypedFloat(Node);
+                    break;
+                case UntypedLong:
+                    Result = await ExtractUnTypedLong(Node);
+                    break;
+                case UntypedNull:
+                    Result = await ExtractUnTypedNull(Node);
+                    break;
             }
 
             return Result;
