@@ -103,6 +103,10 @@ namespace IRH.Commands.Azure.MFA
                     case ReportType.Json:
                         await ExportToJson(AllUsers);
                         break;
+                    case ReportType.CLIAndJson:
+                        await PrintResult(AllUsers, PrintLevelValue);
+                        await ExportToJson(AllUsers);
+                        break;
                 }
 
             }, Group, Scopes, AppID, TenantID, ReportTypeOption, PrintLevel);

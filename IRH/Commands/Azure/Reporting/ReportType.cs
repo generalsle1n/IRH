@@ -9,6 +9,7 @@ namespace IRH.Commands.AzureMFA.Reporting
     internal enum ReportType
     {
         CLI,
-        Json
+        Json,
+        CLIAndJson
     }
 }
