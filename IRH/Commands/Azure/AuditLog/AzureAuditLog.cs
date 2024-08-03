@@ -1,4 +1,5 @@
 ﻿using IRH.Commands.Azure.AuditLog.Exchange;
+using IRH.Commands.Azure.AuditLog.Login;
 using Serilog.Core;
 using System.CommandLine;
 
@@ -19,9 +20,15 @@ namespace IRH.Commands.Azure.AuditLog
         internal Command CreateCommand(RootCommand RootCommand)
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
+
             ExchangeAudit ExchangeAuditCommand = new ExchangeAudit(_logger);
             Command ExchangeCommand = ExchangeAuditCommand.CreateCommand(RootCommand);
+            
+            LoginAudit LoginAuditCommand = new LoginAudit(_logger);
+            Command LoginCommand = LoginAuditCommand.CreateCommand(RootCommand);
+
             Command.AddCommand(ExchangeCommand);
+            Command.AddCommand(LoginCommand);
             return Command;
         }
     }

@@ -1,14 +1,10 @@
 ﻿using Microsoft.Graph.Beta.Models.Security;
 using Microsoft.Kiota.Abstractions.Serialization;
-using System.Reflection;
 
 namespace IRH.Commands.Azure.Helper
 {
     internal class UnTypedExtractor
     {
-
-        private const string _untypedStringValueProperty = "_value";
-
         internal static async Task<List<KeyValuePair<string, string>>> ExtractUntypedDataFromAuditLogRecord(AuditLogRecord Record)
         {
             IEnumerable<KeyValuePair<string,object>> Types = Record.AuditData.AdditionalData.Where(type => type.Value is UntypedArray || type.Value is UntypedObject);
@@ -50,7 +46,42 @@ namespace IRH.Commands.Azure.Helper
             
             foreach(KeyValuePair<string, UntypedNode> Pair in Values)
             {
-                Result.Add(new KeyValuePair<string, string>(Pair.Key, await ExtractUnTypedString(Pair.Value)));
+                Result.Add(new KeyValuePair<string, string>(Pair.Key, await ExtractUntypeUnknownType(Pair.Value)));
+            }
+
+            return Result;
+        }
+
+        internal static async Task<string> ExtractUntypeUnknownType(UntypedNode Node)
+        {
+            string Result = null;
+
+            switch (Node)
+            {
+                case UntypedString:
+                    Result = await ExtractUnTypedString(Node);
+                    break;
+                case UntypedInteger:
+                    Result = await ExtractUnTypedInteger(Node);
+                    break;
+                case UntypedBoolean:
+                    Result = await ExtractUnTypedBoolean(Node);
+                    break;
+                case UntypedDecimal:
+                    Result = await ExtractUnTypedDecimal(Node);
+                    break;
+                case UntypedDouble:
+                    Result = await ExtractUnTypedDouble(Node);
+                    break;
+                case UntypedFloat:
+                    Result = await ExtractUnTypedFloat(Node);
+                    break;
+                case UntypedLong:
+                    Result = await ExtractUnTypedLong(Node);
+                    break;
+                case UntypedNull:
+                    Result = await ExtractUnTypedNull(Node);
+                    break;
             }
 
             return Result;
@@ -58,10 +89,42 @@ namespace IRH.Commands.Azure.Helper
 
         internal static async Task<string> ExtractUnTypedString(UntypedNode Node)
         {
-            FieldInfo FieldValue = Node.GetType().GetField(_untypedStringValueProperty, BindingFlags.NonPublic | BindingFlags.Instance);
-            
-            string Result = (string)FieldValue.GetValue(Node);
-            return Result;
+            return (Node as UntypedString).GetValue();
+        }
+
+        internal static async Task<string> ExtractUnTypedInteger(UntypedNode Node)
+        {
+            return (Node as UntypedInteger).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedBoolean(UntypedNode Node)
+        {
+            return (Node as UntypedBoolean).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedDecimal(UntypedNode Node)
+        {
+            return (Node as UntypedDecimal).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedDouble(UntypedNode Node)
+        {
+            return (Node as UntypedDouble).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedFloat(UntypedNode Node)
+        {
+            return (Node as UntypedFloat).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedLong(UntypedNode Node)
+        {
+            return (Node as UntypedLong).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedNull(UntypedNode Node)
+        {
+            return string.Empty;
         }
     }
 }
