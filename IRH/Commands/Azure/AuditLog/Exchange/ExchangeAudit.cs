@@ -167,6 +167,10 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
                     case ReportType.Json:
                         await Helper.ExportToJson(Result);
                         break;
+                    case ReportType.CLIAndJson:
+                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel));
+                        await Helper.ExportToJson(Result);
+                        break;
                 }
             });
 
