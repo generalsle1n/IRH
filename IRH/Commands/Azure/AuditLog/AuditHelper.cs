@@ -47,10 +47,10 @@ namespace IRH.Commands.Azure.AuditLog
                         string Value = (string)StringVal.GetValue(SingleRecord);
                         if(await IsFilterMatching(StringVal.Name, Regex))
                         {
-                        _logger.Information($" | {StringVal.Name} -> {Value}");
+                            _logger.Information($" | {StringVal.Name} -> {Value}");
+                        }
                     }
-                        
-                    }
+
                     if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                     {
                         IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => TestIfToStringIsOverwritten(filter.Value.GetType()));
@@ -59,8 +59,8 @@ namespace IRH.Commands.Azure.AuditLog
                         {
                             if(await IsFilterMatching(SingleKey.Key, Regex))
                             {
-                            _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
-                        }
+                                _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
+                            }
                         }
 
                         if (Level == ReportPrintLevel.Hacky)
@@ -75,9 +75,9 @@ namespace IRH.Commands.Azure.AuditLog
                                     {
                                         if(await IsFilterMatching(SinglePair.Key, Regex))
                                         {
-                                        _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
+                                            _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
+                                        }
                                     }
-                                }
                                 }
                                 else if (SingleKey.Value is UntypedArray)
                                 {
@@ -86,10 +86,10 @@ namespace IRH.Commands.Azure.AuditLog
                                     {
                                         if(await IsFilterMatching(SinglePair.Key, Regex))
                                         {
-                                        _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
+                                            _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
+                                        }
                                     }
                                 }
-                            }
                             }
                         }
                     }
@@ -102,7 +102,7 @@ namespace IRH.Commands.Azure.AuditLog
             if(Filter.Count == 0)
             {
                 return true;
-                        }
+            }
             else
             {
                 bool Matched = false;
