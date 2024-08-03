@@ -10,7 +10,7 @@ using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
 using System.CommandLine.Parsing;
 using IRH.Commands.Azure.Auth;
-
+using IRH.Commands.Azure.Reporting;
 
 namespace IRH.Commands.Azure.AuditLog.Login
 {
