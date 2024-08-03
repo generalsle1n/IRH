@@ -93,8 +93,39 @@ namespace IRH.Commands.Azure.Helper
             return (Node as UntypedString).GetValue();
         }
             
-            string Result = (string)FieldValue.GetValue(Node);
-            return Result;
+        internal static async Task<string> ExtractUnTypedInteger(UntypedNode Node)
+        {
+            return (Node as UntypedInteger).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedBoolean(UntypedNode Node)
+        {
+            return (Node as UntypedBoolean).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedDecimal(UntypedNode Node)
+        {
+            return (Node as UntypedDecimal).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedDouble(UntypedNode Node)
+        {
+            return (Node as UntypedDouble).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedFloat(UntypedNode Node)
+        {
+            return (Node as UntypedFloat).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedLong(UntypedNode Node)
+        {
+            return (Node as UntypedLong).GetValue().ToString();
+        }
+
+        internal static async Task<string> ExtractUnTypedNull(UntypedNode Node)
+        {
+            return string.Empty;
         }
     }
 }
