@@ -1,4 +1,5 @@
 ﻿using IRH.Commands.Azure.AuditLog.Exchange;
+using IRH.Commands.Azure.AuditLog.Login;
 using Serilog.Core;
 using System.CommandLine;
 
