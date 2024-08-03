@@ -91,7 +91,7 @@ namespace IRH.Commands.Azure.Helper
         {
             return (Node as UntypedString).GetValue();
         }
-            
+
         internal static async Task<string> ExtractUnTypedInteger(UntypedNode Node)
         {
             return (Node as UntypedInteger).GetValue().ToString();
