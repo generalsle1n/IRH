@@ -135,7 +135,7 @@ namespace IRH.Commands.Azure.AuditLog
             };
             Query.DisplayName = $"Created by IRH_Scanner {Id}";
 
-            _logger.Information($"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id}");
+            _logger.Information($"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id} and in Timeframe {Start} - {End}");
 
             AuditLogQuery Processed = await Client.Security.AuditLog.Queries.PostAsync(Query);
             return Processed;
@@ -159,6 +159,21 @@ namespace IRH.Commands.Azure.AuditLog
         internal async Task<AuditLogRecordCollectionResponse> GetResultFromQuery(GraphServiceClient Client, AuditLogQuery Query)
         {
             return await Client.Security.AuditLog.Queries[Query.Id].Records.GetAsync();
+        }
+
+        internal async Task<AuditLogQuery> GetQueryFromName(GraphServiceClient Client, string QueryName)
+        {
+            AuditLogQueryCollectionResponse Collection = await Client.Security.AuditLog.Queries.GetAsync();
+
+            IEnumerable<AuditLogQuery> Result = Collection.Value.Where(item => item.DisplayName.Equals(QueryName));
+            if(Result.Count() >= 1)
+            {
+                return Result.First();
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

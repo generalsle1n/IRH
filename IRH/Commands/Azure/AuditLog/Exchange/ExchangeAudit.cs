@@ -35,7 +35,7 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
         private const string _startDate = "-S";
         private const string _startDateDescription = "Enter the Start of the Investigation (Just in Format DD.MM.YYYY)";
         private const string _startDateAlias = "--Start";
-        private const bool _startDateIsRequired = true;
+        private DateTime _startDateDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
         private const string _endDate = "-E";
         private const string _endDateDescription = "Enter the End of the Investigation (Just in Format DD.MM.YYYY)";
@@ -62,6 +62,10 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
         private const string _printLevelAlias = "--PrintLevel";
         private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
 
+        private const string _exisitingQuery = "-EQ";
+        private const string _exisitingQueryDescription = "Enter the Name of the Existing Query to use the result";
+        private const string _exisitingQueryAlias = "--ExisitingQuery";
+
         private readonly Logger _logger;
 
         internal ExchangeAudit(Logger Logger)
@@ -82,9 +86,9 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
             Option<int> WaitTime = new Option<int>(name: _waitQueryTime, description: _waitQueryTimeDescription);
             Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, description: _reportTypeDescription);
             Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
+            Option<string> ExistingQuery = new Option<string>(name: _exisitingQuery, description: _exisitingQueryDescription);
 
             AppID.IsRequired = _publicAppIDIsRequired;
-            StartDate.IsRequired = _startDateIsRequired;
 
             Scopes.AllowMultipleArgumentsPerToken = true;
             Activities.AllowMultipleArgumentsPerToken = true;
@@ -98,11 +102,13 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
             WaitTime.AddAlias(_waitQueryTimeAlias);
             ReportTypeOption.AddAlias(_reportTypeAlias);
             PrintLevel.AddAlias(_printLevelAlias);
+            ExistingQuery.AddAlias(_exisitingQueryAlias);
 
             Scopes.SetDefaultValue(_permissionScopesDefaultValue);
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
             WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
+            StartDate.SetDefaultValue(_startDateDefaultValue);
             EndDate.SetDefaultValue(_endDateDefaultValue);
             ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
             PrintLevel.SetDefaultValue(_printLevelDefaultValue);
@@ -116,30 +122,35 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
             Command.AddOption(WaitTime);
             Command.AddOption(ReportTypeOption);
             Command.AddOption(PrintLevel);
+            Command.AddOption(ExistingQuery);
 
             Command.SetHandler(async (Context) =>
             {
                 ParseResult Parser = Context.ParseResult;
                 AzureAuth Auth = new AzureAuth();
                 AuditHelper Helper = new AuditHelper(_logger);
-
-                //Set Latest Possbile Date on day
-                DateTime Date = Parser.GetValueForOption(EndDate);
-                DateTime EndDateValue = new DateTime(Date.Year, Date.Month, Date.Day).AddDays(1).AddTicks(-1);
-
+                
                 GraphServiceClient Client = Auth.GetClientBeta(
                     Parser.GetValueForOption(AppID),
                     Parser.GetValueForOption(TenantID),
                     Parser.GetValueForOption(Scopes)
                     );
-
-                AuditLogQuery CreatedQuery = await Helper.CreateQuery(
-                    Client,
-                    Parser.GetValueForOption(StartDate),
-                    EndDateValue,
-                    Parser.GetValueForOption(Activities)
-                    );
-
+                AuditLogQuery CreatedQuery;
+                
+                if (Parser.GetValueForOption(ExistingQuery) is not null)
+                {
+                    CreatedQuery = await Helper.GetQueryFromName(Client, Parser.GetValueForOption(ExistingQuery));
+                }
+                else
+                {
+                    CreatedQuery = await Helper.CreateQuery(
+                        Client,
+                        Parser.GetValueForOption(StartDate),
+                        Parser.GetValueForOption(EndDate),
+                        Parser.GetValueForOption(Activities)
+                   );
+                }
+                
                 CreatedQuery = await Helper.WaitOnQuery(
                     Client,
                     CreatedQuery,
