@@ -11,7 +11,7 @@ namespace IRH.Commands.Azure.AuditLog
         private const string _commandDescription = "Operate with the Audit System from Microsoft";
 
         private const string _filterOnAttributes = "-F";
-        private const string _filterOnAttributesDescription = "Filter on Parameternames, Wildcards are supported (This Setting works only on Printlevel Info and above)";
+        private const string _filterOnAttributesDescription = "Filter on Parameternames, Wildcards are supported (This Setting works only on Printlevel Info and above) its also possible to enter multiple values seperated by whitespace";
         private const string _filterOnAttributesAlias = "--Filter";
 
         private readonly Logger _logger;
