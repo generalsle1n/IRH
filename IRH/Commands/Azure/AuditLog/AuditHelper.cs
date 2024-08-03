@@ -13,6 +13,7 @@ using Microsoft.Kiota.Abstractions.Serialization;
 using Serilog.Core;
 using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
+using System.Text.RegularExpressions;
 
 namespace IRH.Commands.Azure.AuditLog
 {
@@ -29,8 +30,10 @@ namespace IRH.Commands.Azure.AuditLog
             _logger = Logger;
         }
 
-        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level)
+        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level, string[] Filter)
         {
+            List<Regex> Regex = await CreateRegexFilter(Filter);
+
             foreach (AuditLogRecord SingleRecord in Result.Value)
             {
                 _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
@@ -79,6 +82,21 @@ namespace IRH.Commands.Azure.AuditLog
                     }
                 }
             }
+        }
+
+        internal async Task<List<Regex>> CreateRegexFilter (string[] Filter)
+        {
+            List<Regex> Result = new List<Regex>();
+            
+            foreach(string Value in Filter)
+            {
+                string CurrentPattern = $"^{Value.Replace("*", ".*")}$";
+                Result.Add(new Regex(CurrentPattern, RegexOptions.IgnoreCase));
+
+                _logger.Information($"Created Filter for {CurrentPattern}");
+            }
+
+            return Result;
         }
 
         internal bool TestIfToStringIsOverwritten(Type Typename)
