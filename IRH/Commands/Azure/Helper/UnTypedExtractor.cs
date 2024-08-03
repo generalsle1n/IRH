@@ -6,9 +6,6 @@ namespace IRH.Commands.Azure.Helper
 {
     internal class UnTypedExtractor
     {
-
-        private const string _untypedStringValueProperty = "_value";
-
         internal static async Task<List<KeyValuePair<string, string>>> ExtractUntypedDataFromAuditLogRecord(AuditLogRecord Record)
         {
             IEnumerable<KeyValuePair<string,object>> Types = Record.AuditData.AdditionalData.Where(type => type.Value is UntypedArray || type.Value is UntypedObject);
@@ -58,7 +55,8 @@ namespace IRH.Commands.Azure.Helper
 
         internal static async Task<string> ExtractUnTypedString(UntypedNode Node)
         {
-            FieldInfo FieldValue = Node.GetType().GetField(_untypedStringValueProperty, BindingFlags.NonPublic | BindingFlags.Instance);
+            return (Node as UntypedString).GetValue();
+        }
             
             string Result = (string)FieldValue.GetValue(Node);
             return Result;
