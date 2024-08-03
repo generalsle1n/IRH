@@ -95,7 +95,6 @@ namespace IRH.Commands.Azure.AuditLog.Login
             ExistingQuery.AddAlias(_exisitingQueryAlias);
 
             Scopes.SetDefaultValue(_permissionScopesDefaultValue);
-            TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
             WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
             StartDate.SetDefaultValue(_startDateDefaultValue);
