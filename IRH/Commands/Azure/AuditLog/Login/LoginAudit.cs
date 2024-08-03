@@ -24,16 +24,6 @@ namespace IRH.Commands.Azure.AuditLog.Login
         private const string _permissionScopesAlias = "--PermissionScope";
         private string[] _permissionScopesDefaultValue = new string[] { "Directory.Read.All", "AuditLogsQuery.Read.All" };
 
-        private const string _publicAppID = "-A";
-        private const string _publicAppIDDescription = "Enter the ID of the App ID";
-        private const string _publicAppIDAlias = "--AppID";
-        private const bool _publicAppIDIsRequired = true;
-
-        private const string _publicTenantID = "-T";
-        private const string _publicTenantIDDescription = "Enter the ID of the Tenant ID (In the default you dont need to change this)";
-        private const string _publicTenantIDAlias = "--Tenant";
-        private const string _publicTenantIDDefaultValue = "common";
-
         private const string _startDate = "-S";
         private const string _startDateDescription = "Enter the Start of the Investigation (Just in Format DD.MM.YYYY)";
         private const string _startDateAlias = "--Start";
@@ -68,6 +58,10 @@ namespace IRH.Commands.Azure.AuditLog.Login
         private const string _exisitingQueryDescription = "Enter the Name of the Existing Query to use the result";
         private const string _exisitingQueryAlias = "--ExisitingQuery";
 
+        private const string _globalAppIDName = "A";
+        private const string _globalTenantIDName = "T";
+        private const string _globalAuthClientProviderName = "AU";
+
         private readonly Logger _logger;
 
         internal LoginAudit(Logger Logger)
@@ -80,8 +74,6 @@ namespace IRH.Commands.Azure.AuditLog.Login
             Command Command = new Command(name: _commandName, description: _commandDescription);
 
             Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
-            Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
-            Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
             Option<DateTime> StartDate = new Option<DateTime>(name: _startDate, description: _startDateDescription);
             Option<DateTime> EndDate = new Option<DateTime>(name: _endDate, description: _endDateDescription);
             Option<string[]> Activities = new Option<string[]>(name: _defaultActivities, description: _defaultActivitiesDescription);
@@ -90,14 +82,10 @@ namespace IRH.Commands.Azure.AuditLog.Login
             Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
             Option<string> ExistingQuery = new Option<string>(name: _exisitingQuery, description: _exisitingQueryDescription);
 
-            AppID.IsRequired = _publicAppIDIsRequired;
-
             Scopes.AllowMultipleArgumentsPerToken = true;
             Activities.AllowMultipleArgumentsPerToken = true;
 
             Scopes.AddAlias(_permissionScopesAlias);
-            AppID.AddAlias(_publicAppIDAlias);
-            TenantID.AddAlias(_publicTenantIDAlias);
             StartDate.AddAlias(_startDateAlias);
             EndDate.AddAlias(_endDateAlias);
             Activities.AddAlias(_defaultActivitiesAlias);
@@ -116,8 +104,6 @@ namespace IRH.Commands.Azure.AuditLog.Login
             PrintLevel.SetDefaultValue(_printLevelDefaultValue);
 
             Command.AddOption(Scopes);
-            Command.AddOption(AppID);
-            Command.AddOption(TenantID);
             Command.AddOption(StartDate);
             Command.AddOption(EndDate);
             Command.AddOption(Activities);
@@ -129,6 +115,11 @@ namespace IRH.Commands.Azure.AuditLog.Login
             Command.SetHandler(async (Context) =>
             {
                 ParseResult Parser = Context.ParseResult;
+                CommandResult AzureCommandResult = Parser.CommandResult.Parent.Parent as CommandResult;
+                Option<string> AppID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAppIDName)).First() as Option<string>;
+                Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
+                Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
+
                 AzureAuth Auth = new AzureAuth();
                 AuditHelper Helper = new AuditHelper(_logger);
 
