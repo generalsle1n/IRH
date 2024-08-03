@@ -21,6 +21,8 @@ namespace IRH.Commands.Azure.AuditLog
         private readonly Logger _logger;
         private const string _methodToStringName = "ToString";
         private const int _timeMultiplyer = 1000;
+        private const string _tmpFileTypeName = ".tmp";
+        private const string _jsonFileTypeName = ".json";
 
         internal AuditHelper(Logger Logger)
         {
@@ -111,7 +113,7 @@ namespace IRH.Commands.Azure.AuditLog
             using (MemoryStream Stream = new MemoryStream())
             {
                 await JsonSerializer.SerializeAsync(Stream, GeneratedResults);
-                string FilePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+                string FilePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(_tmpFileTypeName, _jsonFileTypeName));
 
                 using (FileStream FileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
