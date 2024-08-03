@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting.Model;
-using IRH.Commands.AzureMFA.Reporting;
+using IRH.Commands.Azure.Reporting;
 using Microsoft.Graph.Beta.Models.Security;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Serilog.Core;

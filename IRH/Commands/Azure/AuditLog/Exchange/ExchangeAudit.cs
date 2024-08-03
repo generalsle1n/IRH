@@ -1,7 +1,7 @@
 ﻿using IRH.Commands.Azure.Auth;
 ﻿using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting.Model;
-using IRH.Commands.AzureMFA.Reporting;
+using IRH.Commands.Azure.Reporting;
 using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
 using Microsoft.Kiota.Abstractions.Serialization;
@@ -131,7 +131,7 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
                 AzureAuth Auth = new AzureAuth();
                 AuditHelper Helper = new AuditHelper(_logger);
                 
-                GraphServiceClient Client = Auth.GetClientBeta(
+                GraphServiceClient Client = Auth.GetDeviceClientBeta(
                     Parser.GetValueForOption(AppID),
                     Parser.GetValueForOption(TenantID),
                     Parser.GetValueForOption(Scopes)

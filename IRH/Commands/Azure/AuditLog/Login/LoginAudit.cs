@@ -1,4 +1,4 @@
-﻿using IRH.Commands.AzureMFA.Reporting;
+﻿using IRH.Commands.Azure.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,7 +132,7 @@ namespace IRH.Commands.Azure.AuditLog.Login
                 AzureAuth Auth = new AzureAuth();
                 AuditHelper Helper = new AuditHelper(_logger);
 
-                GraphServiceClient Client = Auth.GetClientBeta(
+                GraphServiceClient Client = Auth.GetDeviceClientBeta(
                     Parser.GetValueForOption(AppID),
                     Parser.GetValueForOption(TenantID),
                     Parser.GetValueForOption(Scopes)
