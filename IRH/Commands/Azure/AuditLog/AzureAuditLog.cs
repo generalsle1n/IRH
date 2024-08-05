@@ -15,7 +15,7 @@ namespace IRH.Commands.Azure.AuditLog
         private const string _filterOnParameterAlias = "--FilterParameter";
 
         private const string _filterOnParameterValue = "-FV";
-        private const string _filterOnParameterValueDescription = "Filter on Paramtervalue (Datafilter), Wildcards are supported (This Setting works only on Printlevel Info and above) its also possible to enter multiple values seperated by whitespace";
+        private const string _filterOnParameterValueDescription = "Filter on Paramtervalue (Datafilter): Syntax --> ParamterName:FilterValue (Example: *:User1), if you specify multiple serpated by whitespace it have an AND Operator (This Setting works only on Printlevel Info and above)";
         private const string _filterOnParameterValueAlias = "--FilterValue";
 
         private readonly Logger _logger;
