@@ -37,8 +37,12 @@ namespace IRH.Commands.Azure.AuditLog
 
             foreach (AuditLogRecord SingleRecord in Result.Value)
             {
+        internal async Task PrintResultBrief(AuditLogRecord SingleRecord)
+        {
                 _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
-                if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+        }
+
+        internal async Task PrintResultInfo(AuditLogRecord SingleRecord, List<Regex> Regex)
                 {
                     PropertyInfo[] AllProperties = SingleRecord.GetType().GetProperties();
                     IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
@@ -46,27 +50,29 @@ namespace IRH.Commands.Azure.AuditLog
                     foreach (PropertyInfo StringVal in AllStringVal)
                     {
                         string Value = (string)StringVal.GetValue(SingleRecord);
-                        if(await IsFilterMatching(StringVal.Name, Regex))
+                if (await IsFilterMatching(StringVal.Name, Regex))
                         {
                             _logger.Information($" | {StringVal.Name} -> {Value}");
                         }
                     }
+        }
 
-                    if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+        internal async Task PrintResultDetailed(AuditLogRecord SingleRecord, List<Regex> Regex)
                     {
                         IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => TestIfToStringIsOverwritten(filter.Value.GetType()));
 
                         foreach (KeyValuePair<string, object> SingleKey in FilterResult)
                         {
-                            if(await IsFilterMatching(SingleKey.Key, Regex))
+                if (await IsFilterMatching(SingleKey.Key, Regex))
                             {
                                 _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
                             }
                         }
+        }
 
-                        if (Level == ReportPrintLevel.Hacky)
+        internal async Task PrintResultHacky(AuditLogRecord SingleRecord, List<Regex> Regex)
                         {
-                            FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
+            IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
                             foreach (KeyValuePair<string, object> SingleKey in FilterResult)
                             {
                                 if (SingleKey.Value is UntypedObject)
@@ -74,7 +80,7 @@ namespace IRH.Commands.Azure.AuditLog
                                     List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUnTypedObject(SingleKey.Value as UntypedObject);
                                     foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
                                     {
-                                        if(await IsFilterMatching(SinglePair.Key, Regex))
+                        if (await IsFilterMatching(SinglePair.Key, Regex))
                                         {
                                             _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
                                         }
@@ -85,7 +91,7 @@ namespace IRH.Commands.Azure.AuditLog
                                     List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedArray(SingleKey.Value as UntypedArray);
                                     foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
                                     {
-                                        if(await IsFilterMatching(SinglePair.Key, Regex))
+                        if (await IsFilterMatching(SinglePair.Key, Regex))
                                         {
                                             _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
                                         }
@@ -93,10 +99,6 @@ namespace IRH.Commands.Azure.AuditLog
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
 
         internal async Task<bool> IsFilterMatching(string Value, List<Regex> Filter)
         {
