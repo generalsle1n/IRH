@@ -99,6 +99,25 @@ The AzureMFA tool enables comprehensive reporting on Azure Multi-Factor Authenti
 - Provide detailed reports on MFA methods used by each user, available in both CLI and JSON formats.
 - Print detailed information on each MFA method configured for users.
 
+## Azure Audit Logs
+
+### Login Specific Reporting
+The LoginAudit tool is designed to provide in-depth reporting on login-related activities recorded in the Azure Audit Log.
+
+- Customizable Investigation Period
+- Custom Permission Scopes
+- Activity Filters: Focus on specific login activities, such as "WrongUsername", "UserLoggedIn", and "UserLoginFailed".
+- Multiple Output Formats
+- Advanced Filtering Options
+
+### Exchange Specific Reporting
+The LoginAudit tool is designed to provide in-depth reporting on login-related activities recorded in the Azure Audit Log.
+
+- Customizable Investigation Period
+- Custom Permission Scopes
+- Activity Filters: Focus on specific login activities, such as "New-TransportRule", "New-InboxRule", "Set-Mailbox", "Set-TransportRule", and "Set-InboxRule.
+- Multiple Output Formats
+- Advanced Filtering Options
 
 ## FAQ
 
@@ -116,7 +135,7 @@ Some features yes, but the Graph Api requires an internet connection
 To run this project, you need to specify the paramters in the command line tool of youre choice
 
 ### Azure MFA Reporting
-#### Command: ``` -AMFA ```
+#### Command: ``` -Azure -AMFA ```
 ###### Description: Fetches and reports the Multi-Factor Authentication (MFA) settings for Azure AD users, crucial for verifying the security posture and compliance of user accounts.
 
 ##### Options: 
@@ -125,17 +144,69 @@ To run this project, you need to specify the paramters in the command line tool 
 -P, --PermissionScope (optional): Define custom permission scopes for Azure API access (default: Directory.Read.All, UserAuthenticationMethod.Read.All).
 -A, --AppID (required): Application ID for Azure AD.
 -T, --Tenant (optional): Tenant ID (default: common).
--R, --Report (optional): Report format (default: CLI; options: CLI, Json).
+-R, --Report (optional): Report format (default: CLI; options: CLI, Json, CLIAndJson).
 -PL, --PrintLevel (optional): Detail level in the report (default: Brief; options: Brief, Info, Detailed, Hacky).
 ```
 
 ##### Example:
 ```bash
-IRH.exe -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+IRH.exe -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
 
-./IRH -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+./IRH -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
 
-dotnet run -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+dotnet run -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+```
+
+### Azure Audit Login Reporting
+#### Command: ``` -Azure -Audit -Login ```
+###### Description: Fetches and reports the the most important Login related Infos for Azure AD users, crucial for verifying the security posture and compliance of user accounts.
+
+##### Options: 
+```bash
+-P, --PermissionScope (optional): Define custom permission scopes for Azure API access (default: Directory.Read.All, UserAuthenticationMethod.Read.All).
+-A, --AppID (required): Application ID for Azure AD.
+-T, --Tenant (optional): Tenant ID (default: common).
+-R, --Report (optional): Report format (default: CLI; options: CLI, Json, CLIAndJson).
+-PL, --PrintLevel (optional): Detail level in the report (default: Brief; options: Brief, Info, Detailed, Hacky).
+-S, --Start (optional): Enter the Start of the Investigation (Just in Format DD.MM.YYYY))
+-E, --End (optional): Enter the End of the Investigation (Just in Format DD.MM.YYYY))
+-AC, --Activities (optional): Enter the Default Activities that should be searched in the Audit Logs (Seperated By Whitespace (default:MailboxLogin|UserLoggedIn|UserLoginFailed)
+-QT, --QueryWait (optional): Enter the Value how long to wait between the single query checks (In Seconds) (default: 10)
+-EQ, --ExisitingQuery (optional): Enter the Name of the Existing Query to use the result
+ -FP, --FilterParameter (optional): Filter on Parameternames (Displayfilter), Wildcards are supported (This Setting works only on Printlevel Info and above) its also possible to enter multiple values seperated by whitespace
+-FV, --FilterValue (optional): Filter on Paramtervalue (Datafilter): Syntax --> ParamterName:FilterValue (Example: Id:241af6fe-955d-4884-b27d-08dc93695d85), if you specify multiple serpated by whitespace it have an AND Operator
+-AU, --AuthType (optional): Enter the the process how you want to authenticate (default:DeviceCode)
+```
+
+### Azure Audit Exchange Reporting
+#### Command: ``` -Azure -Audit -Exchange ```
+###### Description: Fetches and reports the the most important Exchange related Infos for Office365 Mailboxen, crucial for verifying the security posture and compliance of user accounts.
+
+##### Options: 
+```bash
+-P, --PermissionScope (optional): Define custom permission scopes for Azure API access (default: Directory.Read.All, UserAuthenticationMethod.Read.All).
+-A, --AppID (required): Application ID for Azure AD.
+-T, --Tenant (optional): Tenant ID (default: common).
+-R, --Report (optional): Report format (default: CLI; options: CLI, Json, CLIAndJson).
+-PL, --PrintLevel (optional): Detail level in the report (default: Brief; options: Brief, Info, Detailed, Hacky).
+-S, --Start (optional): Enter the Start of the Investigation (Just in Format DD.MM.YYYY))
+-E, --End (optional): Enter the End of the Investigation (Just in Format DD.MM.YYYY))
+-AC, --Activities (optional): Enter the Default Activities that should be searched in the Audit Logs (Seperated By Whitespace (default:MailboxLogin|UserLoggedIn|UserLoginFailed)
+-QT, --QueryWait (optional): Enter the Value how long to wait between the single query checks (In Seconds) (default: 10)
+-EQ, --ExisitingQuery (optional): Enter the Name of the Existing Query to use the result
+ -FP, --FilterParameter (optional): Filter on Parameternames (Displayfilter), Wildcards are supported (This Setting works only on Printlevel Info and above) its also possible to enter multiple values seperated by whitespace
+-FV, --FilterValue (optional): Filter on Paramtervalue (Datafilter): Syntax --> ParamterName:FilterValue (Example: Id:241af6fe-955d-4884-b27d-08dc93695d85), if you specify multiple serpated by whitespace it have an AND Operator
+-AU, --AuthType (optional): Enter the the process how you want to authenticate (default:DeviceCode)
+```
+
+
+##### Example:
+```bash
+IRH.exe -Azure -Audit -Exchange --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+
+./IRH -Azure -Audit -Exchange --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+
+dotnet run -Azure -Audit -Exchange --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
 ```
 
 ### Ldap Monitoring
