@@ -30,9 +30,10 @@ namespace IRH.Commands.Azure.AuditLog
             _logger = Logger;
         }
 
-        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level, string[] Filter)
+        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level, string[] FilterParameter, string[] FilterValue)
         {
-            List<Regex> Regex = await CreateRegexFilter(Filter);
+            List<Regex> Regex = await CreateRegexFilter(FilterParameter);
+            AuditRuleEngine RuleEngine = new AuditRuleEngine(FilterValue, _logger);
 
             foreach (AuditLogRecord SingleRecord in Result.Value)
             {
