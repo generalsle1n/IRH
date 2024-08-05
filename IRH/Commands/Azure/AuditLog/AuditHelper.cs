@@ -94,11 +94,8 @@ namespace IRH.Commands.Azure.AuditLog
         internal async Task PrintResultHacky(AuditLogRecord SingleRecord, List<Regex> Regex)
                         {
             IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
-                            foreach (KeyValuePair<string, object> SingleKey in FilterResult)
-                            {
-                                if (SingleKey.Value is UntypedObject)
-                                {
-                                    List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUnTypedObject(SingleKey.Value as UntypedObject);
+            
+            List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(SingleRecord);
                                     foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
                                     {
                         if (await IsFilterMatching(SinglePair.Key, Regex))
@@ -107,19 +104,6 @@ namespace IRH.Commands.Azure.AuditLog
                                         }
                                     }
                                 }
-                                else if (SingleKey.Value is UntypedArray)
-                                {
-                                    List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedArray(SingleKey.Value as UntypedArray);
-                                    foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
-                                    {
-                        if (await IsFilterMatching(SinglePair.Key, Regex))
-                                        {
-                                            _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
-                                        }
-                                    }
-                                }
-                            }
-                        }
 
         internal async Task<bool> IsFilterMatching(string Value, List<Regex> Filter)
         {
