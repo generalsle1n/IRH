@@ -60,7 +60,7 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
         private const string _globalAppIDName = "A";
         private const string _globalTenantIDName = "T";
         private const string _globalAuthClientProviderName = "AU";
-        private const string _globalFilterParamterName = "F";
+        private const string _globalFilterParamterName = "FP";
 
         private readonly Logger _logger;
 
