@@ -30,69 +30,77 @@ namespace IRH.Commands.Azure.AuditLog
             _logger = Logger;
         }
 
-        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level, string[] Filter)
+        internal async Task PrintResult(AuditLogRecordCollectionResponse Result, ReportPrintLevel Level, string[] FilterParameter, string[] FilterValue)
         {
-            List<Regex> Regex = await CreateRegexFilter(Filter);
+            List<Regex> Regex = await CreateRegexFilter(FilterParameter);
+            AuditRuleEngine RuleEngine = new AuditRuleEngine(FilterValue, _logger);
 
             foreach (AuditLogRecord SingleRecord in Result.Value)
             {
-                _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
-                if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                if(await RuleEngine.ProcessAudit(SingleRecord))
                 {
-                    PropertyInfo[] AllProperties = SingleRecord.GetType().GetProperties();
-                    IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
-
-                    foreach (PropertyInfo StringVal in AllStringVal)
+                    await PrintResultBrief(SingleRecord);
+                    if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                     {
-                        string Value = (string)StringVal.GetValue(SingleRecord);
-                        if(await IsFilterMatching(StringVal.Name, Regex))
-                        {
-                            _logger.Information($" | {StringVal.Name} -> {Value}");
-                        }
-                    }
+                        await PrintResultInfo(SingleRecord, Regex);
 
-                    if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
-                    {
-                        IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => TestIfToStringIsOverwritten(filter.Value.GetType()));
-
-                        foreach (KeyValuePair<string, object> SingleKey in FilterResult)
+                        if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                         {
-                            if(await IsFilterMatching(SingleKey.Key, Regex))
+                            await PrintResultDetailed(SingleRecord, Regex);
+
+                            if (Level == ReportPrintLevel.Hacky)
                             {
-                                _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
-                            }
-                        }
-
-                        if (Level == ReportPrintLevel.Hacky)
-                        {
-                            FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
-                            foreach (KeyValuePair<string, object> SingleKey in FilterResult)
-                            {
-                                if (SingleKey.Value is UntypedObject)
-                                {
-                                    List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUnTypedObject(SingleKey.Value as UntypedObject);
-                                    foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
-                                    {
-                                        if(await IsFilterMatching(SinglePair.Key, Regex))
-                                        {
-                                            _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
-                                        }
-                                    }
-                                }
-                                else if (SingleKey.Value is UntypedArray)
-                                {
-                                    List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedArray(SingleKey.Value as UntypedArray);
-                                    foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
-                                    {
-                                        if(await IsFilterMatching(SinglePair.Key, Regex))
-                                        {
-                                            _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
-                                        }
-                                    }
-                                }
+                                await PrintResultHacky(SingleRecord, Regex);
                             }
                         }
                     }
+                }
+            }
+        }
+
+        internal async Task PrintResultBrief(AuditLogRecord SingleRecord)
+        {
+            _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
+        }
+
+        internal async Task PrintResultInfo(AuditLogRecord SingleRecord, List<Regex> Regex)
+        {
+            PropertyInfo[] AllProperties = SingleRecord.GetType().GetProperties();
+            IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
+
+            foreach (PropertyInfo StringVal in AllStringVal)
+            {
+                string Value = (string)StringVal.GetValue(SingleRecord);
+                if (await IsFilterMatching(StringVal.Name, Regex))
+                {
+                    _logger.Information($" | {StringVal.Name} -> {Value}");
+                }
+            }
+        }
+
+        internal async Task PrintResultDetailed(AuditLogRecord SingleRecord, List<Regex> Regex)
+        {
+            IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => TestIfToStringIsOverwritten(filter.Value.GetType()));
+
+            foreach (KeyValuePair<string, object> SingleKey in FilterResult)
+            {
+                if (await IsFilterMatching(SingleKey.Key, Regex))
+                {
+                    _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
+                }
+            }
+        }
+
+        internal async Task PrintResultHacky(AuditLogRecord SingleRecord, List<Regex> Regex)
+        {
+            IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
+            
+            List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(SingleRecord);
+            foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
+            {
+                if (await IsFilterMatching(SinglePair.Key, Regex))
+                {
+                    _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
                 }
             }
         }

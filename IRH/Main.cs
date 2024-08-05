@@ -11,7 +11,7 @@ const string _commandDescription = "suite of some little helper tools within inc
 
 Logger Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .MinimumLevel.Verbose()
+    .MinimumLevel.Information()
     .CreateLogger();
 
 RootCommand RootCommand = new RootCommand(_commandDescription);

@@ -60,7 +60,8 @@ namespace IRH.Commands.Azure.AuditLog.Login
         private const string _globalAppIDName = "A";
         private const string _globalTenantIDName = "T";
         private const string _globalAuthClientProviderName = "AU";
-        private const string _globalFilterParamterName = "F";
+        private const string _globalFilterParamterName = "FP";
+        private const string _globalFilterValueName = "FV";
 
         private readonly Logger _logger;
 
@@ -121,6 +122,7 @@ namespace IRH.Commands.Azure.AuditLog.Login
                 Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
                 Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
                 Option<string[]> FilterParameter = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterParamterName)).First() as Option<string[]>;
+                Option<string[]> FilterValue = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterValueName)).First() as Option<string[]>;
 
                 AzureAuth Auth = new AzureAuth();
                 AuditHelper Helper = new AuditHelper(_logger);
@@ -164,13 +166,13 @@ namespace IRH.Commands.Azure.AuditLog.Login
                 switch (Parser.GetValueForOption(ReportTypeOption))
                 {
                     case ReportType.CLI:
-                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter));
+                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
                         break;
                     case ReportType.Json:
                         await Helper.ExportToJson(Result);
                         break;
                     case ReportType.CLIAndJson:
-                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter));
+                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
                         await Helper.ExportToJson(Result);
                         break;
                 }
