@@ -37,6 +37,27 @@ namespace IRH.Commands.Azure.AuditLog
 
             foreach (AuditLogRecord SingleRecord in Result.Value)
             {
+                if(await RuleEngine.ProcessAudit(SingleRecord))
+                {
+                    await PrintResultBrief(SingleRecord);
+                    if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                    {
+                        await PrintResultInfo(SingleRecord, Regex);
+
+                        if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
+                        {
+                            await PrintResultDetailed(SingleRecord, Regex);
+
+                            if (Level == ReportPrintLevel.Hacky)
+                            {
+                                await PrintResultHacky(SingleRecord, Regex);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         internal async Task PrintResultBrief(AuditLogRecord SingleRecord)
         {
                 _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
