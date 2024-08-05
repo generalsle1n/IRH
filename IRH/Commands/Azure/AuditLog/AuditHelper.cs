@@ -60,50 +60,50 @@ namespace IRH.Commands.Azure.AuditLog
 
         internal async Task PrintResultBrief(AuditLogRecord SingleRecord)
         {
-                _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
+            _logger.Information($"User: {SingleRecord.UserPrincipalName} -> {SingleRecord.Operation}");
         }
 
         internal async Task PrintResultInfo(AuditLogRecord SingleRecord, List<Regex> Regex)
-                {
-                    PropertyInfo[] AllProperties = SingleRecord.GetType().GetProperties();
-                    IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
+        {
+            PropertyInfo[] AllProperties = SingleRecord.GetType().GetProperties();
+            IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
 
-                    foreach (PropertyInfo StringVal in AllStringVal)
-                    {
-                        string Value = (string)StringVal.GetValue(SingleRecord);
+            foreach (PropertyInfo StringVal in AllStringVal)
+            {
+                string Value = (string)StringVal.GetValue(SingleRecord);
                 if (await IsFilterMatching(StringVal.Name, Regex))
-                        {
-                            _logger.Information($" | {StringVal.Name} -> {Value}");
-                        }
-                    }
+                {
+                    _logger.Information($" | {StringVal.Name} -> {Value}");
+                }
+            }
         }
 
         internal async Task PrintResultDetailed(AuditLogRecord SingleRecord, List<Regex> Regex)
-                    {
-                        IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => TestIfToStringIsOverwritten(filter.Value.GetType()));
+        {
+            IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => TestIfToStringIsOverwritten(filter.Value.GetType()));
 
-                        foreach (KeyValuePair<string, object> SingleKey in FilterResult)
-                        {
+            foreach (KeyValuePair<string, object> SingleKey in FilterResult)
+            {
                 if (await IsFilterMatching(SingleKey.Key, Regex))
-                            {
-                                _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
-                            }
-                        }
+                {
+                    _logger.Information($" | | {SingleKey.Key} -> {SingleKey.Value}");
+                }
+            }
         }
 
         internal async Task PrintResultHacky(AuditLogRecord SingleRecord, List<Regex> Regex)
-                        {
+        {
             IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
             
             List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(SingleRecord);
-                                    foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
-                                    {
-                        if (await IsFilterMatching(SinglePair.Key, Regex))
-                                        {
-                                            _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
-                                        }
-                                    }
-                                }
+            foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
+            {
+                if (await IsFilterMatching(SinglePair.Key, Regex))
+                {
+                    _logger.Information($" | | | {SinglePair.Key} -> {SinglePair.Value}");
+                }
+            }
+        }
 
         internal async Task<bool> IsFilterMatching(string Value, List<Regex> Filter)
         {
