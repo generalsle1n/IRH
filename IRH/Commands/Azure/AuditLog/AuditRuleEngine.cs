@@ -8,6 +8,22 @@ namespace IRH.Commands.Azure
 {
     internal class AuditRuleEngine
     {
+        internal AuditRuleEngine(string[] RuleText, Logger Logger)
+        {
+            _logger = Logger;
+            _rules = new List<KeyValuePair<string, string>>();
+
+            foreach(string SingleRule in RuleText)
+            {
+                string[] Splitted = SingleRule.Split(_ruleSeperator);
+                _rules.Add(new KeyValuePair<string, string>(Splitted[0], Splitted[1]));
+
+                _logger.Information($"Loaded {SingleRule} Rule into Engine");
+            }
+
+            _logger.Information($"{_rules.Count} Rules loaded");
+        }
+
         internal async Task<bool> ProcessAudit(AuditLogRecord Record)
         {
             PropertyInfo[] AllProperties = Record.GetType().GetProperties();
