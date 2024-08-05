@@ -59,6 +59,21 @@ namespace IRH.Commands.Azure
 
                     _logger.Verbose($"Match for {FilterdProperty.Name}: {SingleResult}");
                 }
+                else
+                {
+                    _logger.Verbose($"Try to expand object{Record.Id} for further search");
+                    List<KeyValuePair<string,string>> Expanded = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(Record);
+
+                    IEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.Where(filter => filter.Key.Equals(SingleRule.Key) && filter.Value.Equals(SingleRule.Value));
+
+                    if(SearchForExpand.Count() > 0)
+                    {
+                        SingleResult = true;
+                    }
+
+                    _logger.Verbose($"Match for Expanded {SingleRule.Key}: {SingleResult}");
+                }
+                
 
                 AllResult.Add(SingleResult);
             }
