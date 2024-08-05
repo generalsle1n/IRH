@@ -62,17 +62,26 @@ namespace IRH.Commands.Azure
                 }
                 else
                 {
+                    IEnumerable<KeyValuePair<string,object>> SearchResult = Record.AuditData.AdditionalData.Where(item => item.Key.Equals(SingleRule.Key));
+                    
+                    if(SearchResult.Count() > 0)
+                    {
+                        SingleResult = SingleRule.Value.Equals(SearchResult.First().Value.ToString());
+                    }
+                    else
+                    {
                     _logger.Verbose($"Try to expand object{Record.Id} for further search");
-                    List<KeyValuePair<string,string>> Expanded = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(Record);
+                        List<KeyValuePair<string, string>> Expanded = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(Record);
 
                     IEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.Where(filter => filter.Key.Equals(SingleRule.Key) && filter.Value.Equals(SingleRule.Value));
 
-                    if(SearchForExpand.Count() > 0)
+                        if (SearchForExpand.Count() > 0)
                     {
                         SingleResult = true;
                     }
 
                     _logger.Verbose($"Match for Expanded {SingleRule.Key}: {SingleResult}");
+                }
                 }
                 
 
