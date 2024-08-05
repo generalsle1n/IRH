@@ -8,6 +8,10 @@ namespace IRH.Commands.Azure
 {
     internal class AuditRuleEngine
     {
+        private List<KeyValuePair<string, string>> _rules;
+        private readonly Logger _logger;
+        private const string _ruleSeperator = ":";
+
         internal AuditRuleEngine(string[] RuleText, Logger Logger)
         {
             _logger = Logger;
