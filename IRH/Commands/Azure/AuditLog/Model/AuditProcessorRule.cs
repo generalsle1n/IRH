@@ -9,5 +9,6 @@ namespace IRH.Commands.Azure.AuditLog.Model
     internal class AuditProcessorRule
     {
         internal AuditRawRule RawRule { get; set; }
+        internal AuditRegexRule RegexRule { get; set; }
     }
 }
