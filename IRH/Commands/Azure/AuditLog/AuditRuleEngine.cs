@@ -94,7 +94,7 @@ namespace IRH.Commands.Azure.AuditLog
 
                 _logger.Verbose($"Searching {FilterdProperty.Name} in {Record.Id}");
 
-                if (PropertyValue.Equals(Rule.RawRule.ParamterValueFilter))
+                if (await MatchStringToRegex(PropertyValue, Rule.RegexRule.ParamterValueFilter))
                 {
                     SingleResult = true;
                 }
