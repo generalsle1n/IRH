@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting.Model;
 using IRH.Commands.Azure.Reporting;
 using Microsoft.Graph.Beta.Models.Security;
@@ -14,8 +13,9 @@ using Serilog.Core;
 using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
 using System.Text.RegularExpressions;
+using IRH.Commands.Azure.AuditLog;
 
-namespace IRH.Commands.Azure.AuditLog
+namespace IRH.Commands.Azure.Helper
 {
     internal class AuditHelper
     {
@@ -37,7 +37,7 @@ namespace IRH.Commands.Azure.AuditLog
 
             foreach (AuditLogRecord SingleRecord in Result.Value)
             {
-                if(await RuleEngine.ProcessAudit(SingleRecord))
+                if (await RuleEngine.ProcessAudit(SingleRecord))
                 {
                     await PrintResultBrief(SingleRecord);
                     if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
@@ -94,7 +94,7 @@ namespace IRH.Commands.Azure.AuditLog
         internal async Task PrintResultHacky(AuditLogRecord SingleRecord, List<Regex> Regex)
         {
             IEnumerable<KeyValuePair<string, object>> FilterResult = SingleRecord.AuditData.AdditionalData.Where(filter => !TestIfToStringIsOverwritten(filter.Value.GetType()));
-            
+
             List<KeyValuePair<string, string>> ExtractedResult = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(SingleRecord);
             foreach (KeyValuePair<string, string> SinglePair in ExtractedResult)
             {
@@ -107,14 +107,14 @@ namespace IRH.Commands.Azure.AuditLog
 
         internal async Task<bool> IsFilterMatching(string Value, List<Regex> Filter)
         {
-            if(Filter.Count == 0)
+            if (Filter.Count == 0)
             {
                 return true;
             }
             else
             {
                 bool Matched = false;
-                foreach(Regex SingleReg in Filter)
+                foreach (Regex SingleReg in Filter)
                 {
                     Match Match = SingleReg.Match(Value);
                     if (Match.Success)
@@ -128,11 +128,11 @@ namespace IRH.Commands.Azure.AuditLog
             }
         }
 
-        internal async Task<List<Regex>> CreateRegexFilter (string[] Filter)
+        internal async Task<List<Regex>> CreateRegexFilter(string[] Filter)
         {
             List<Regex> Result = new List<Regex>();
-            
-            foreach(string Value in Filter)
+
+            foreach (string Value in Filter)
             {
                 string CurrentPattern = $"^{Value.Replace("*", ".*")}$";
                 Result.Add(new Regex(CurrentPattern, RegexOptions.IgnoreCase));
@@ -230,7 +230,7 @@ namespace IRH.Commands.Azure.AuditLog
             AuditLogQueryCollectionResponse Collection = await Client.Security.AuditLog.Queries.GetAsync();
 
             IEnumerable<AuditLogQuery> Result = Collection.Value.Where(item => item.DisplayName.Equals(QueryName));
-            if(Result.Count() >= 1)
+            if (Result.Count() >= 1)
             {
                 return Result.First();
             }
