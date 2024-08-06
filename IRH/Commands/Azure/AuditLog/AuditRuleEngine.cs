@@ -133,12 +133,12 @@ namespace IRH.Commands.Azure.AuditLog
 
             List<KeyValuePair<string, string>> Expanded = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(Record);
 
-            IEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.Where(filter =>
+            IAsyncEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.ToAsyncEnumerable().WhereAwait(async filter =>
             {
-                return (filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && filter.Value.Equals(Rule.RawRule.ParamterValueFilter));
+                return filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && await MatchStringToRegex(filter.Value as string, Rule.RegexRule.ParamterValueFilter);
             });
 
-            if (SearchForExpand.Count() > 0)
+            if (await SearchForExpand.CountAsync() > 0)
             {
                 SingleResult = true;
                 _logger.Verbose($"Match for Expanded {Rule.RawRule.ParamterNameFilter}: {SingleResult}");
