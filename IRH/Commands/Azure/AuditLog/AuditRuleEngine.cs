@@ -152,5 +152,18 @@ namespace IRH.Commands.Azure.AuditLog
             string CurrentPattern = $"^{Input.Replace("*", ".*")}$";
             return new Regex(CurrentPattern, RegexOptions.IgnoreCase);
         }
+
+        internal async Task<bool> MatchStringToRegex(string Value, Regex Regex)
+        {
+            bool Matched = false;
+
+            Match Match = Regex.Match(Value);
+            if (Match.Success)
+            {
+                Matched = true;
+            }
+
+            return Matched;
+        }
     }
 }
