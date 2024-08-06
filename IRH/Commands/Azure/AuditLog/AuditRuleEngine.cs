@@ -8,7 +8,7 @@ using IRH.Commands.Azure.Helper;
 using Microsoft.Graph.Beta.Models.Security;
 using Serilog.Core;
 
-namespace IRH.Commands.Azure
+namespace IRH.Commands.Azure.AuditLog
 {
     internal class AuditRuleEngine
     {
@@ -21,7 +21,7 @@ namespace IRH.Commands.Azure
             _logger = Logger;
             _rules = new List<KeyValuePair<string, string>>();
 
-            foreach(string SingleRule in RuleText)
+            foreach (string SingleRule in RuleText)
             {
                 string[] Splitted = SingleRule.Split(_ruleSeperator);
                 _rules.Add(new KeyValuePair<string, string>(Splitted[0], Splitted[1]));
@@ -38,7 +38,7 @@ namespace IRH.Commands.Azure
 
             List<bool> AllResult = new List<bool>();
 
-            foreach(KeyValuePair<string, string> SingleRule in _rules)
+            foreach (KeyValuePair<string, string> SingleRule in _rules)
             {
                 bool SingleResult = false;
 
@@ -46,7 +46,7 @@ namespace IRH.Commands.Azure
 
                 _logger.Verbose($"Evaluted {AllProperties.Length} Properties for Object {Record.Id}");
 
-                if(Search.Count() > 0)
+                if (Search.Count() > 0)
                 {
                     PropertyInfo FilterdProperty = Search.First();
                     string PropertyValue = FilterdProperty.GetValue(Record) as string;
@@ -62,28 +62,28 @@ namespace IRH.Commands.Azure
                 }
                 else
                 {
-                    IEnumerable<KeyValuePair<string,object>> SearchResult = Record.AuditData.AdditionalData.Where(item => item.Key.Equals(SingleRule.Key));
-                    
-                    if(SearchResult.Count() > 0)
+                    IEnumerable<KeyValuePair<string, object>> SearchResult = Record.AuditData.AdditionalData.Where(item => item.Key.Equals(SingleRule.Key));
+
+                    if (SearchResult.Count() > 0)
                     {
                         SingleResult = SingleRule.Value.Equals(SearchResult.First().Value.ToString());
                     }
                     else
                     {
-                    _logger.Verbose($"Try to expand object{Record.Id} for further search");
+                        _logger.Verbose($"Try to expand object{Record.Id} for further search");
                         List<KeyValuePair<string, string>> Expanded = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(Record);
 
-                    IEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.Where(filter => filter.Key.Equals(SingleRule.Key) && filter.Value.Equals(SingleRule.Value));
+                        IEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.Where(filter => filter.Key.Equals(SingleRule.Key) && filter.Value.Equals(SingleRule.Value));
 
                         if (SearchForExpand.Count() > 0)
-                    {
-                        SingleResult = true;
-                    }
+                        {
+                            SingleResult = true;
+                        }
 
-                    _logger.Verbose($"Match for Expanded {SingleRule.Key}: {SingleResult}");
+                        _logger.Verbose($"Match for Expanded {SingleRule.Key}: {SingleResult}");
+                    }
                 }
-                }
-                
+
 
                 AllResult.Add(SingleResult);
             }
