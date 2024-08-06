@@ -111,7 +111,7 @@ namespace IRH.Commands.Azure.AuditLog
 
             IAsyncEnumerable<KeyValuePair<string, object>> Search = Record.AuditData.AdditionalData.ToAsyncEnumerable().WhereAwait(async filter =>
             {
-                return (filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && await MatchStringToRegex(filter.Value as string, Rule.RegexRule.ParamterValueFilter));
+                return (filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && await MatchStringToRegex(filter.Value.ToString(), Rule.RegexRule.ParamterValueFilter));
             });
 
             _logger.Verbose($"Evaluted {Record.AuditData.AdditionalData.Count} Properties for Object {Record.Id}");
