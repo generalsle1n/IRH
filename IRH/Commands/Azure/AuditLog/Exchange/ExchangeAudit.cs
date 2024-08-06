@@ -1,5 +1,5 @@
 ﻿using IRH.Commands.Azure.Auth;
-﻿using IRH.Commands.Azure.Helper;
+using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting.Model;
 using IRH.Commands.Azure.Reporting;
 using Microsoft.Graph.Beta;
