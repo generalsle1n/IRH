@@ -109,17 +109,17 @@ namespace IRH.Commands.Azure.AuditLog
         {
             bool SingleResult = false;
 
-            IEnumerable<KeyValuePair<string,object>> Search = Record.AuditData.AdditionalData.Where(filter =>
+            IAsyncEnumerable<KeyValuePair<string, object>> Search = Record.AuditData.AdditionalData.ToAsyncEnumerable().WhereAwait(async filter =>
             {
-                return (filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && filter.Value.Equals(Rule.RawRule.ParamterValueFilter));
+                return (filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && await MatchStringToRegex(filter.Value as string, Rule.RegexRule.ParamterValueFilter));
             });
 
             _logger.Verbose($"Evaluted {Record.AuditData.AdditionalData.Count} Properties for Object {Record.Id}");
 
-            if (Search.Count() > 0)
+            if (await Search.CountAsync() > 0)
             {
                 SingleResult = true;
-                _logger.Verbose($"Match for {Search.First().Key}: {SingleResult}");
+                _logger.Verbose($"Match for {(await Search.FirstAsync()).Key}: {SingleResult}");
             }
 
             return SingleResult;
