@@ -50,63 +50,101 @@ namespace IRH.Commands.Azure.AuditLog
 
         internal async Task<bool> ProcessAudit(AuditLogRecord Record)
         {
-            PropertyInfo[] AllProperties = Record.GetType().GetProperties();
-
             List<bool> AllResult = new List<bool>();
 
             foreach (AuditProcessorRule SingleRule in _rules)
             {
-                bool SingleResult = false;
+                bool SearchResult = false;
 
-                IEnumerable<PropertyInfo> Search = AllProperties.Where(filter => filter.Name.Equals(SingleRule.RawRule.ParamterNameFilter));
+                SearchResult = await IsMatchingRecordInfoLevel(Record, SingleRule);
 
-                _logger.Verbose($"Evaluted {AllProperties.Length} Properties for Object {Record.Id}");
-
-                if (Search.Count() > 0)
+                if(!SearchResult)
                 {
-                    PropertyInfo FilterdProperty = Search.First();
-                    string PropertyValue = FilterdProperty.GetValue(Record) as string;
+                    SearchResult = await IsMatchingRecordAuditLevel(Record, SingleRule);
 
-                    _logger.Verbose($"Searching {FilterdProperty.Name} in {Record.Id}");
-
-                    if (PropertyValue.Equals(SingleRule.RawRule.ParamterValueFilter))
+                    if (!SearchResult)
                     {
-                        SingleResult = true;
-                    }
-
-                    _logger.Verbose($"Match for {FilterdProperty.Name}: {SingleResult}");
-                }
-                else
-                {
-                    IEnumerable<KeyValuePair<string, object>> SearchResult = Record.AuditData.AdditionalData.Where(item => item.Key.Equals(SingleRule.RawRule.ParamterNameFilter));
-
-                    if (SearchResult.Count() > 0)
-                    {
-                        SingleResult = SingleRule.RawRule.ParamterValueFilter.Equals(SearchResult.First().Value.ToString());
-                    }
-                    else
-                    {
-                        _logger.Verbose($"Try to expand object{Record.Id} for further search");
-                        List<KeyValuePair<string, string>> Expanded = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(Record);
-
-                        IEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.Where(filter => filter.Key.Equals(SingleRule.RawRule.ParamterNameFilter) && filter.Value.Equals(SingleRule.RawRule.ParamterValueFilter));
-
-                        if (SearchForExpand.Count() > 0)
-                        {
-                            SingleResult = true;
-                        }
-
-                        _logger.Verbose($"Match for Expanded {SingleRule.RawRule.ParamterNameFilter}: {SingleResult}");
+                        SearchResult = await IsMatchingRecordExpandedLevel(Record, SingleRule);
                     }
                 }
 
+                AllResult.Add(SearchResult);
 
-                AllResult.Add(SingleResult);
             }
 
             bool Result = AllResult.All(filter => filter == true);
 
             return Result;
+        }
+
+        internal async Task<bool> IsMatchingRecordInfoLevel(AuditLogRecord Record, AuditProcessorRule Rule)
+        {
+            bool SingleResult = false;
+
+            PropertyInfo[] AllProperties = Record.GetType().GetProperties();
+
+            IEnumerable<PropertyInfo> Search = AllProperties.Where(filter => filter.Name.Equals(Rule.RawRule.ParamterNameFilter));
+
+            _logger.Verbose($"Evaluted {AllProperties.Length} Properties for Object {Record.Id}");
+
+            if (Search.Count() > 0)
+            {
+                PropertyInfo FilterdProperty = Search.First();
+                string PropertyValue = FilterdProperty.GetValue(Record) as string;
+
+                _logger.Verbose($"Searching {FilterdProperty.Name} in {Record.Id}");
+
+                if (PropertyValue.Equals(Rule.RawRule.ParamterValueFilter))
+                {
+                    SingleResult = true;
+                }
+
+                _logger.Verbose($"Match for {FilterdProperty.Name}: {SingleResult}");
+            }
+
+            return SingleResult;
+        }
+
+        internal async Task<bool> IsMatchingRecordAuditLevel(AuditLogRecord Record, AuditProcessorRule Rule)
+        {
+            bool SingleResult = false;
+
+            IEnumerable<KeyValuePair<string,object>> Search = Record.AuditData.AdditionalData.Where(filter =>
+            {
+                return (filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && filter.Value.Equals(Rule.RawRule.ParamterValueFilter));
+            });
+
+            _logger.Verbose($"Evaluted {Record.AuditData.AdditionalData.Count} Properties for Object {Record.Id}");
+
+            if (Search.Count() > 0)
+            {
+                SingleResult = true;
+                _logger.Verbose($"Match for {Search.First().Key}: {SingleResult}");
+            }
+
+            return SingleResult;
+        }
+
+        internal async Task<bool> IsMatchingRecordExpandedLevel(AuditLogRecord Record, AuditProcessorRule Rule)
+        {
+            bool SingleResult = false;
+
+            _logger.Verbose($"Try to expand object{Record.Id} for further search");
+
+            List<KeyValuePair<string, string>> Expanded = await UnTypedExtractor.ExtractUntypedDataFromAuditLogRecord(Record);
+
+            IEnumerable<KeyValuePair<string, string>> SearchForExpand = Expanded.Where(filter =>
+            {
+                return (filter.Key.Equals(Rule.RawRule.ParamterNameFilter) && filter.Value.Equals(Rule.RawRule.ParamterValueFilter));
+            });
+
+            if (SearchForExpand.Count() > 0)
+            {
+                SingleResult = true;
+                _logger.Verbose($"Match for Expanded {Rule.RawRule.ParamterNameFilter}: {SingleResult}");
+            }
+
+            return SingleResult;
         }
 
         internal Regex CreateRegex(string Input)
