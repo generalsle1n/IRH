@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Core;
 using System.CommandLine;
 using IRH.Commands.Azure;
+using IRH.Commands.ActiveDirectory;
 
 const string _commandDescription = "suite of some little helper tools within incident response when dealing with security breaches. These tools provide essential features for IT security professionals, making it easier to manage and respond to incidents effectively.";
 
@@ -19,13 +20,16 @@ RootCommand RootCommand = new RootCommand(_commandDescription);
 LDAPMonitor LM = new LDAPMonitor(Logger);
 SetupDeployment SD = new SetupDeployment(Logger);
 AzureFunctions AF = new AzureFunctions(Logger);
+ActiveDirectory AD = new ActiveDirectory(Logger);
 
 Command LdapMonitor = LM.CreateCommand(RootCommand);
 Command SetupDeployment = SD.CreateCommand(RootCommand);
 Command AzureFunctions = AF.CreateCommand(RootCommand);
+Command ActiveDirectory = AD.CreateCommand(RootCommand);
 
 RootCommand.AddCommand(LdapMonitor);
 RootCommand.AddCommand(SetupDeployment);
 RootCommand.AddCommand(AzureFunctions);
+RootCommand.AddCommand(ActiveDirectory);
 
 await RootCommand.InvokeAsync(args);
