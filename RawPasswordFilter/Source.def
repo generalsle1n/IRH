@@ -1,3 +1,5 @@
 LIBRARY RawPasswordFilter
 EXPORTS
-	Add
+	InitializeChangeNotify
+	PasswordChangeNotify
+	PasswordFilter
