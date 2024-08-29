@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRH", "IRH\IRH.csproj", "{B31F3830-F83E-4E6F-8370-5422EF8E0C4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRH", "IRH\IRH.csproj", "{B31F3830-F83E-4E6F-8370-5422EF8E0C4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRH.ProcessElevation", "IRH.ProcessElevation\IRH.ProcessElevation.csproj", "{E7163176-41B8-40AF-AABA-97FFDBC2D933}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B31F3830-F83E-4E6F-8370-5422EF8E0C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31F3830-F83E-4E6F-8370-5422EF8E0C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B31F3830-F83E-4E6F-8370-5422EF8E0C4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7163176-41B8-40AF-AABA-97FFDBC2D933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7163176-41B8-40AF-AABA-97FFDBC2D933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7163176-41B8-40AF-AABA-97FFDBC2D933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7163176-41B8-40AF-AABA-97FFDBC2D933}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
