@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRH.ProcessElevation.Model;
+using System;
 using System.Collections.Generic;
 using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
@@ -9,15 +10,28 @@ namespace IRH.ProcessElevation.Classes
 {
     internal class DomainInteraction
     {
-        private extern AcquireCredentialsHandle
         internal async Task<string> GetSPNFromCurrent()
         {
             Domain CurrentDomain = Domain.GetCurrentDomain();
             string CurrentDomainName = CurrentDomain.Name;
             string CurrentDomainControllerName = CurrentDomain.PdcRoleOwner.Name;
-            //string DomainController = Domain.
+
+            SecurityHandle Handle = new SecurityHandle(0);
+            SecurityInteger Integer = new SecurityInteger(0);
+
+            DomainInteractionInterop.AcquireCredentialsHandle(
+                null, 
+                "Kerberos", 
+                DomainInteractionInterop.SECPKG_CRED_OUTBOUND, 
+                IntPtr.Zero, 
+                IntPtr.Zero, 
+                0, 
+                IntPtr.Zero, 
+                ref Handle, 
+                ref Integer
+                );
+
             return CurrentDomainControllerName;
-            //var domainController = Networking.GetDCName(domain);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IRH.ProcessElevation.Model
 {
-    internal class SecurityInteger
+    internal struct SecurityInteger
     {
         internal uint LowPart;
         internal int HighPart;
