@@ -9,19 +9,19 @@ namespace IRH.ProcessElevation.Model
 {
     internal class SecurityBuffer : IDisposable
     {
-        public int Buffer;
-        public int BufferType;
-        public IntPtr BufferPointer;
+        internal int Buffer;
+        internal int BufferType;
+        internal IntPtr BufferPointer;
 
 
-        public SecurityBuffer(int BufferSize)
+        internal SecurityBuffer(int BufferSize)
         {
             Buffer = BufferSize;
             BufferType = (int)SecurityBufferType.Token;
             BufferPointer = Marshal.AllocHGlobal(BufferSize);
         }
 
-        public SecurityBuffer(byte[] SecurityBufferBytes)
+        internal SecurityBuffer(byte[] SecurityBufferBytes)
         {
             Buffer = SecurityBufferBytes.Length;
             BufferType = (int)SecurityBufferType.Token;
@@ -29,7 +29,7 @@ namespace IRH.ProcessElevation.Model
             Marshal.Copy(SecurityBufferBytes, 0, BufferPointer, Buffer);
         }
 
-        public SecurityBuffer(byte[] SecurityBufferBytes, SecurityBufferType Type)
+        internal SecurityBuffer(byte[] SecurityBufferBytes, SecurityBufferType Type)
         {
             Buffer = SecurityBufferBytes.Length;
             BufferType = (int)Type;
