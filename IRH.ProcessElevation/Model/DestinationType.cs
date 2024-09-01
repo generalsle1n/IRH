@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IRH.ProcessElevation.Model
 {
-    internal enum DestinationType
+    public enum DestinationType
     {
         Domain,
         Workgroup
