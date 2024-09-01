@@ -14,16 +14,31 @@ namespace IRH.ProcessElevation.Classes
 
         [DllImport("secur32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int AcquireCredentialsHandle(
-            string SecurityChar, //SEC_CHAR*
-            string PackageType, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
+            string SecurityChar,
+            string PackageType,
             int IsInUse,
-            IntPtr AuthID,//_LUID AuthenticationID,//pvLogonID,//PLUID
-            IntPtr AuthData,//PVOID
-            int SecurityKey, //SEC_GET_KEY_FN
-            IntPtr KeyArgument, //PVOID
-            ref SecurityHandle HandleKey, //SecHandle //PCtxtHandle ref
-            ref SecurityInteger ExpiryDate  //PTimeStamp //TimeStamp ref
+            IntPtr AuthID,
+            IntPtr AuthData,
+            int SecurityKey,
+            IntPtr KeyArgument,
+            ref SecurityHandle CredHandle,
+            ref SecurityInteger ExpiryDate 
         );
+
+        [DllImport("secur32.dll", SetLastError = true)]
+        public static extern int InitializeSecurityContext(
+            ref SecurityHandle CredHandle,
+            IntPtr PCContextHandle,
+            string TargetName,
+            int ContextRequest,
+            int Reserved,
+            int DataReputation,
+            IntPtr SecInput,
+            int ReservedData,
+            out SecurityHandle NewHandle,
+            out SecurityBufferDescription SecurityBufferDescription,
+            out uint ManagedContext,
+            out SecurityInteger ExpiryDate
         );
     }
 }
