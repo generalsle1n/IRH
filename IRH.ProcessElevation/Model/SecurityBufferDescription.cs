@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace IRH.ProcessElevation.Model
 {
+    [StructLayout(LayoutKind.Sequential)]
     internal class SecurityBufferDescription : IDisposable
     {
         internal int Version;
