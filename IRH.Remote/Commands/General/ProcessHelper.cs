@@ -43,19 +43,7 @@ namespace IRH.Remote.Commands.General
                 uint PID = (uint)CimResult.OutParameters[_resultPropertyName].Value;
                 Result = true;
                 logger.Information($"Powershell Script started successfully (PID: {PID})");
-
-                while(Wait == true)
-                {
-                    IEnumerable<CimInstance> ProcessList = Session.QueryInstances(_wmiNamespace, _wmiQueryDialect, $"SELECT {_resultPropertyName} FROM Win32_Process WHERE {_resultPropertyName} = {PID}");
-                    if (!ProcessList.Any())
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        Thread.Sleep(_wmiQueryTimeout);
-                    }
-                }
+                WaitOnPID(Session, PID);
             }
             else
             {
@@ -63,6 +51,58 @@ namespace IRH.Remote.Commands.General
             }
 
             return Result;
+        }
+        internal static bool CreateProcess(CimSession Session, string Executable, string Arguments, Logger logger, ShowWindow WindowMode = ShowWindow.SW_HIDE, bool Wait = true)
+        {
+            bool Result = false;
+            CimMethodParametersCollection Parameters = new CimMethodParametersCollection();
+
+            CimInstance StartupInfo = new CimInstance(_settingWmiClass);
+
+            StartupInfo.CimInstanceProperties.Add(CimProperty.Create("ShowWindow", ShowWindow.SW_HIDE, CimType.UInt16, CimFlags.None)); // SW_SHOWNORMAL
+
+            string CommandLine = $"{Executable}";
+
+            if (Arguments is not null)
+            {
+                CommandLine = $"{CommandLine} {Arguments}";
+            }
+
+            Parameters.Add(CimMethodParameter.Create("CommandLine", $"{CommandLine}", CimType.String, CimFlags.In));
+            Parameters.Add(CimMethodParameter.Create("CurrentDirectory", _currentDirectory, CimType.String, CimFlags.In));
+            Parameters.Add(CimMethodParameter.Create("ProcessStartupInformation", StartupInfo, CimFlags.Parameter));
+
+            CimMethodResult CimResult = Session.InvokeMethod(_wmiNamespace, _wmiClass, _wmiMethodCreation, Parameters);
+
+            if ((uint)CimResult.ReturnValue.Value == (uint)0)
+            {
+                uint PID = (uint)CimResult.OutParameters[_resultPropertyName].Value;
+                Result = true;
+                logger.Information($"Executable started successfully (PID: {PID})");
+                WaitOnPID(Session, PID);
+            }
+            else
+            {
+                logger.Error("Unable to start executable");
+            }
+
+            return Result;
+        }
+        
+        private static void WaitOnPID(CimSession Session, uint PID)
+        {
+            while (true)
+            {
+                IEnumerable<CimInstance> ProcessList = Session.QueryInstances(_wmiNamespace, _wmiQueryDialect, $"SELECT {_resultPropertyName} FROM Win32_Process WHERE {_resultPropertyName} = {PID}");
+                if (!ProcessList.Any())
+                {
+                    break;
+                }
+                else
+                {
+                    Thread.Sleep(_wmiQueryTimeout);
+                }
+            }
         }
     }
 }
