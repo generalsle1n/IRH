@@ -52,7 +52,7 @@ namespace IRH.Remote.Commands.UploadFile
 
         private const string _remoteMachineDomainName = "--Domain";
         private const string _remoteMachineDomainDescription = "Enter the remote Domain to login";
-        private const string _remoteMachineDomainAlias = "-D";
+        private const string _remoteMachineDomainAlias = "-DO";
 
         private const string _remoteMachineTimeoutName = "--Timeout";
         private const string _remoteMachineTimeoutDescription = "Enter the remote Timeout to wait max";
