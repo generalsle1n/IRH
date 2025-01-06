@@ -4,6 +4,7 @@ using System.CommandLine.Parsing;
 using IRH.Remote.Commands.UploadFile;
 using IRH.Remote.Commands.DownloadFile;
 using IRH.Remote.Commands.ExecuteFile;
+using IRH.Remote.Commands.InstallMSI;
 
 namespace IRH.Remote
 {
@@ -32,9 +33,13 @@ namespace IRH.Remote
             ExecuteFile ExecuteFile = new ExecuteFile(_logger);
             Command ExecuteFileCommand = ExecuteFile.CreateCommand(Command);
 
+            InstallMSI InstallMSI = new InstallMSI(_logger);
+            Command InstallMSICommand = InstallMSI.CreateCommand(Command);
+
             Command.AddCommand(UploadFileCommand);
             Command.AddCommand(DownloadFileCommand);
             Command.AddCommand(ExecuteFileCommand);
+            Command.AddCommand(InstallMSICommand);
 
             return Command;
         }
