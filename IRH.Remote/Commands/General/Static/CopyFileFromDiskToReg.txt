@@ -1,0 +1,6 @@
+﻿$KeyPathName = "HKCU:\SOFTWARE\Microsoft\Windows\"
+$ValueName = "xXKeyNameXx"
+$FilePath = "xXFilePathXx"
+
+$Data = [System.IO.File]::ReadAllBytes($FilePath)
+New-ItemProperty -Path $KeyPathName -Name $ValueName -Value $Data -PropertyType "Binary" | Out-Null
