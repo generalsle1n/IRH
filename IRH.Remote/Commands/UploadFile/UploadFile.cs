@@ -145,40 +145,20 @@ namespace IRH.Remote.Commands.UploadFile
 
                         string Domain = Parser.GetValueForOption(RemoteMachineDomainOption) ?? Parser.GetValueForOption(RemoteMachineOption);
 
-                        NetworkCredential RawCredential = new NetworkCredential(
-                            Parser.GetValueForOption(RemoteMachineUserNameOption),
-                            Parser.GetValueForOption(RemoteMachinePasswordOption),
-                            Domain
-                            );
-
-                        CimCredential Credential = new CimCredential(
-                            PasswordAuthenticationMechanism.Default,
-                            RawCredential.Domain,
-                            RawCredential.UserName,
-                            RawCredential.SecurePassword
-                            );
-
-                        DComSessionOptions Options = new DComSessionOptions()
-                        {
-                            Impersonation = ImpersonationType.Impersonate,
-                            Timeout = TimeSpan.FromSeconds(Parser.GetValueForOption(RemoteMachineTimeoutOption))
-                        };
-                        Options.AddDestinationCredentials(Credential);
-
-                        using (CimSession Session = CimSession.Create(Parser.GetValueForOption(RemoteMachineOption), Options))
+                        using (CimSession Session = CimHelper.CreateSession(_remoteMachineName, Domain, Parser.GetValueForOption(RemoteMachineUserNameOption), Parser.GetValueForOption(RemoteMachinePasswordOption), Parser.GetValueForOption(RemoteMachineTimeoutOption)))
                         {
                             bool ConnectionCheck = Session.TestConnection();
 
                             if (ConnectionCheck)
                             {
                                 _logger.Information($"Connection to {Parser.GetValueForOption(RemoteMachineOption)} established");
-                                
+
                                 byte[] FileData = File.ReadAllBytes(Parser.GetValueForOption(LocalPathOption));
                                 byte[] Result = ByteArrayHelper.MergeArray(Encoding.UTF8.GetBytes(Parser.GetValueForOption(DestinationPathOption)), FileData);
                                 Guid ValueName = Guid.NewGuid();
 
                                 bool Success = RegistryHelper.CreateRegistryValue(Session, _defaultRegistryKey, ValueName.ToString(), Result, _logger, Tree: RegistryTree.HKEY_CURRENT_USER);
-                                if(Success)
+                                if (Success)
                                 {
                                     string EncodedScript = PowershellHelper.CreateScriptToWriteFileFromRegistry(ValueName.ToString(), _logger);
                                     ProcessHelper.CreatePowershellProcess(Session, EncodedScript, _logger);
