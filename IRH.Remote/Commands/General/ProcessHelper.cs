@@ -23,7 +23,7 @@ namespace IRH.Remote.Commands.General
         private const string _wmiQueryDialect = "WQL";
         private const int _wmiQueryTimeout = 1000;
 
-        internal static bool CreatePowershellProcess(CimSession Session, string PowershellScript, Logger logger, ShowWindow WindowMode = ShowWindow.SW_HIDE)
+        internal static bool CreatePowershellProcess(CimSession Session, string PowershellScript, Logger logger, ShowWindow WindowMode = ShowWindow.SW_HIDE, bool Wait = true)
         {
             bool Result = false;
             CimMethodParametersCollection Parameters = new CimMethodParametersCollection();
