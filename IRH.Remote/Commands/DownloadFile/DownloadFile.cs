@@ -15,7 +15,7 @@ namespace IRH.Remote.Commands.DownloadFile
     internal class DownloadFile
     {
         private const string _commandName = "--Download";
-        private const string _commandDescription = "Download an File on from the remote Machine";
+        private const string _commandDescription = "Download an File from the remote Machine";
         private const string _commandAlias = "-D";
 
         private const string _deploymentTypeName = "--Type";
