@@ -20,6 +20,8 @@ namespace IRH.Remote.Commands.General
         private const string _currentDirectory = @"C:\Windows\System32";
         private const string _binaryName = "powershell.exe";
         private const string _resultPropertyName = "ProcessId";
+        private const string _wmiQueryDialect = "WQL";
+        private const int _wmiQueryTimeout = 1000;
 
         internal static bool CreatePowershellProcess(CimSession Session, string PowershellScript, Logger logger, ShowWindow WindowMode = ShowWindow.SW_HIDE)
         {
