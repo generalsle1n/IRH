@@ -30,7 +30,7 @@ namespace IRH.Remote.Commands.General
 
             CimInstance StartupInfo = new CimInstance(_settingWmiClass);
             
-            StartupInfo.CimInstanceProperties.Add(CimProperty.Create("ShowWindow", ShowWindow.SW_HIDE, CimType.UInt16, CimFlags.None)); // SW_SHOWNORMAL
+            StartupInfo.CimInstanceProperties.Add(CimProperty.Create("ShowWindow", ShowWindow.SW_HIDE, CimType.UInt16, CimFlags.None));
 
             Parameters.Add(CimMethodParameter.Create("CommandLine", $"{_binaryName} -ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden -EncodedCommand {PowershellScript}", CimType.String, CimFlags.In));
             Parameters.Add(CimMethodParameter.Create("CurrentDirectory", _currentDirectory, CimType.String, CimFlags.In));
