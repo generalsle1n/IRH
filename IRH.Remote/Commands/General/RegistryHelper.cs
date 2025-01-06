@@ -16,6 +16,7 @@ namespace IRH.Remote.Commands.General
         private const string _wmiClass = "StdRegProv";
         private const string _wmiMethodCreation = "SetBinaryValue";
         private const string _wmiMethodDeletion = "DeleteValue";
+        private const string _wmiMethodBinaryGet = "GetBinaryValue";
 
         internal static bool CreateRegistryValue(CimSession Session, string RegistryKey, string RegistryValueName, byte[] RegistryValue, Logger logger, RegistryTree Tree = RegistryTree.HKEY_CURRENT_USER)
         {
@@ -61,6 +62,30 @@ namespace IRH.Remote.Commands.General
             else
             {
                 logger.Error("Unable to delete Registry Value");
+            }
+
+            return Result;
+        }
+        
+        internal static byte[] GetRegistryBinaryValue(CimSession Session, string RegistryKey, string RegistryValueName, Logger logger, RegistryTree Tree = RegistryTree.HKEY_CURRENT_USER)
+        {
+            byte[] Result = null;
+            CimMethodParametersCollection Parameters = new CimMethodParametersCollection();
+
+            Parameters.Add(CimMethodParameter.Create("hDefKey", Tree, CimType.UInt32, CimFlags.In));
+            Parameters.Add(CimMethodParameter.Create("sSubKeyName", RegistryKey, CimType.String, CimFlags.In));
+            Parameters.Add(CimMethodParameter.Create("sValueName", RegistryValueName, CimType.String, CimFlags.In));
+
+            CimMethodResult CimResult = Session.InvokeMethod(_wmiNamespace, _wmiClass, _wmiMethodBinaryGet, Parameters);
+
+            if ((uint)CimResult.ReturnValue.Value == (uint)0)
+            {
+                Result = CimResult.OutParameters["uValue"].Value as byte[];
+                logger.Information("Registry Value read successfully");
+            }
+            else
+            {
+                logger.Error("Unable to read Registry Value");
             }
 
             return Result;
