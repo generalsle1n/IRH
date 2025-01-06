@@ -57,7 +57,7 @@ namespace IRH.Remote.Commands.UploadFile
         private const string _remoteMachineTimeoutName = "--Timeout";
         private const string _remoteMachineTimeoutDescription = "Enter the remote Timeout to wait max";
         private const string _remoteMachineTimeoutAlias = "-T";
-        private const int _remoteMachineTimeoutDefaultValue = 5;
+        private const int _remoteMachineTimeoutDefaultValue = 10;
 
         private const string _optionSeperator = "-";
         private const string _defaultRegistryKey = @"SOFTWARE\Microsoft\Windows";

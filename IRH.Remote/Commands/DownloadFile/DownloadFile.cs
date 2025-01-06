@@ -51,7 +51,7 @@ namespace IRH.Remote.Commands.DownloadFile
         private const string _remoteMachineTimeoutName = "--Timeout";
         private const string _remoteMachineTimeoutDescription = "Enter the remote Timeout to wait max";
         private const string _remoteMachineTimeoutAlias = "-T";
-        private const int _remoteMachineTimeoutDefaultValue = 5;
+        private const int _remoteMachineTimeoutDefaultValue = 10;
 
         private readonly Logger _logger;
 
