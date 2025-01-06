@@ -1,0 +1,9 @@
+﻿$KeyPathName = "HKCU:\SOFTWARE\Microsoft\Windows\"
+$ValueName = "xXKeyNameXx"
+$Seperator = [byte]"255"
+
+$Data = Get-ItemProperty -Path $KeyPathName -Name $ValueName
+$Path = $Data.$ValueName[0..($Data.$ValueName.IndexOf($Seperator) -1)]
+$Path = [System.Text.Encoding]::UTF8.GetString($Path)
+$RawData = $Data.$ValueName[($Data.$ValueName.IndexOf($Seperator)+1)..($Data.$ValueName.Length-1)]
+[System.IO.File]::WriteAllBytes($Path, $RawData)
