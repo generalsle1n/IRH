@@ -21,7 +21,7 @@ namespace IRH.Remote.Commands.General
         private const string _binaryName = "powershell.exe";
         private const string _resultPropertyName = "ProcessId";
         private const string _wmiQueryDialect = "WQL";
-        private const int _wmiQueryTimeout = 1000;
+        private const int _wmiQueryTimeout = 250;
 
         internal static bool CreatePowershellProcess(CimSession Session, string PowershellScript, Logger logger, ShowWindow WindowMode = ShowWindow.SW_HIDE, bool Wait = true)
         {
