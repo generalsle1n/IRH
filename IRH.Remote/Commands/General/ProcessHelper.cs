@@ -40,8 +40,22 @@ namespace IRH.Remote.Commands.General
 
             if ((uint)CimResult.ReturnValue.Value == (uint)0)
             {
+                uint PID = (uint)CimResult.OutParameters[_resultPropertyName].Value;
                 Result = true;
-                logger.Information($"Powershell Script started successfully (PID: {CimResult.OutParameters[_resultPropertyName].Value})");
+                logger.Information($"Powershell Script started successfully (PID: {PID})");
+
+                while(Wait == true)
+                {
+                    IEnumerable<CimInstance> ProcessList = Session.QueryInstances(_wmiNamespace, _wmiQueryDialect, $"SELECT {_resultPropertyName} FROM Win32_Process WHERE {_resultPropertyName} = {PID}");
+                    if (!ProcessList.Any())
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(_wmiQueryTimeout);
+                    }
+                }
             }
             else
             {
