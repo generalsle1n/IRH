@@ -145,7 +145,7 @@ namespace IRH.Remote.Commands.UploadFile
 
                         string Domain = Parser.GetValueForOption(RemoteMachineDomainOption) ?? Parser.GetValueForOption(RemoteMachineOption);
 
-                        using (CimSession Session = CimHelper.CreateSession(_remoteMachineName, Domain, Parser.GetValueForOption(RemoteMachineUserNameOption), Parser.GetValueForOption(RemoteMachinePasswordOption), Parser.GetValueForOption(RemoteMachineTimeoutOption)))
+                        using (CimSession Session = CimHelper.CreateSession(Parser.GetValueForOption(RemoteMachineOption), Domain, Parser.GetValueForOption(RemoteMachineUserNameOption), Parser.GetValueForOption(RemoteMachinePasswordOption), Parser.GetValueForOption(RemoteMachineTimeoutOption)))
                         {
                             bool ConnectionCheck = Session.TestConnection();
 
