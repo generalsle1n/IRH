@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Commands\General\Static\CopyFileFromDiskToReg.txt" />
     <EmbeddedResource Include="Commands\General\Static\CopyFileFromRegToDisk.txt" />
   </ItemGroup>
 
