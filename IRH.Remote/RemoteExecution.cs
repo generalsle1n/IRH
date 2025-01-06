@@ -3,6 +3,7 @@ using System.CommandLine;
 using System.CommandLine.Parsing;
 using IRH.Remote.Commands.UploadFile;
 using IRH.Remote.Commands.DownloadFile;
+using IRH.Remote.Commands.ExecuteFile;
 
 namespace IRH.Remote
 {
@@ -28,8 +29,12 @@ namespace IRH.Remote
             DownloadFile DownloadFile = new DownloadFile(_logger);
             Command DownloadFileCommand = DownloadFile.CreateCommand(Command);
 
+            ExecuteFile ExecuteFile = new ExecuteFile(_logger);
+            Command ExecuteFileCommand = ExecuteFile.CreateCommand(Command);
+
             Command.AddCommand(UploadFileCommand);
             Command.AddCommand(DownloadFileCommand);
+            Command.AddCommand(ExecuteFileCommand);
 
             return Command;
         }
