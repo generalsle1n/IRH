@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IRH.ProcessElevation\IRH.ProcessElevation.csproj" />
+    <ProjectReference Include="..\IRH.Remote\IRH.Remote.csproj" />
   </ItemGroup>
 
 </Project>
