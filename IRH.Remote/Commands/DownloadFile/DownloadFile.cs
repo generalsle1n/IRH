@@ -50,7 +50,7 @@ namespace IRH.Remote.Commands.DownloadFile
 
         private const string _remoteMachineDomainName = "--Domain";
         private const string _remoteMachineDomainDescription = "Enter the remote Domain to login";
-        private const string _remoteMachineDomainAlias = "-D";
+        private const string _remoteMachineDomainAlias = "-DO";
 
         private const string _remoteMachineTimeoutName = "--Timeout";
         private const string _remoteMachineTimeoutDescription = "Enter the remote Timeout to wait max";
@@ -151,20 +151,29 @@ namespace IRH.Remote.Commands.DownloadFile
                             {
                                 _logger.Information($"Connection to {Parser.GetValueForOption(RemoteMachineOption)} established");
 
-                                byte[] FileData = File.ReadAllBytes(Parser.GetValueForOption(LocalPathOption));
-                                byte[] Result = ByteArrayHelper.MergeArray(Encoding.UTF8.GetBytes(Parser.GetValueForOption(DestinationPathOption)), FileData);
                                 Guid ValueName = Guid.NewGuid();
-
-                                bool Success = RegistryHelper.CreateRegistryValue(Session, _defaultRegistryKey, ValueName.ToString(), Result, _logger, Tree: RegistryTree.HKEY_CURRENT_USER);
+                                
+                                string EncodedScript = PowershellHelper.CreateScriptToWriteRegistryValueFromFile(Parser.GetValueForOption(DestinationPathOption), ValueName.ToString(), _logger);
+                                bool Success = ProcessHelper.CreatePowershellProcess(Session, EncodedScript, _logger);
+                                
                                 if (Success)
                                 {
-                                    string EncodedScript = PowershellHelper.CreateScriptToWriteFileFromRegistry(ValueName.ToString(), _logger);
-                                    ProcessHelper.CreatePowershellProcess(Session, EncodedScript, _logger);
-                                    RegistryHelper.DeleteRegistryValue(Session, _defaultRegistryKey, ValueName.ToString(), _logger, Tree: RegistryTree.HKEY_CURRENT_USER);
+                                    
+                                    byte[] Data = RegistryHelper.GetRegistryBinaryValue(Session, _defaultRegistryKey, ValueName.ToString(), _logger, Tree: RegistryTree.HKEY_CURRENT_USER);
+                                    if(Data is not null)
+                                    {
+                                        RegistryHelper.DeleteRegistryValue(Session, _defaultRegistryKey, ValueName.ToString(), _logger);
+                                        File.WriteAllBytes(Parser.GetValueForOption(LocalPathOption), Data);
+                                        _logger.Information($"File wrote to {Parser.GetValueForOption(LocalPathOption)}");
+                                    }
+                                    else
+                                    {
+                                        _logger.Error($"Unable to read registry value {_defaultRegistryKey} - {ValueName.ToString()}");
+                                    }
                                 }
                                 else
                                 {
-                                    _logger.Error("File upload failed");
+                                    _logger.Error("File download failed");
                                 }
                             }
                             else
