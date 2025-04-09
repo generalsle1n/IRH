@@ -15,6 +15,7 @@ namespace IRH.Commands.Azure
         private const string _publicAppIDDescription = "Enter the ID of the App ID";
         private const string _publicAppIDAlias = "--AppID";
         private const bool _publicAppIDIsRequired = true;
+        private const string _publicAppIDDefaultValue = "c0849608-c8b9-4e86-b37d-fce972a0a7f6";
 
         private const string _publicTenantID = "-T";
         private const string _publicTenantIDDescription = "Enter the ID of the Tenant ID (In the default you dont need to change this)";
@@ -47,6 +48,7 @@ namespace IRH.Commands.Azure
             TenantID.AddAlias(_publicTenantIDAlias);
             AuthType.AddAlias(_authClientProviderAlias);
 
+            AppID.SetDefaultValue(_publicAppIDDefaultValue);
             TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
             AuthType.SetDefaultValue(_authClientProviderDefaultValue);
 
