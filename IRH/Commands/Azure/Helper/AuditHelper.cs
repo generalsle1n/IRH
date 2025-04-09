@@ -187,7 +187,7 @@ namespace IRH.Commands.Azure.Helper
             }
         }
 
-        internal async Task<AuditLogQuery> CreateQuery(GraphServiceClient Client, DateTime Start, DateTime End, string[] Activities)
+        internal async Task<AuditLogQuery> CreateQuery(GraphServiceClient Client, DateTime Start, DateTime End, string[] Activities, string[] UserLoginFilter = null)
         {
             Guid Id = Guid.NewGuid();
 
@@ -197,9 +197,22 @@ namespace IRH.Commands.Azure.Helper
                 FilterEndDateTime = End,
                 OperationFilters = Activities.ToList()
             };
+
+            if (UserLoginFilter is not null)
+            {
+                Query.UserPrincipalNameFilters = UserLoginFilter.ToList();
+            }
+
             Query.DisplayName = $"Created by IRH_Scanner {Id}";
 
-            _logger.Information($"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id} and in Timeframe {Start} - {End}");
+            string LogText = $"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id} and in Timeframe {Start} - {End}";
+
+            if(UserLoginFilter is not null)
+            {
+                LogText += $" and with Userfilter {string.Join(", ", UserLoginFilter)}";
+            }
+
+            _logger.Information(LogText);
 
             AuditLogQuery Processed = await Client.Security.AuditLog.Queries.PostAsync(Query);
             return Processed;
