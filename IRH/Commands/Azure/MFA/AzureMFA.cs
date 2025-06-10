@@ -1,5 +1,6 @@
 ﻿using Azure.Identity;
 using IRH.Commands.Azure.Auth;
+using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting;
 using IRH.Commands.Azure.Reporting.Model;
 using Microsoft.Graph;
@@ -89,7 +90,8 @@ namespace IRH.Commands.Azure.MFA
                     Parser.GetValueForOption(AuthProviderType)
                     );
 
-                UserCollectionResponse Users = await GetUsers(Client, Parser.GetValueForOption(Group));
+                UserHelper UserHelper = new UserHelper(_logger);
+                UserCollectionResponse Users = await UserHelper.GetUsersAsync(Client, Parser.GetValueForOption(Group));
 
                 List<UserMFA> AllUsers = await GetAllUsersMFA(Client, Users);
                 switch (Parser.GetValueForOption(ReportTypeOption))
@@ -110,44 +112,7 @@ namespace IRH.Commands.Azure.MFA
             return Command;
         }
 
-        private async Task<UserCollectionResponse> GetUsers(GraphServiceClient Client, string[] GroupIDs)
-        {
-            _logger.Information("Querying all Users with MemberOf Attribute, this can take some time");
-            UserCollectionResponse AllUsers = await Client.Users.GetAsync((search) =>
-            {
-                search.QueryParameters.Expand = new string[] { "memberOf" };
-            });
 
-            if (GroupIDs.Length > 0)
-            {
-                _logger.Information("Start on filtering User");
-                int Count = 1;
-
-                UserCollectionResponse CleanUser = new UserCollectionResponse();
-                CleanUser.Value = new List<User>();
-                foreach (User SingleUser in AllUsers.Value)
-                {
-                    foreach (DirectoryObject SingleGroup in SingleUser.MemberOf)
-                    {
-                        bool Result = GroupIDs.Contains(SingleGroup.Id);
-                        if (Result)
-                        {
-                            CleanUser.Value.Add(SingleUser);
-                            break;
-                        }
-                    }
-
-                    _logger.Information($"Processed {Count} from {AllUsers.Value.Count}");
-                    Count++;
-                }
-                return CleanUser;
-            }
-            else
-            {
-                _logger.Information($"Found {AllUsers.Value.Count} Users without Filtering");
-                return AllUsers;
-            }
-        }
 
         private async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers)
         {
