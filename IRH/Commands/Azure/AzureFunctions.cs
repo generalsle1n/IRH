@@ -69,7 +69,7 @@ namespace IRH.Commands.Azure
             Command.AddCommand(AzureMFA);
             Command.AddCommand(AzureSession);
             Command.AddCommand(AzureAuditLog);
-
+            
             return Command;
         }
     }

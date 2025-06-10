@@ -112,7 +112,7 @@ namespace IRH.Commands.Azure.MFA
             return Command;
         }
 
-
+        
 
         private async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers)
         {
