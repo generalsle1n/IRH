@@ -3,6 +3,7 @@ using IRH.Commands.Azure.AuditLog;
 using Serilog.Core;
 using System.CommandLine;
 using IRH.Commands.Azure.Auth;
+using IRH.Commands.Azure.Session;
 
 namespace IRH.Commands.Azure
 {
@@ -59,10 +60,14 @@ namespace IRH.Commands.Azure
             AzureMFA AzureMFACommand = new AzureMFA(_logger);
             Command AzureMFA = AzureMFACommand.CreateCommand(RootCommand);
 
+            AzureSession AzureSessionCommand = new AzureSession(_logger);
+            Command AzureSession = AzureSessionCommand.CreateCommand(RootCommand);
+
             AzureAuditLog AzureAuditLogCommand = new AzureAuditLog(_logger);
             Command AzureAuditLog = AzureAuditLogCommand.CreateCommand(RootCommand);
 
             Command.AddCommand(AzureMFA);
+            Command.AddCommand(AzureSession);
             Command.AddCommand(AzureAuditLog);
 
             return Command;
