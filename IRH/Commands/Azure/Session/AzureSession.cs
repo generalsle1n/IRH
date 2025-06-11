@@ -99,7 +99,7 @@ namespace IRH.Commands.Azure.Session
                 Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
                 Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
 
-                AzureAuth Auth = new AzureAuth();
+                AzureAuth Auth = new AzureAuth(_logger);
 
                 GraphServiceClient Client = Auth.GetClient(
                     Parser.GetValueForOption(AppID),
