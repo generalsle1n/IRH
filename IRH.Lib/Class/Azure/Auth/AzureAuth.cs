@@ -1,22 +1,33 @@
 ﻿using Azure.Identity;
 using IRH.Lib.Model.Azure.Auth;
 using Microsoft.Graph;
+using Serilog;
+using System.Runtime.CompilerServices;
 using BGraphServiceClient = Microsoft.Graph.Beta.GraphServiceClient;
 
-namespace IRH.Commands.Azure.Auth
+namespace IRH.Lib.Class.Azure.Auth
 {
-    internal class AzureAuth
+    public class AzureAuth
     {
-        internal GraphServiceClient GetClient(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type)
+        public AzureAuth(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        private readonly ILogger _logger;
+
+        public GraphServiceClient GetClient(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type)
         {
             GraphServiceClient Client = null;
             switch (Type)
             {
                 case AuthType.DeviceCode:
-                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(AppIDValue, TenantIDValue);
+                    _logger.Verbose("Create Client with DeviceCode authentication");
+                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(AppIDValue, TenantIDValue, true);
                     Client = new GraphServiceClient(DeviceCredentials, ScopesValue);
                     break;
                 case AuthType.Interactive:
+                    _logger.Verbose("Create Client with Interactive authentication");
                     InteractiveBrowserCredential InteractiveCredentials = CreateInteractiveBrowserCredential(AppIDValue, TenantIDValue);
                     Client = new GraphServiceClient(InteractiveCredentials, ScopesValue);
                     break;
@@ -24,17 +35,20 @@ namespace IRH.Commands.Azure.Auth
 
             return Client;
         }
-        internal BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type)
+
+        public BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type)
         {
             BGraphServiceClient Client = null;
 
             switch (Type)
             {
                 case AuthType.DeviceCode:
-                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(AppIDValue, TenantIDValue);
+                    _logger.Verbose("Create Beta Client with DeviceCode authentication");
+                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(AppIDValue, TenantIDValue, true);
                     Client = new BGraphServiceClient(DeviceCredentials, ScopesValue);
                     break;
                 case AuthType.Interactive:
+                    _logger.Verbose("Create Beta Client with Interactive authentication");
                     InteractiveBrowserCredential InteractiveCredentials = CreateInteractiveBrowserCredential(AppIDValue, TenantIDValue);
                     Client = new BGraphServiceClient(InteractiveCredentials, ScopesValue);
                     break;
@@ -43,19 +57,19 @@ namespace IRH.Commands.Azure.Auth
             return Client;
         }
 
-        private DeviceCodeCredential CreateDeviceCodeCredential(string AppID, string TenantID)
+        private DeviceCodeCredential CreateDeviceCodeCredential(string AppID, string TenantID, bool AutomaticAuthentication)
         {
+            _logger.Verbose($"Create DeviceCodeCredential with AppID: {AppID} and TenantID: {TenantID}");
             DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
             {
                 AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
                 ClientId = AppID,
                 TenantId = TenantID,
-
                 DeviceCodeCallback = (code, cancellation) =>
                 {
                     Console.WriteLine(code.Message);
                     return Task.FromResult(0);
-                },
+                }
             };
 
             return new DeviceCodeCredential(Options);
@@ -63,6 +77,7 @@ namespace IRH.Commands.Azure.Auth
 
         private InteractiveBrowserCredential CreateInteractiveBrowserCredential(string AppID, string TenantID)
         {
+            _logger.Verbose($"Create InteractiveBrowserCredentialOptions with AppID: {AppID} and TenantID: {TenantID}");
             InteractiveBrowserCredentialOptions Options = new InteractiveBrowserCredentialOptions
             {
                 TenantId = TenantID,
