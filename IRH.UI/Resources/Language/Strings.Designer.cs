@@ -115,6 +115,15 @@ namespace IRH.UI.Resources.Language {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Printlevel ähnelt.
+        /// </summary>
+        internal static string AzureMFA_PrintLevel_Label {
+            get {
+                return ResourceManager.GetString("AzureMFA_PrintLevel_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die ✨ ähnelt.
         /// </summary>
         internal static string Common_Add {

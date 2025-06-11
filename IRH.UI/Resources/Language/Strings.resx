@@ -177,4 +177,7 @@
   <data name="AzureMFA_OpenDeviceLogin_Button" xml:space="preserve">
     <value>Open Browser</value>
   </data>
+  <data name="AzureMFA_PrintLevel_Label" xml:space="preserve">
+    <value>Printlevel</value>
+  </data>
 </root>
