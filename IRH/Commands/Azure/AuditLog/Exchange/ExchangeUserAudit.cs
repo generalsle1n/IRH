@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Text.Json;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Lib.Model.Azure.Auth;
+using IRH.Lib.Class.Azure.Auth;
 
 namespace IRH.Commands.Azure.AuditLog.Exchange
 {
@@ -124,7 +125,7 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
                 Option<DateTime> StartDate = ExchangeAuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalStartDateName)).First() as Option<DateTime>;
                 Option<DateTime> EndDate = ExchangeAuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalEndDateName)).First() as Option<DateTime>;
 
-                AzureAuth Auth = new AzureAuth();
+                AzureAuth Auth = new AzureAuth(_logger);
                 AuditHelper Helper = new AuditHelper(_logger);
             
                 GraphServiceClient Client = Auth.GetClientBeta(

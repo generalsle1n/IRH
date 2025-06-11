@@ -9,10 +9,10 @@ using System.CommandLine;
 using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
 using System.CommandLine.Parsing;
-using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Helper;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Lib.Model.Azure.Auth;
+using IRH.Lib.Class.Azure.Auth;
 
 namespace IRH.Commands.Azure.AuditLog.Login
 {
@@ -127,7 +127,7 @@ namespace IRH.Commands.Azure.AuditLog.Login
                 Option<string[]> FilterParameter = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterParamterName)).First() as Option<string[]>;
                 Option<string[]> FilterValue = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterValueName)).First() as Option<string[]>;
 
-                AzureAuth Auth = new AzureAuth();
+                AzureAuth Auth = new AzureAuth(_logger);
                 AuditHelper Helper = new AuditHelper(_logger);
 
                 GraphServiceClient Client = Auth.GetClientBeta(

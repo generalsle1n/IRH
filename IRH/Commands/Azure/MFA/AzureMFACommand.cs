@@ -1,5 +1,4 @@
 ﻿using Azure.Identity;
-using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting;
 //using IRH.Commands.Azure.Reporting.Model;
@@ -15,6 +14,7 @@ using System.Reflection;
 using System.Text.Json;
 using IRH.Lib.Model.Azure.Result;
 using IRH.Lib.Class.Azure.Generel;
+using IRH.Lib.Class.Azure.Auth;
 
 namespace IRH.Commands.Azure.MFA
 {
@@ -86,7 +86,7 @@ namespace IRH.Commands.Azure.MFA
                 Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
                 Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
 
-                AzureAuth Auth = new AzureAuth();
+                AzureAuth Auth = new AzureAuth(_logger);
 
                 GraphServiceClient Client = Auth.GetClient(
                     Parser.GetValueForOption(AppID),
@@ -98,9 +98,9 @@ namespace IRH.Commands.Azure.MFA
                 AzureUser AzureUser = new AzureUser(_logger);
                 UserCollectionResponse Users = await AzureUser.GetUsersAsync(Client, Parser.GetValueForOption(Group));
 
-                AzureMFA AzureMFA = new AzureMFA();
+                AzureMFA AzureMFA = new AzureMFA(_logger);
 
-                List<UserMFA> AllUsers = await AzureMFA.GetAllUsersMFA(Client, Users, logger: _logger);
+                List<UserMFA> AllUsers = await AzureMFA.GetAllUsersMFA(Client, Users);
 
                 switch (Parser.GetValueForOption(ReportTypeOption))
                 {
