@@ -14,8 +14,8 @@
 
     <ShellContent
         Title="Azure MFA"
-        ContentTemplate="{DataTemplate pages:AzureMFA}"
-        Route="AzureMFA" />
+        ContentTemplate="{DataTemplate pages:AzureMFAPage}"
+        Route="AzureMFAPage" />
 
     <ShellContent
         Title="Settings"
