@@ -1,7 +1,7 @@
-﻿using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting;
 using IRH.Commands.Azure.Reporting.Model;
+using IRH.Lib.Class.Azure.Auth;
 using IRH.Lib.Class.Azure.Generel;
 using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
