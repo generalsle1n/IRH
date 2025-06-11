@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using Azure.Core;
+using Azure.Identity;
 using IRH.Lib;
 using IRH.Lib.Class.Azure.Auth;
 using IRH.Lib.Class.Azure.Generel;
@@ -9,8 +10,10 @@ using IRH.Lib.Model.Azure.Result;
 using IRH.Lib.Model.General;
 using IRH.UI.Resources.Language;
 using Microsoft.Graph;
+using Microsoft.Graph.Beta.Models.ManagedTenants;
 using Microsoft.Graph.Models;
 using Serilog;
+using System.Reflection;
 
 namespace IRH.UI.Custom.Page;
 
@@ -23,7 +26,12 @@ public partial class AzureMFAPage : ContentPage
 		InitializeComponent();
         LoadPermissions();
         LoadOutputType();
+        LoadPrintlevel();
+
+        //PopulateUserMFASchemaToCollectionTemplate(typeof(UserMFA)).Wait();
 	}
+
+    private List<UserMFA> AllMFAUser;
 
     private readonly ILogger _logger;
 
@@ -75,6 +83,12 @@ public partial class AzureMFAPage : ContentPage
     {
         OutputPicker.ItemsSource = Enum.GetValues<ReportType>();
         OutputPicker.SelectedIndex = PreferenceHelper.GetIndexFromEnum<ReportType>(DefaultValue.ReportType);
+    }
+    
+    private void LoadPrintlevel()
+    {
+        PrintlevelPicker.ItemsSource = Enum.GetValues<ReportPrintLevel>();
+        PrintlevelPicker.SelectedIndex = PreferenceHelper.GetIndexFromEnum<ReportPrintLevel>(DefaultValue.PrintLevel);
     }
 
     private void AddNewGroupEntry(object sender, EventArgs e)
@@ -158,6 +172,7 @@ public partial class AzureMFAPage : ContentPage
 
         LoadPermissions();
         LoadOutputType();
+        LoadPrintlevel();
     }
 
     private void DeleteChildsWithSkip(StackLayout Layout, int Skip)
@@ -221,11 +236,100 @@ public partial class AzureMFAPage : ContentPage
 
     private async void StartGathering(object sender, EventArgs e)
     {
+        StartProcessToGather.IsEnabled = false;
+        AuthType Flow = PreferenceHelper.GetEnumFromIndex<AuthType>(Preferences.Get(PreferenceHelper.DefaultAuthTypeName, 0));
+        GraphServiceClient Client = null;
         
+        switch (Flow)
+        {
+            case AuthType.DeviceCode:
+                AzureAuth AzureAuth = new AzureAuth(_logger);
+
+                DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
+                    Preferences.Get(PreferenceHelper.DefaultAppIDName, ""),
+                    Preferences.Get(PreferenceHelper.DefaultTenantIDName, ""),
+                    CreateCallBack: false);
+
+                DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        DeviceCodeOutput.Text = DeviceCode.UserCode;
+                        DeviceCodeOutput.IsVisible = true;
+
+                        LoadingIndicator.IsVisible = true;
+                        LoadingIndicator.IsRunning = true;
+
+                        OpenBrowser.IsVisible = true;
+                    });
+                    return Task.CompletedTask;
+                };
+
+                DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
+
+                await DeviceCodeCredential.GetTokenAsync(new TokenRequestContext(GetPermissions()));
+
+                OpenBrowser.IsVisible = false;
+
+                Client = AzureAuth.GetClient(
+                    Preferences.Get(PreferenceHelper.DefaultAppIDName, ""),
+                    Preferences.Get(PreferenceHelper.DefaultTenantIDName, ""),
+                    GetPermissions(),
+                    Flow,
+                    CodeCredential: DeviceCodeCredential);
+
+                break;
+            case AuthType.Interactive:
+                break;
+        }
+        AzureUser AzureUser = new AzureUser(_logger);
+        var AllUser = await AzureUser.GetUsersAsync(Client, GetGroupIDs());
+
+        AzureMFA AzureMFA = new AzureMFA(_logger);
+        AllMFAUser = (await AzureMFA.GetAllUsersMFA(Client, AllUser)).OrderByDescending(user => user.AllMFACount).ToList();
+
+        await PopulateUserMFASchemaToCollectionTemplate(typeof(UserMFA));
+        MainUserMFACollection.
+        MainUserMFACollection.ItemsSource = AllMFAUser;
+
+        LoadingIndicator.IsRunning = false;
+        LoadingIndicator.IsVisible = false;
+
+        StartProcessToGather.IsEnabled = true;
     }
 
     private async void OpenBrowserDeviceLogin(object sender, EventArgs e)
     {
         await Browser.OpenAsync("https://microsoft.com/devicelogin");
+    }
+
+    private async Task PopulateUserMFASchemaToCollectionTemplate(Type SingleObject)
+    {
+        ReportPrintLevel Current = PreferenceHelper.GetEnumFromIndex<ReportPrintLevel>(PrintlevelPicker.SelectedIndex);
+        PropertyInfo[] AllProperties = SingleObject.GetProperties();
+        Console.WriteLine();
+
+        if(Current == ReportPrintLevel.Brief || Current == ReportPrintLevel.Info || Current == ReportPrintLevel.Detailed || Current == ReportPrintLevel.Hacky)
+        {
+            MainUserMFACollection.ItemTemplate = new DataTemplate(() =>
+            {
+                HorizontalStackLayout Layout = new HorizontalStackLayout()
+                {
+                    Spacing = 5
+                };
+
+                Label NameLabel = new Label();
+                NameLabel.SetBinding(Label.TextProperty, static (UserMFA user) => user.User.UserPrincipalName);
+                NameLabel.FontAttributes = FontAttributes.Bold;
+
+                Label Count = new Label();
+                Count.SetBinding(Label.TextProperty, static (UserMFA user) => user.AllMFACount);
+                
+                Layout.Add(NameLabel);
+                Layout.Add(Count);
+
+                return Layout;
+            });
+        }
     }
 }
