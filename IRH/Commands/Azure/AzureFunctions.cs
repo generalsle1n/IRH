@@ -2,7 +2,6 @@
 using IRH.Commands.Azure.AuditLog;
 using Serilog.Core;
 using System.CommandLine;
-using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Session;
 using IRH.Lib.Model.Azure.Auth;
 
