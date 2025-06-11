@@ -11,6 +11,8 @@ using Microsoft.Graph.Beta.Models.Security;
 using System.CommandLine.Parsing;
 using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Helper;
+using IRH.Lib.Model.Azure.Reporting;
+using IRH.Lib.Model.Azure.Auth;
 
 namespace IRH.Commands.Azure.AuditLog.Login
 {

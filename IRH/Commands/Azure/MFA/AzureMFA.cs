@@ -3,6 +3,8 @@ using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting;
 using IRH.Commands.Azure.Reporting.Model;
+using IRH.Lib.Model.Azure.Auth;
+using IRH.Lib.Model.Azure.Reporting;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Serilog.Core;

@@ -10,6 +10,8 @@ using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Reflection;
 using System.Text.Json;
+using IRH.Lib.Model.Azure.Reporting;
+using IRH.Lib.Model.Azure.Auth;
 
 namespace IRH.Commands.Azure.AuditLog.Exchange
 {

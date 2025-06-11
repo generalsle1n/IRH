@@ -1,4 +1,5 @@
 ﻿using Azure.Identity;
+using IRH.Lib.Model.Azure.Auth;
 using Microsoft.Graph;
 using BGraphServiceClient = Microsoft.Graph.Beta.GraphServiceClient;
 

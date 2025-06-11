@@ -4,6 +4,7 @@ using Serilog.Core;
 using System.CommandLine;
 using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Session;
+using IRH.Lib.Model.Azure.Auth;
 
 namespace IRH.Commands.Azure
 {
