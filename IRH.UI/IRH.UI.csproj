@@ -64,6 +64,8 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.70" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.5" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -71,6 +73,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Custom\Page\AzureMFAPage.xaml.cs">
+	    <DependentUpon>AzureMFAPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\Language\Strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -86,7 +91,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Custom\Page\AzureMFA.xaml">
+	  <MauiXaml Update="Custom\Page\AzureMFAPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Custom\Page\Settings.xaml">
