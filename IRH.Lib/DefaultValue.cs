@@ -15,5 +15,6 @@ namespace IRH.Lib
         public readonly static AuthType AuthType = AuthType.DeviceCode;
         public readonly static List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
         public readonly static ReportType ReportType = ReportType.CLI;
+        public readonly static ReportPrintLevel PrintLevel = ReportPrintLevel.Brief;
     }
 }
