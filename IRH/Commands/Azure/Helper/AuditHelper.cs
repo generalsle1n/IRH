@@ -14,6 +14,7 @@ using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
 using System.Text.RegularExpressions;
 using IRH.Commands.Azure.AuditLog;
+using IRH.Lib.Model.Azure.Reporting;
 
 namespace IRH.Commands.Azure.Helper
 {

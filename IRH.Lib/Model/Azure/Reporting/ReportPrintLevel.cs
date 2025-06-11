@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRH.Commands.Azure.Reporting
+namespace IRH.Lib.Model.Azure.Reporting
 {
-    internal enum ReportPrintLevel
+    public enum ReportPrintLevel
     {
         Brief,
         Info,
