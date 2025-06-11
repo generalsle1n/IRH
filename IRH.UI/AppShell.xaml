@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="IRH.UI.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:IRH.UI"
+    xmlns:pages="clr-namespace:IRH.UI.Custom.Page"
+    Title="IRH.UI">
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+    <ShellContent
+        Title="Azure MFA"
+        ContentTemplate="{DataTemplate pages:AzureMFA}"
+        Route="AzureMFA" />
+
+    <ShellContent
+        Title="Settings"
+        ContentTemplate="{DataTemplate pages:Settings}"
+        Route="Settings" />
+
+</Shell>

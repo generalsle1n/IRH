@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:language="clr-namespace:IRH.UI.Resources.Language"
+             x:Class="IRH.UI.Custom.Page.AzureMFA"
+             Title="AzureMFA">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.30*" />
+            <ColumnDefinition Width="0.70*" />
+        </Grid.ColumnDefinitions>
+        <ScrollView Grid.Column="0" BackgroundColor="{StaticResource SubMenuColor}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackLayout Grid.Row="0" x:Name="MainGroupStack" Spacing="10" Padding="10">
+                    <Label Text="{x:Static language:Strings.AzureMFA_GroupFilter_Label}"/>
+                    <HorizontalStackLayout Spacing="5">
+                        <Entry Placeholder="{x:Static language:Strings.AzureMFA_GroupFilter_Placeholder}" WidthRequest="300"/>
+                        <Button Text="{x:Static language:Strings.Common_Add}" Clicked="AddNewGroupEntry"/>
+                    </HorizontalStackLayout>
+                </StackLayout>
+                <StackLayout Grid.Row="1" x:Name="MainPermissionStack" Spacing="10" Padding="10">
+                    <Label Text="{x:Static language:Strings.AzureMFA_Permission_Label}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="2" x:Name="MainOutputStack" Spacing="10" Padding="10">
+                    <Label Text="{x:Static language:Strings.AzureMFA_Output_Label}"/>
+                    <Picker x:Name="OutputPicker"/>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.90*"/>
+                <RowDefinition Height="0.10*"/>
+            </Grid.RowDefinitions>
+            <HorizontalStackLayout Grid.Row="0"/>
+            <HorizontalStackLayout HorizontalOptions="End" Grid.Row="1" Spacing="10" Padding="10" BackgroundColor="{StaticResource SubMenuColor}">
+                <Button HorizontalOptions="End" Text="{x:Static language:Strings.Common_Start}"/>
+                <Button HorizontalOptions="End" Text="{x:Static language:Strings.Common_Delete}" Clicked="ResetLocalSettings"/>
+            </HorizontalStackLayout>
+            
+        </Grid>
+    </Grid>
+</ContentPage>

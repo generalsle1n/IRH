@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IRH.UI.Custom.Page.Settings"
+             xmlns:language="clr-namespace:IRH.UI.Resources.Language"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:libAzureAuth="clr-namespace:IRH.Lib.Model.Azure.Auth;assembly=IRH.Lib"
+             xmlns:libGeneral="clr-namespace:IRH.Lib.Model.General;assembly=IRH.Lib"
+             Title="Settings">
+
+    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+        <HorizontalStackLayout Spacing="40">
+            <Label WidthRequest="250" VerticalTextAlignment="Center" Text="{x:Static language:Strings.Settings_Tenant_Label}"/>
+            <Entry WidthRequest="350" Placeholder="TenantID" x:Name="TenantID"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="40">
+            <Label WidthRequest="250" VerticalTextAlignment="Center" Text="{x:Static language:Strings.Settings_AppID_Label}"/>
+            <Entry WidthRequest="350" Placeholder="AppID" x:Name="AppID"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="40">
+            <Label WidthRequest="250" VerticalTextAlignment="Center" Text="{x:Static language:Strings.Settings_AuthType_Label}"/>
+            <Picker x:Name="AuthTypes" /> 
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="40">
+            <Label WidthRequest="250" VerticalTextAlignment="Center" Text="{x:Static language:Strings.Settings_Language_Label}"/>
+            <Picker x:Name="Language" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+            <Button Text="{x:Static language:Strings.Settings_Save_Button}" x:Name="Save" Clicked="OnSaveClick"/>
+            <Button Text="{x:Static language:Strings.Settings_Reset_Button}" x:Name="Reset" Clicked="OnResetClick"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>
