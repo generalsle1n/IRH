@@ -58,7 +58,7 @@ namespace IRH.Commands.Azure
             Command.AddGlobalOption(TenantID);
             Command.AddGlobalOption(AuthType);
 
-            AzureMFA AzureMFACommand = new AzureMFA(_logger);
+            AzureMFACommand AzureMFACommand = new AzureMFACommand(_logger);
             Command AzureMFA = AzureMFACommand.CreateCommand(RootCommand);
 
             AzureSession AzureSessionCommand = new AzureSession(_logger);
