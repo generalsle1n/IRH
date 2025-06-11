@@ -13,14 +13,17 @@ namespace IRH.Lib.Class.Azure.MFA
 {
     public class AzureMFA
     {
-        public async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers, Logger logger = null)
+        public AzureMFA(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        private readonly ILogger _logger;
+
+        public async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers)
         {
             List<UserMFA> Result = new List<UserMFA>();
-            
-            if(logger is not null)
-            {
-                logger.Information($"Start getting MFA Methods for {AllUsers.Value.Count} Users");
-            }
+            _logger.Information($"Start getting MFA Methods for {AllUsers.Value.Count} Users");
 
             int Count = 1;
 
@@ -38,11 +41,7 @@ namespace IRH.Lib.Class.Azure.MFA
                 SingleUserResult.MFA.AddRange(AuthMethods.Value);
 
                 Result.Add(SingleUserResult);
-
-                if(logger is not null)
-                {
-                    logger.Information($"Process MFA {Count} from {AllUsers.Value.Count}");
-                }
+                _logger.Information($"Process MFA {Count} from {AllUsers.Value.Count}");
 
                 Count++;
             }
