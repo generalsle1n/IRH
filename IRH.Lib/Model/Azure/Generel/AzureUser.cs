@@ -7,18 +7,18 @@ using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Serilog.Core;
 
-namespace IRH.Commands.Azure.Helper
+namespace IRH.Lib.Class.Azure.Generel
 {
-    internal class UserHelper
+    public class AzureUser
     {
-        internal UserHelper(Logger logger)
+        public AzureUser(Logger logger)
         {
             _logger = logger;
         }
 
         private readonly Logger _logger;
 
-        internal async Task<UserCollectionResponse> GetUsersAsync(GraphServiceClient Client, string[] GroupIDs)
+        public async Task<UserCollectionResponse> GetUsersAsync(GraphServiceClient Client, string[] GroupIDs)
         {
             _logger.Information("Querying all Users with MemberOf Attribute, this can take some time");
             UserCollectionResponse AllUsers = await Client.Users.GetAsync((search) =>
