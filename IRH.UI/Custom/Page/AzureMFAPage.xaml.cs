@@ -1,18 +1,31 @@
-﻿using IRH.Lib;
+﻿using Azure.Identity;
+using IRH.Lib;
+using IRH.Lib.Class.Azure.Auth;
+using IRH.Lib.Class.Azure.Generel;
+using IRH.Lib.Class.Azure.MFA;
+using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
+using IRH.Lib.Model.Azure.Result;
 using IRH.Lib.Model.General;
 using IRH.UI.Resources.Language;
+using Microsoft.Graph;
+using Microsoft.Graph.Models;
+using Serilog;
 
 namespace IRH.UI.Custom.Page;
 
-public partial class AzureMFA : ContentPage
+public partial class AzureMFAPage : ContentPage
 {
-	public AzureMFA()
+    public AzureMFAPage(ILogger logger)
 	{
+        _logger = logger;
+
 		InitializeComponent();
         LoadPermissions();
         LoadOutputType();
 	}
+
+    private readonly ILogger _logger;
 
     private void LoadPermissions()
     {
@@ -155,5 +168,64 @@ public partial class AzureMFA : ContentPage
         {
             Layout.Children.Remove(SingleChildToDelete);
         }
+    }
+
+    private string[] GetGroupIDs()
+    {
+        List<string> GroupIDs = new List<string>();
+        List<IView> AllChildren = MainGroupStack.Children.ToList();
+
+        foreach(IView Single in AllChildren)
+        {
+            if(Single is HorizontalStackLayout)
+            {
+                Entry SingleEntry = GetEntryFromParentGroupLayout((HorizontalStackLayout)Single);
+                GroupIDs.Add(SingleEntry.Text);
+            }
+        }
+
+        
+        GroupIDs = GroupIDs.Where(item => item is not null).ToList();
+        
+        _logger.Information($"{GroupIDs.Count} groups evaluated in AzureMFA");
+
+        return GroupIDs.ToArray();
+    }
+
+    private string[] GetPermissions()
+    {
+        List<string> Permissions = new List<string>();
+        List<IView> AllChildren = MainPermissionStack.Children.ToList();
+
+        foreach (IView Single in AllChildren)
+        {
+            if (Single is HorizontalStackLayout)
+            {
+                Entry SingleEntry = GetEntryFromParentGroupLayout((HorizontalStackLayout)Single);
+                Permissions.Add(SingleEntry.Text);
+            }
+        }
+
+
+        Permissions = Permissions.Where(item => item is not null).ToList();
+
+        _logger.Information($"{Permissions.Count} permissions evaluated in AzureMFA");
+
+        return Permissions.ToArray();
+    }
+
+    private Entry GetEntryFromParentGroupLayout(HorizontalStackLayout Parent)
+    {
+        return (Entry)Parent.Children[0];
+    }
+
+    private async void StartGathering(object sender, EventArgs e)
+    {
+        
+    }
+
+    private async void OpenBrowserDeviceLogin(object sender, EventArgs e)
+    {
+        await Browser.OpenAsync("https://microsoft.com/devicelogin");
     }
 }

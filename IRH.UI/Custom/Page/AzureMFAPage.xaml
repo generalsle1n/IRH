@@ -2,14 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:language="clr-namespace:IRH.UI.Resources.Language"
-             x:Class="IRH.UI.Custom.Page.AzureMFA"
+             x:Class="IRH.UI.Custom.Page.AzureMFAPage"
              Title="AzureMFA">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.30*" />
             <ColumnDefinition Width="0.70*" />
         </Grid.ColumnDefinitions>
-        <ScrollView Grid.Column="0" BackgroundColor="{StaticResource SubMenuColor}">
+        <ScrollView Grid.Column="0" BackgroundColor="#302f30">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -37,12 +37,32 @@
                 <RowDefinition Height="0.90*"/>
                 <RowDefinition Height="0.10*"/>
             </Grid.RowDefinitions>
-            <HorizontalStackLayout Grid.Row="0"/>
-            <HorizontalStackLayout HorizontalOptions="End" Grid.Row="1" Spacing="10" Padding="10" BackgroundColor="{StaticResource SubMenuColor}">
-                <Button HorizontalOptions="End" Text="{x:Static language:Strings.Common_Start}"/>
-                <Button HorizontalOptions="End" Text="{x:Static language:Strings.Common_Delete}" Clicked="ResetLocalSettings"/>
-            </HorizontalStackLayout>
-            
+            <CollectionView Grid.Row="0" x:Name="MainUserMFACollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <HorizontalStackLayout>
+                            <Label Text="Cool"/>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Grid Grid.Row="1" BackgroundColor="#302f30">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <HorizontalStackLayout Grid.Column="0" Spacing="10" Padding="5" Margin="5">
+                        <Entry x:Name="DeviceCodeOutput" IsVisible="False" IsReadOnly="True"/>
+                        <Button Text="{x:Static language:Strings.AzureMFA_OpenDeviceLogin_Button}" Clicked="OpenBrowserDeviceLogin" IsVisible="False"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="10" Padding="5" Margin="5">
+                        <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False"/>
+                        <Button HorizontalOptions="End" Text="{x:Static language:Strings.Common_Start}" Clicked="StartGathering"/>
+                        <Button HorizontalOptions="End" Text="{x:Static language:Strings.Common_Delete}" Clicked="ResetLocalSettings"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </ContentPage>
