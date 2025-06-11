@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IRH.Lib\IRH.Lib.csproj" />
     <ProjectReference Include="..\IRH.Remote\IRH.Remote.csproj" />
   </ItemGroup>
 
