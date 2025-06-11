@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
+using Serilog;
 using Serilog.Core;
 
 namespace IRH.Lib.Class.Azure.Generel
 {
     public class AzureUser
     {
-        public AzureUser(Logger logger)
+        public AzureUser(ILogger logger)
         {
             _logger = logger;
         }
 
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
 
         public async Task<UserCollectionResponse> GetUsersAsync(GraphServiceClient Client, string[] GroupIDs)
         {
@@ -25,7 +26,7 @@ namespace IRH.Lib.Class.Azure.Generel
             {
                 search.QueryParameters.Expand = new string[] { "memberOf" };
             });
-
+            
             if (GroupIDs.Length > 0)
             {
                 _logger.Information("Start on filtering User");
@@ -33,6 +34,7 @@ namespace IRH.Lib.Class.Azure.Generel
 
                 UserCollectionResponse CleanUser = new UserCollectionResponse();
                 CleanUser.Value = new List<User>();
+                
                 foreach (User SingleUser in AllUsers.Value)
                 {
                     foreach (DirectoryObject SingleGroup in SingleUser.MemberOf)
