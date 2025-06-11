@@ -2,6 +2,7 @@
 using IRH.Commands.Azure.Helper;
 using IRH.Commands.Azure.Reporting;
 using IRH.Commands.Azure.Reporting.Model;
+using IRH.Lib.Class.Azure.Generel;
 using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
 using Microsoft.Graph;
@@ -107,8 +108,8 @@ namespace IRH.Commands.Azure.Session
                     Parser.GetValueForOption(AuthProviderType)
                     );
 
-                UserHelper UserHelper = new UserHelper(_logger);
-                UserCollectionResponse Users = await UserHelper.GetUsersAsync(Client, Parser.GetValueForOption(Group));
+                AzureUser AzureUser = new AzureUser(_logger);
+                UserCollectionResponse Users = await AzureUser.GetUsersAsync(Client, Parser.GetValueForOption(Group));
 
                 List<UserSession> AllUsers = await ResetUserSessionsAsync(Client, Users);
                   
