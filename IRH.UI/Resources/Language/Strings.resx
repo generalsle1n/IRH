@@ -174,4 +174,7 @@
   <data name="Common_Start" xml:space="preserve">
     <value>▶️</value>
   </data>
+  <data name="AzureMFA_OpenDeviceLogin_Button" xml:space="preserve">
+    <value>Open Browser</value>
+  </data>
 </root>

@@ -79,6 +79,15 @@ namespace IRH.UI.Resources.Language {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open Browser ähnelt.
+        /// </summary>
+        internal static string AzureMFA_OpenDeviceLogin_Button {
+            get {
+                return ResourceManager.GetString("AzureMFA_OpenDeviceLogin_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Output ähnelt.
         /// </summary>
         internal static string AzureMFA_Output_Label {
