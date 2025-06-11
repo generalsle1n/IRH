@@ -1,6 +1,8 @@
 ﻿using Azure.Identity;
 using IRH.Lib.Model.Azure.Auth;
 using Microsoft.Graph;
+using Microsoft.Graph.Beta.Models;
+using Microsoft.Graph.Beta.Models.ManagedTenants;
 using Serilog;
 using System.Runtime.CompilerServices;
 using BGraphServiceClient = Microsoft.Graph.Beta.GraphServiceClient;
@@ -16,15 +18,23 @@ namespace IRH.Lib.Class.Azure.Auth
 
         private readonly ILogger _logger;
 
-        public GraphServiceClient GetClient(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type)
+        public GraphServiceClient GetClient(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null)
         {
             GraphServiceClient Client = null;
             switch (Type)
             {
                 case AuthType.DeviceCode:
-                    _logger.Verbose("Create Client with DeviceCode authentication");
-                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(AppIDValue, TenantIDValue, true);
-                    Client = new GraphServiceClient(DeviceCredentials, ScopesValue);
+                    if(CodeCredential is null)
+                    {
+                        _logger.Verbose("Create Client with DeviceCode authentication");
+                        DeviceCodeCredentialOptions Options = CreateDeviceCodeCredentialOptions(AppIDValue, TenantIDValue);
+                        DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(Options);
+                        Client = new GraphServiceClient(DeviceCredentials, ScopesValue);
+                    }
+                    else
+                    {
+                        Client = new GraphServiceClient(CodeCredential, ScopesValue);
+                    }
                     break;
                 case AuthType.Interactive:
                     _logger.Verbose("Create Client with Interactive authentication");
@@ -44,7 +54,8 @@ namespace IRH.Lib.Class.Azure.Auth
             {
                 case AuthType.DeviceCode:
                     _logger.Verbose("Create Beta Client with DeviceCode authentication");
-                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(AppIDValue, TenantIDValue, true);
+                    DeviceCodeCredentialOptions Options = CreateDeviceCodeCredentialOptions(AppIDValue, TenantIDValue);
+                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(Options);
                     Client = new BGraphServiceClient(DeviceCredentials, ScopesValue);
                     break;
                 case AuthType.Interactive:
@@ -57,22 +68,31 @@ namespace IRH.Lib.Class.Azure.Auth
             return Client;
         }
 
-        private DeviceCodeCredential CreateDeviceCodeCredential(string AppID, string TenantID, bool AutomaticAuthentication)
+        public DeviceCodeCredential CreateDeviceCodeCredential(DeviceCodeCredentialOptions Options)
         {
-            _logger.Verbose($"Create DeviceCodeCredential with AppID: {AppID} and TenantID: {TenantID}");
+            _logger.Verbose($"Create DeviceCodeCredential with AppID: {Options.ClientId} and TenantID: {Options.TenantId}");
+            return new DeviceCodeCredential(Options);
+        }
+
+        public DeviceCodeCredentialOptions CreateDeviceCodeCredentialOptions(string AppID, string TenantID, bool CreateCallBack = true)
+        {
             DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
             {
                 AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
                 ClientId = AppID,
                 TenantId = TenantID,
-                DeviceCodeCallback = (code, cancellation) =>
+            };
+
+            if(CreateCallBack)
+            {
+                Options.DeviceCodeCallback = (code, cancellation) =>
                 {
                     Console.WriteLine(code.Message);
                     return Task.FromResult(0);
-                }
-            };
+                };
+            }
 
-            return new DeviceCodeCredential(Options);
+            return Options;
         }
 
         private InteractiveBrowserCredential CreateInteractiveBrowserCredential(string AppID, string TenantID)
