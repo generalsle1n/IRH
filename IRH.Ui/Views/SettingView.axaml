@@ -49,7 +49,10 @@
                 <ui:SettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal" Spacing="10">
                         <ToggleSwitch IsChecked="{Binding TenantIDEditEnabled}" OffContent="" OnContent=""/>
-                        <TextBox IsEnabled="{Binding TenantIDEditEnabled}" Watermark="{x:Static lang:Strings.Setting_TenantID_Default}" Text="{Binding CurrentTenantID}" MinWidth="200"/>
+                        <Button Command="{Binding ResetTenantIDCommand}">
+                            <icons:SymbolIcon Symbol="ArrowReset"/>
+                        </Button>
+                        <TextBox IsEnabled="{Binding TenantIDEditEnabled}" Watermark="{x:Static lang:Strings.Setting_TenantID_Default}" Text="{Binding CurrentTenantID}" MinWidth="275"/>
                     </StackPanel>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
@@ -61,7 +64,10 @@
                 <ui:SettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal" Spacing="10">
                         <ToggleSwitch IsChecked="{Binding AppIDEditEnabled}" OffContent="" OnContent=""/>
-                        <TextBox IsEnabled="{Binding AppIDEditEnabled}" Watermark="{x:Static lang:Strings.Setting_AppID_Default}" Text="{Binding CurrentAppID}" MinWidth="200"/>
+                        <Button Command="{Binding ResetAppIDCommand}">
+                            <icons:SymbolIcon Symbol="ArrowReset"/>
+                        </Button>
+                        <TextBox IsEnabled="{Binding AppIDEditEnabled}" Watermark="{x:Static lang:Strings.Setting_AppID_Default}" Text="{Binding CurrentAppID}" MinWidth="275"/>
                     </StackPanel>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
