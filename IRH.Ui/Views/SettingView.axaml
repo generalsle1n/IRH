@@ -2,7 +2,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:lang="using:IRH.Ui.Resources"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             xmlns:vm="using:IRH.Ui.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SettingViewModel"
              x:Class="IRH.Ui.Views.SettingView">
-    Settings
+    
+    <ScrollViewer Margin="{StaticResource DefaultMargin}">
+        <StackPanel Spacing="10">
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
+                <DockPanel Height="100">
+                    <Svg Path="/Assets/IRH-logo.svg" />
+                    <StackPanel Spacing="0" Margin="12 0">
+                        <TextBlock Text="{x:Static lang:Strings.Common_ProgramName}" FontWeight="Bold" FontSize="20" />
+                        <TextBlock Text="{x:Static lang:Strings.Common_Version}" FontSize="16"/>
+                        <TextBlock Text="{x:Static lang:Strings.Setting_ProjectUrl}" FontWeight="SemiBold" FontSize="18"/>
+                        <TextBlock Text="{x:Static lang:Strings.Common_GitHubUrl}" Foreground="LightSkyBlue" TextDecorations="Underline" FontSize="16"/>
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AppTheme_Main}" Description="{x:Static lang:Strings.Setting_AppTheme_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="DarkTheme" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAppThemes}" SelectedItem="{Binding SelectedAppTheme}">
+                    </ui:FAComboBox>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
+            
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AuthType_Main}" Description="{x:Static lang:Strings.Setting_AuthType_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="PersonAccounts" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAuthTypes}" SelectedItem="{Binding SelectedAuthType}"/>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
+            
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_TenantID_Main}" Description="{x:Static lang:Strings.Setting_TenantID_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="Building" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <ToggleSwitch IsChecked="{Binding TenantIDEditEnabled}" OffContent="" OnContent=""/>
+                        <TextBox IsEnabled="{Binding TenantIDEditEnabled}" Watermark="{x:Static lang:Strings.Setting_TenantID_Default}" Text="{Binding CurrentTenantID}" MinWidth="200"/>
+                    </StackPanel>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
+            
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AppID_Main}" Description="{x:Static lang:Strings.Setting_AppID_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="Apps" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <ToggleSwitch IsChecked="{Binding AppIDEditEnabled}" OffContent="" OnContent=""/>
+                        <TextBox IsEnabled="{Binding AppIDEditEnabled}" Watermark="{x:Static lang:Strings.Setting_AppID_Default}" Text="{Binding CurrentAppID}" MinWidth="200"/>
+                    </StackPanel>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
