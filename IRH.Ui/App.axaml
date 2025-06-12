@@ -20,6 +20,6 @@
              
     <Application.Styles>
         <!-- <FluentTheme /> -->
-        <style:FluentAvaloniaTheme />
+        <style:FluentAvaloniaTheme PreferUserAccentColor="True" UseSystemFontOnWindows="True" />
     </Application.Styles>
 </Application>
