@@ -26,6 +26,7 @@
     <PackageReference Include="FluentAvaloniaUI" Version="2.3.0" />
     <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.302" />
     <PackageReference Include="HyperText.Avalonia" Version="2.0.0" />
+    <PackageReference Include="Sandreas.Avalonia.SimplePreferences" Version="0.0.4" />
     <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.0.1" />
   </ItemGroup>
 
