@@ -19,14 +19,24 @@ namespace IRH.Ui.ViewModels
 
         partial void OnSelectedItemChanged(NavigationViewItem value)
         {
-            string[] SplitType = (value.Tag as string).Split(";");
+            string ViewTypeName, ViewModelTypeName = null;
+            Type ViewType, ViewModelType = null;
             
-            string ViewTypeName = SplitType[0];
-            string ViewModelTypeName = SplitType[1];
-            
-            Type ViewType = Type.GetType(ViewTypeName) ?? typeof(SettingView);
-            Type ViewModelType = Type.GetType(ViewTypeName) ?? typeof(SettingViewModel);
-            
+            if (!(value.Name is not null && value.Name.Equals("SettingsItem")))
+            {
+                string[] SplitType = (value.Tag as string).Split(";");
+                ViewTypeName = SplitType[0];
+                ViewModelTypeName = SplitType[1];
+
+                ViewType = Type.GetType(ViewTypeName);
+                ViewModelType = Type.GetType(ViewModelTypeName);
+            }
+            else
+            {
+                ViewType = typeof(SettingView);
+                ViewModelType = typeof(SettingViewModel);
+            }
+
             UserControl SingleView = (UserControl)Activator.CreateInstance(ViewType);
             ViewModelBase SingleViewModel = (ViewModelBase)Activator.CreateInstance(ViewModelType);
             
