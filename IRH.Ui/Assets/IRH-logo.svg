@@ -1,0 +1,36 @@
+﻿<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Warm orange-focused gradient -->
+        <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFD580" /> <!-- Light apricot -->
+            <stop offset="25%" stop-color="#FFA726" /> <!-- Bright orange -->
+            <stop offset="50%" stop-color="#FF7043" /> <!-- Warm coral -->
+            <stop offset="75%" stop-color="#FF5722" /> <!-- Deep orange -->
+            <stop offset="100%" stop-color="#E64A19" /> <!-- Burnt orange -->
+        </linearGradient>
+
+        <!-- Soft background blur -->
+        <filter id="blurEffect" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="18" result="blur" />
+            <feBlend in="SourceGraphic" in2="blur" mode="normal"/>
+        </filter>
+    </defs>
+
+    <!-- Blurred orange gradient background -->
+    <ellipse cx="100" cy="100" rx="85" ry="85"
+             fill="url(#orangeGradient)" opacity="0.25" filter="url(#blurEffect)" />
+
+    <!-- Foreground glass-style rounded square -->
+    <rect x="20" y="20" width="160" height="160" rx="28" ry="28"
+          fill="white" fill-opacity="0.2"
+          stroke="url(#orangeGradient)" stroke-width="2" />
+
+    <!-- Subtle center circular glow -->
+    <circle cx="100" cy="100" r="65" fill="url(#orangeGradient)" opacity="0.1" />
+
+    <!-- IRH Text -->
+    <text x="100" y="122" text-anchor="middle" font-family="Segoe UI, sans-serif"
+          font-size="54" font-weight="600" fill="url(#orangeGradient)">
+        IRH
+    </text>
+</svg>
