@@ -150,6 +150,60 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Setting_AppID.
+        /// </summary>
+        public static string Setting_Name_AppID {
+            get {
+                return ResourceManager.GetString("Setting_Name_AppID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_Name_AppIDEditEnabled.
+        /// </summary>
+        public static string Setting_Name_AppIDEditEnabled {
+            get {
+                return ResourceManager.GetString("Setting_Name_AppIDEditEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_AppTheme.
+        /// </summary>
+        public static string Setting_Name_AppTheme {
+            get {
+                return ResourceManager.GetString("Setting_Name_AppTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_AuthType.
+        /// </summary>
+        public static string Setting_Name_AuthType {
+            get {
+                return ResourceManager.GetString("Setting_Name_AuthType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_TenantID.
+        /// </summary>
+        public static string Setting_Name_TenantID {
+            get {
+                return ResourceManager.GetString("Setting_Name_TenantID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_TenantIDEditEnabled.
+        /// </summary>
+        public static string Setting_Name_TenantIDEditEnabled {
+            get {
+                return ResourceManager.GetString("Setting_Name_TenantIDEditEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Projekt Link.
         /// </summary>
         public static string Setting_ProjectUrl {

@@ -159,4 +159,22 @@
   <data name="Setting_AppID_Default" xml:space="preserve">
     <value>c0849608-c8b9-4e86-b37d-fce972a0a7f6</value>
   </data>
+  <data name="Setting_Name_AppTheme" xml:space="preserve">
+    <value>Setting_AppTheme</value>
+  </data>
+  <data name="Setting_Name_AuthType" xml:space="preserve">
+    <value>Setting_AuthType</value>
+  </data>
+  <data name="Setting_Name_TenantID" xml:space="preserve">
+    <value>Setting_TenantID</value>
+  </data>
+  <data name="Setting_Name_AppID" xml:space="preserve">
+    <value>Setting_AppID</value>
+  </data>
+  <data name="Setting_Name_TenantIDEditEnabled" xml:space="preserve">
+    <value>Setting_TenantIDEditEnabled</value>
+  </data>
+  <data name="Setting_Name_AppIDEditEnabled" xml:space="preserve">
+    <value>Setting_Name_AppIDEditEnabled</value>
+  </data>
 </root>
