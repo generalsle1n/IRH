@@ -28,8 +28,7 @@
                     <icons:SymbolIconSource Symbol="DarkTheme" />
                 </ui:SettingsExpander.IconSource>
                 <ui:SettingsExpander.Footer>
-                    <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAppThemes}" SelectedItem="{Binding SelectedAppTheme}">
-                    </ui:FAComboBox>
+                    <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAppThemes}" SelectedItem="{Binding SelectedAppTheme}"/>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
             
