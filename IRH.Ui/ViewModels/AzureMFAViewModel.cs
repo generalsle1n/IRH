@@ -1,6 +1,5 @@
 ﻿namespace IRH.Ui.ViewModels;
-
-public class AzureMFAViewModel
+public class AzureMFAViewModel : ViewModelBase
 {
     
 }
