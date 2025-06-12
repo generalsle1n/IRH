@@ -177,4 +177,22 @@
   <data name="Setting_Name_AppIDEditEnabled" xml:space="preserve">
     <value>Setting_Name_AppIDEditEnabled</value>
   </data>
+  <data name="AzureMFA_StartProcess_Label" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="AzureMFA_ReportLevel_Main" xml:space="preserve">
+    <value>Printlevel</value>
+  </data>
+  <data name="AzureMFA_GroupFilter_Label" xml:space="preserve">
+    <value>Group Filter</value>
+  </data>
+  <data name="AzureMFA_GroupFilter_Placeholder" xml:space="preserve">
+    <value>Group ID</value>
+  </data>
+  <data name="AzureMFA_Scope_Label" xml:space="preserve">
+    <value>All Permissions</value>
+  </data>
+  <data name="AzureMFA_Scope_Placeholder" xml:space="preserve">
+    <value>Permission</value>
+  </data>
 </root>

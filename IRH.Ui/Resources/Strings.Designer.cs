@@ -60,6 +60,60 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Group Filter.
+        /// </summary>
+        public static string AzureMFA_GroupFilter_Label {
+            get {
+                return ResourceManager.GetString("AzureMFA_GroupFilter_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group ID.
+        /// </summary>
+        public static string AzureMFA_GroupFilter_Placeholder {
+            get {
+                return ResourceManager.GetString("AzureMFA_GroupFilter_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Printlevel.
+        /// </summary>
+        public static string AzureMFA_ReportLevel_Main {
+            get {
+                return ResourceManager.GetString("AzureMFA_ReportLevel_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Permissions.
+        /// </summary>
+        public static string AzureMFA_Scope_Label {
+            get {
+                return ResourceManager.GetString("AzureMFA_Scope_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permission.
+        /// </summary>
+        public static string AzureMFA_Scope_Placeholder {
+            get {
+                return ResourceManager.GetString("AzureMFA_Scope_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string AzureMFA_StartProcess_Label {
+            get {
+                return ResourceManager.GetString("AzureMFA_StartProcess_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/generalsle1n/IRH/.
         /// </summary>
         public static string Common_GitHubUrl {
