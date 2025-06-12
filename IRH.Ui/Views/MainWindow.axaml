@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:IRH.Ui.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+        xmlns:model="using:IRH.Ui.Models.Generel"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="IRH.Ui.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="IRH.Ui">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*">
+        <ui:NavigationView x:Name="MainNavigation" Grid.Row="1" SelectedItem="{Binding SelectedItem}" PaneDisplayMode="LeftCompact" Name="MainNavigation" IsSettingsVisible="True">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="Azure MFA" Tag="IRH.Ui.Views.AzureMfaView">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="LockShield" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+            <ui:Frame Name="CurrentPage" Content="{Binding CurrentPage}"/>
+        </ui:NavigationView>
+    </Grid>
+
+</Window>
