@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -234,12 +236,11 @@ public partial class AzureMFAViewModel : ViewModelBase
         
         AuthType Flow = Preferences.Get<AuthType>(Strings.Setting_Name_AuthType, AuthType.DeviceCode);
         GraphServiceClient Client = null;
-
+        AzureAuth AzureAuth = new AzureAuth(Log.Logger);
+        
         switch (Flow)
         {
             case AuthType.DeviceCode:
-                AzureAuth AzureAuth = new AzureAuth(Log.Logger);
-                
                 DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
                     Preferences.Get<String>(Strings.Setting_Name_AppID, null),
                     Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
