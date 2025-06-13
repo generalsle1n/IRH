@@ -275,10 +275,10 @@ public partial class AzureMFAViewModel : ViewModelBase
         string[] AllGroups = GetGroups();
         
         AzureUser AzureUser = new AzureUser(Log.Logger);
-        UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups);
+        UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups, token);
 
         AzureMFA AzureMFA = new AzureMFA(Log.Logger);
-        List<UserMFA> AllMFAUserResult = (await AzureMFA.GetAllUsersMFA(Client, AllUser));
+        List<UserMFA> AllMFAUserResult = await AzureMFA.GetAllUsersMFA(Client, AllUser);
 
         foreach (UserMFA SingleUser in AllMFAUserResult)
         {
