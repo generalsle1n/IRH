@@ -195,4 +195,13 @@
   <data name="AzureMFA_Scope_Placeholder" xml:space="preserve">
     <value>Berechtigung</value>
   </data>
+  <data name="AzureMFA_OpenBrowser_ButtonToolTip" xml:space="preserve">
+    <value>Browser öffnen um den Code einzugeben</value>
+  </data>
+  <data name="AzureMFA_UPN_DataGridHeader" xml:space="preserve">
+    <value>UserPrincipleName</value>
+  </data>
+  <data name="AzureMFA_MFACount_DataGrid" xml:space="preserve">
+    <value>MFA Anzahl (1 meint nur Password)</value>
+  </data>
 </root>

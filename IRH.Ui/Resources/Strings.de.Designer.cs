@@ -78,6 +78,24 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MFA Anzahl (1 meint nur Password).
+        /// </summary>
+        public static string AzureMFA_MFACount_DataGrid {
+            get {
+                return ResourceManager.GetString("AzureMFA_MFACount_DataGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browser öffnen um den Code einzugeben.
+        /// </summary>
+        public static string AzureMFA_OpenBrowser_ButtonToolTip {
+            get {
+                return ResourceManager.GetString("AzureMFA_OpenBrowser_ButtonToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ausgabetiefe.
         /// </summary>
         public static string AzureMFA_ReportLevel_Main {
@@ -110,6 +128,15 @@ namespace IRH.Ui.Resources {
         public static string AzureMFA_StartProcess_Label {
             get {
                 return ResourceManager.GetString("AzureMFA_StartProcess_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UserPrincipleName.
+        /// </summary>
+        public static string AzureMFA_UPN_DataGridHeader {
+            get {
+                return ResourceManager.GetString("AzureMFA_UPN_DataGridHeader", resourceCulture);
             }
         }
         
