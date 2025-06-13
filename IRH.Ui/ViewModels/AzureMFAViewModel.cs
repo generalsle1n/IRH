@@ -45,6 +45,8 @@ public partial class AzureMFAViewModel : ViewModelBase
     {
         new AzureMFAItemControlTemplate(null, showDelete:false)
     };
+
+    public ObservableCollection<UserMFA> AllUserMFA { get; } = new ObservableCollection<UserMFA>();
     
     public ObservableCollection<AzureMFAItemControlTemplate> AllScopes { get; }= new ObservableCollection<AzureMFAItemControlTemplate>(
         DefaultValue.AzureMfaPermissions.Select((singleString, index) => new AzureMFAItemControlTemplate(singleString,showDelete:index != 0))
