@@ -19,7 +19,9 @@
     </Application.Resources>
              
     <Application.Styles>
-        <!-- <FluentTheme /> -->
+        <FluentTheme />
         <style:FluentAvaloniaTheme PreferUserAccentColor="True" UseSystemFontOnWindows="True" />
+        <StyleInclude Source="avares://FluentAvalonia.ProgressRing/Styling/Controls/ProgressRing.axaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     </Application.Styles>
 </Application>
