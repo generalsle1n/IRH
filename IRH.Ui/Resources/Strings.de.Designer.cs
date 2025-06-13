@@ -60,6 +60,15 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Daten exportieren.
+        /// </summary>
+        public static string AzureMFA_ExportData_Label {
+            get {
+                return ResourceManager.GetString("AzureMFA_ExportData_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gruppen Filter.
         /// </summary>
         public static string AzureMFA_GroupFilter_Label {
@@ -74,6 +83,15 @@ namespace IRH.Ui.Resources {
         public static string AzureMFA_GroupFilter_Placeholder {
             get {
                 return ResourceManager.GetString("AzureMFA_GroupFilter_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Laden der bereits exportieren MFA Daten.
+        /// </summary>
+        public static string AzureMFA_LoadFile_Title {
+            get {
+                return ResourceManager.GetString("AzureMFA_LoadFile_Title", resourceCulture);
             }
         }
         
@@ -101,6 +119,15 @@ namespace IRH.Ui.Resources {
         public static string AzureMFA_ReportLevel_Main {
             get {
                 return ResourceManager.GetString("AzureMFA_ReportLevel_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speichern der Export Daten.
+        /// </summary>
+        public static string AzureMFA_SaveFile_Title {
+            get {
+                return ResourceManager.GetString("AzureMFA_SaveFile_Title", resourceCulture);
             }
         }
         
