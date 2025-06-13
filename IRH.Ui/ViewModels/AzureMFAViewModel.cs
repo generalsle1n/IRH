@@ -28,6 +28,14 @@ using Strings = IRH.Ui.Resources.Strings;
 namespace IRH.Ui.ViewModels;
 public partial class AzureMFAViewModel : ViewModelBase
 {
+    private const string _filePickerDisplayName = "Json";
+    private const string _fileNamePrefix = "Result-";
+    private const string _fileNameSuffix = ".json";
+    private const string _filePickerFilter = $"*{_fileNameSuffix}";
+    private const string _dateFormat = "dd_MM_yyyy-HH_mm_ss";
+    private const string _fileAppleIdentifier = "public.json";
+    private const string _fileMimeType = "application/json";
+    
     [ObservableProperty]
     private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
     
@@ -41,6 +49,8 @@ public partial class AzureMFAViewModel : ViewModelBase
     private bool _copyUserCodeEnabled = false;
     [ObservableProperty]
     private bool _loadingRingEnabled = false;
+    [ObservableProperty]
+    private bool _exportEnabled = false;
     public ObservableCollection<AzureMFAItemControlTemplate> AllGroupFilter { get; }= new ObservableCollection<AzureMFAItemControlTemplate>()
     {
         new AzureMFAItemControlTemplate(null, showDelete:false)
@@ -131,6 +141,46 @@ public partial class AzureMFAViewModel : ViewModelBase
         await Clipboard.SetTextAsync(UserCode);
     }
 
+    [RelayCommand]
+    private async Task SaveDataToFile(CancellationToken token)
+    {
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
+        Window MainWindow = AppLifeTime.MainWindow;
+        
+        IStorageFile SaveFile = await MainWindow.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+        {
+            Title = Strings.AzureMFA_SaveFile_Title,
+            FileTypeChoices = new List<FilePickerFileType>()
+            {
+                new FilePickerFileType(_filePickerDisplayName)
+                {
+                    Patterns = new List<string>()
+                    {
+                        _filePickerFilter
+                    },
+                    AppleUniformTypeIdentifiers = new List<string>()
+                    {
+                        _fileAppleIdentifier
+                    },
+                    MimeTypes = new List<string>()
+                    {
+                        _fileMimeType
+                    }
+                }
+            },
+            ShowOverwritePrompt = true,
+            SuggestedFileName = $"{_fileNamePrefix}{DateTimeOffset.Now.ToString(_dateFormat)}{_fileNameSuffix}",
+        });
+
+        if (SaveFile is not null)
+        {
+            Uri SinglePath = SaveFile.Path;
+            using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                await JsonSerializer.SerializeAsync<List<UserMFA>>(Stream, AllUserMFA.ToList(), cancellationToken: token);
+            }
+        }
+    }
     [RelayCommand]
     private async Task StartAzureGathering()
     {
