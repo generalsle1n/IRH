@@ -263,6 +263,13 @@ public partial class AzureMFAViewModel : ViewModelBase
                     Flow,
                     CodeCredential: DeviceCodeCredential);
                 break;
+            case AuthType.Interactive:
+                Client = Client = AzureAuth.GetClient(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, null),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
+                    GetPermission(),
+                    Flow);
+                break;
         }
         
         string[] AllGroups = GetGroups();
