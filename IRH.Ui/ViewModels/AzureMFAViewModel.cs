@@ -279,5 +279,10 @@ public partial class AzureMFAViewModel : ViewModelBase
         }
         
         LoadingRingEnabled = false;
+        ExportEnabled = true;
+        CopyUserCodeEnabled = true;
+        OpenBrowserEnabled = true;
+
+        UserCode = null;
     }
 }
