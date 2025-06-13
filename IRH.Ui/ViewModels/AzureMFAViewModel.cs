@@ -228,7 +228,7 @@ public partial class AzureMFAViewModel : ViewModelBase
     }
     
     [RelayCommand]
-    private async Task StartAzureGathering()
+    private async Task StartAzureGathering(CancellationToken token)
     {
         LoadingRingEnabled = true;
         
