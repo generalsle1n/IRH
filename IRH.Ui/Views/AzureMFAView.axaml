@@ -72,8 +72,8 @@
             <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
                 <DataGrid ItemsSource="{Binding AllUserMFA}" GridLinesVisibility="All">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_UPN_DataGridHeader}" Binding="{Binding User.UserPrincipalName}"/>
-                        <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_MFACount_DataGrid}" Binding="{Binding AllMFACount}" />
+                        <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_UPN_DataGridHeader}" Binding="{Binding User.UserPrincipalName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_MFACount_DataGrid}" Binding="{Binding AllMFACount}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
@@ -107,7 +107,8 @@
                 </ui:CommandBarElementContainer>
             </ui:CommandBar.PrimaryCommands>
             <ui:CommandBar.SecondaryCommands>
-                <ui:CommandBarButton Label="Export"></ui:CommandBarButton>
+                <ui:CommandBarButton Label="{x:Static lang:Strings.AzureMFA_ExportData_Label}" IsEnabled="{Binding ExportEnabled}" Command="{Binding SaveDataToFileCommand}" />
+                <ui:CommandBarButton Label="{x:Static lang:Strings.AzureMFA_LoadFile_Title}" Command="{Binding LoadDataFileCommand}" />
             </ui:CommandBar.SecondaryCommands>
         </ui:CommandBar>
     </Grid>
