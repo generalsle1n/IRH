@@ -81,4 +81,107 @@ public partial class AzureMFAViewModel : ViewModelBase
         AzureMFAItemControlTemplate Item = SingleButton.DataContext as AzureMFAItemControlTemplate;
         AllScopes.Remove(Item);
     }
+
+    private string[] GetGroups()
+    {
+        List<string> Groups = new List<string>();
+
+        foreach (AzureMFAItemControlTemplate SingleEntry in AllGroupFilter)
+        {
+            if (SingleEntry.Label is not null)
+            {
+                Groups.Add(SingleEntry.Label);
+            }
+        }
+        
+        return Groups.ToArray();
+    }
+    
+    private string[] GetPermission()
+    {
+        List<string> Permissions = new List<string>();
+
+        foreach (AzureMFAItemControlTemplate SingleEntry in AllScopes)
+        {
+            if (SingleEntry.Label is not null)
+            {
+                Permissions.Add(SingleEntry.Label);
+            }
+        }
+        
+        return Permissions.ToArray();
+    }
+
+    [RelayCommand]
+    private async Task OpenBrowserAsync()
+    {
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
+        Window MainWindow = AppLifeTime.MainWindow;
+        ILauncher Launcher = TopLevel.GetTopLevel(MainWindow).Launcher;
+        await Launcher.LaunchUriAsync(DefaultValue.DeviceLoginUrl);
+    }
+    
+    [RelayCommand]
+    private async Task SetUserCodeToClipboard()
+    {
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
+        Window MainWindow = AppLifeTime.MainWindow;
+        IClipboard Clipboard = MainWindow.Clipboard;
+        
+        await Clipboard.SetTextAsync(UserCode);
+    }
+
+    [RelayCommand]
+    private async Task StartAzureGathering()
+    {
+        LoadingRingEnabled = true;
+        
+        AuthType Flow = Preferences.Get<AuthType>(Strings.Setting_Name_AuthType, AuthType.DeviceCode);
+        GraphServiceClient Client = null;
+
+        switch (Flow)
+        {
+            case AuthType.DeviceCode:
+                AzureAuth AzureAuth = new AzureAuth(Log.Logger);
+                
+                DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, null),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
+                    CreateCallBack: false);
+                
+                DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
+                {
+                    UserCode = DeviceCode.UserCode;
+                    CopyUserCodeEnabled = true;
+                    OpenBrowserEnabled = true;
+
+                    return Task.CompletedTask;
+                };
+                
+                DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
+  
+                Client = AzureAuth.GetClient(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, null),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
+                    GetPermission(),
+                    Flow,
+                    CodeCredential: DeviceCodeCredential);
+                break;
+        }
+        
+        string[] AllGroups = GetGroups();
+        
+        AzureUser AzureUser = new AzureUser(Log.Logger);
+        UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups);
+
+        AzureMFA AzureMFA = new AzureMFA(Log.Logger);
+        List<UserMFA> AllMFAUserResult = (await AzureMFA.GetAllUsersMFA(Client, AllUser));
+
+        foreach (UserMFA SingleUser in AllMFAUserResult)
+        {
+            AllUserMFA.Add(SingleUser);
+        }
+        
+        LoadingRingEnabled = false;
+    }
 }
