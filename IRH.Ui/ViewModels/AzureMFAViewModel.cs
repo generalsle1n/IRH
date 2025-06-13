@@ -31,6 +31,16 @@ public partial class AzureMFAViewModel : ViewModelBase
     [ObservableProperty]
     private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
     
+    [ObservableProperty]
+    private bool _openBrowserEnabled = false;
+    
+    [ObservableProperty]
+    private string _userCode;
+    
+    [ObservableProperty]
+    private bool _copyUserCodeEnabled = false;
+    [ObservableProperty]
+    private bool _loadingRingEnabled = false;
     public ObservableCollection<AzureMFAItemControlTemplate> AllGroupFilter { get; }= new ObservableCollection<AzureMFAItemControlTemplate>()
     {
         new AzureMFAItemControlTemplate(null, showDelete:false)
