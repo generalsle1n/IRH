@@ -19,13 +19,13 @@ namespace IRH.Lib.Class.Azure.Generel
 
         private readonly ILogger _logger;
 
-        public async Task<UserCollectionResponse> GetUsersAsync(GraphServiceClient Client, string[] GroupIDs)
+        public async Task<UserCollectionResponse> GetUsersAsync(GraphServiceClient Client, string[] GroupIDs, CancellationToken singleCancellationToken = default)
         {
             _logger.Information("Querying all Users with MemberOf Attribute, this can take some time");
             UserCollectionResponse AllUsers = await Client.Users.GetAsync((search) =>
             {
                 search.QueryParameters.Expand = new string[] { "memberOf" };
-            });
+            }, cancellationToken: singleCancellationToken);
             
             if (GroupIDs.Length > 0)
             {

@@ -20,7 +20,7 @@ namespace IRH.Lib.Class.Azure.MFA
 
         private readonly ILogger _logger;
 
-        public async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers)
+        public async Task<List<UserMFA>> GetAllUsersMFA(GraphServiceClient Client, UserCollectionResponse AllUsers, CancellationToken singleCancellationToken = new CancellationToken())
         {
             List<UserMFA> Result = new List<UserMFA>();
             _logger.Information($"Start getting MFA Methods for {AllUsers.Value.Count} Users");
@@ -29,7 +29,7 @@ namespace IRH.Lib.Class.Azure.MFA
 
             foreach (User SingleUser in AllUsers.Value)
             {
-                AuthenticationMethodCollectionResponse AuthMethods = await Client.Users[SingleUser.Id].Authentication.Methods.GetAsync();
+                AuthenticationMethodCollectionResponse AuthMethods = await Client.Users[SingleUser.Id].Authentication.Methods.GetAsync(cancellationToken: singleCancellationToken);
 
                 UserMFA SingleUserResult = new UserMFA()
                 {
