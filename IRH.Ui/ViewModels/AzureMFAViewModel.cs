@@ -181,6 +181,52 @@ public partial class AzureMFAViewModel : ViewModelBase
             }
         }
     }
+
+    [RelayCommand]
+    private async Task LoadDataFile(CancellationToken token)
+    {
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
+        Window MainWindow = AppLifeTime.MainWindow;
+        
+        IReadOnlyList<IStorageFile> OpenFile = await MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        {
+            Title = Strings.AzureMFA_SaveFile_Title,
+            AllowMultiple = false,
+            FileTypeFilter = new List<FilePickerFileType>()
+            {
+                new FilePickerFileType(_filePickerDisplayName)
+                {
+                    Patterns = new List<string>()
+                    {
+                        _filePickerFilter
+                    },
+                    AppleUniformTypeIdentifiers = new List<string>()
+                    {
+                        _fileAppleIdentifier
+                    },
+                    MimeTypes = new List<string>()
+                    {
+                        _fileMimeType
+                    }
+                }
+            }
+        });
+
+        if (OpenFile.Any())
+        {
+            Uri SinglePath = OpenFile[0].Path;
+            using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.Open, FileAccess.Read))
+            {
+                List<UserMFA> Result = await JsonSerializer.DeserializeAsync<List<UserMFA>>(Stream, cancellationToken: token);
+                AllUserMFA.Clear();
+                foreach (UserMFA SingleUser in Result)
+                {
+                    AllUserMFA.Add(SingleUser);
+                }
+            }
+        }
+    }
+    
     [RelayCommand]
     private async Task StartAzureGathering()
     {
