@@ -9,9 +9,9 @@ namespace IRH.Ui.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private UserControl _currentPage = new AzureMfaView()
+        private UserControl _currentPage = new SettingView()
         {
-            DataContext = new AzureMFAViewModel()
+            DataContext = new SettingViewModel()
         };
 
         [ObservableProperty]
