@@ -102,10 +102,10 @@ public partial class AzureMFAViewModel : ViewModelBase
                 Groups.Add(SingleEntry.Label);
             }
         }
-        
+
         return Groups.ToArray();
     }
-    
+
     private string[] GetPermission()
     {
         List<string> Permissions = new List<string>();
@@ -117,7 +117,7 @@ public partial class AzureMFAViewModel : ViewModelBase
                 Permissions.Add(SingleEntry.Label);
             }
         }
-        
+
         return Permissions.ToArray();
     }
 
@@ -129,14 +129,14 @@ public partial class AzureMFAViewModel : ViewModelBase
         ILauncher Launcher = TopLevel.GetTopLevel(MainWindow).Launcher;
         await Launcher.LaunchUriAsync(DefaultValue.DeviceLoginUrl);
     }
-    
+
     [RelayCommand]
     private async Task SetUserCodeToClipboard()
     {
         IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
         Window MainWindow = AppLifeTime.MainWindow;
         IClipboard Clipboard = MainWindow.Clipboard;
-        
+
         await Clipboard.SetTextAsync(UserCode);
     }
 
@@ -145,7 +145,7 @@ public partial class AzureMFAViewModel : ViewModelBase
     {
         IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
         Window MainWindow = AppLifeTime.MainWindow;
-        
+
         IStorageFile SaveFile = await MainWindow.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
         {
             Title = Strings.AzureMFA_SaveFile_Title,
@@ -176,7 +176,7 @@ public partial class AzureMFAViewModel : ViewModelBase
             Uri SinglePath = SaveFile.Path;
             using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
-                await JsonSerializer.SerializeAsync<List<UserMFA>>(Stream, AllUserMFA.ToList(), cancellationToken: token);
+                await JsonSerializer.SerializeAsync<List<UserMFA>>(Stream, AllUserMFAData.ToList(), cancellationToken: token);
             }
         }
     }
@@ -186,30 +186,30 @@ public partial class AzureMFAViewModel : ViewModelBase
     {
         IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
         Window MainWindow = AppLifeTime.MainWindow;
-        
+
         IReadOnlyList<IStorageFile> OpenFile = await MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
-        {
-            Title = Strings.AzureMFA_SaveFile_Title,
-            AllowMultiple = false,
-            FileTypeFilter = new List<FilePickerFileType>()
             {
-                new FilePickerFileType(_filePickerDisplayName)
+                Title = Strings.AzureMFA_SaveFile_Title,
+                AllowMultiple = false,
+                FileTypeFilter = new List<FilePickerFileType>()
                 {
-                    Patterns = new List<string>()
+                    new FilePickerFileType(_filePickerDisplayName)
                     {
-                        _filePickerFilter
-                    },
-                    AppleUniformTypeIdentifiers = new List<string>()
-                    {
-                        _fileAppleIdentifier
-                    },
-                    MimeTypes = new List<string>()
-                    {
-                        _fileMimeType
+                        Patterns = new List<string>()
+                        {
+                            _filePickerFilter
+                        },
+                        AppleUniformTypeIdentifiers = new List<string>()
+                        {
+                            _fileAppleIdentifier
+                        },
+                        MimeTypes = new List<string>()
+                        {
+                            _fileMimeType
+                        }
                     }
                 }
-            }
-        });
+            });
 
         if (OpenFile.Any())
         {
