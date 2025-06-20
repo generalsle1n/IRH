@@ -96,11 +96,20 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MFA Anzahl (1 meint nur Password).
+        ///   Looks up a localized string similar to MFA Anzahl.
         /// </summary>
         public static string AzureMFA_MFACount_DataGrid {
             get {
                 return ResourceManager.GetString("AzureMFA_MFACount_DataGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methoden.
+        /// </summary>
+        public static string AzureMFA_MFAName_DataGrid {
+            get {
+                return ResourceManager.GetString("AzureMFA_MFAName_DataGrid", resourceCulture);
             }
         }
         
