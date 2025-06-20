@@ -70,10 +70,36 @@
                         </StackPanel>
                 </ScrollViewer>
             <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
-                <DataGrid ItemsSource="{Binding AllUserMFA}" GridLinesVisibility="All">
+                <DataGrid ItemsSource="{Binding AllUserMFAData}" GridLinesVisibility="All">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_UPN_DataGridHeader}" Binding="{Binding User.UserPrincipalName}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_MFACount_DataGrid}" Binding="{Binding AllMFACount}" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header="MFA" >
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <Expander Header="Show Items">
+                                        <ItemsControl ItemsSource="{Binding MFA}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Expander Header="{Binding Method.OdataType}">
+                                                        <ItemsControl ItemsSource="{Binding MethodProperties}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                                                        <TextBox Width="150" Text="{Binding PropertyName}"/>
+                                                                        <TextBox Text="{Binding PropertyValue}"/>
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </Expander>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Expander> 
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
