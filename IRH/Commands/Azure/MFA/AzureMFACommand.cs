@@ -128,17 +128,17 @@ namespace IRH.Commands.Azure.MFA
 
                 if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                 {
-                    foreach (AuthenticationMethod SingleMethod in SingleUser.MFA)
+                    foreach (AzureAuthenticationMethod SingleMethod in SingleUser.MFA)
                     {
-                        _logger.Information($" | {SingleMethod.GetType().ToString().Split(".").Last()}");
+                        _logger.Information($" | {SingleMethod.Method.GetType().ToString().Split(".").Last()}");
                         if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                         {
-                            PropertyInfo[] AllProperties = SingleMethod.GetType().GetProperties();
+                            PropertyInfo[] AllProperties = SingleMethod.Method.GetType().GetProperties();
                             IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
 
                             foreach (PropertyInfo StringVal in AllStringVal)
                             {
-                                string Value = (string)StringVal.GetValue(SingleMethod);
+                                string Value = (string)StringVal.GetValue(SingleMethod.Method);
                                 if (Value is not null)
                                 {
                                     _logger.Information($" | |{StringVal.Name}: {Value}");
@@ -151,7 +151,7 @@ namespace IRH.Commands.Azure.MFA
 
                                 foreach (PropertyInfo NonStringVal in AllNonStringVal)
                                 {
-                                    object Value = NonStringVal.GetValue(SingleMethod);
+                                    object Value = NonStringVal.GetValue(SingleMethod.Method);
                                     if (Value is not null)
                                     {
                                         _logger.Information($" | | | {NonStringVal.Name}: {Value.ToString()}");
