@@ -217,24 +217,24 @@ public partial class AzureMFAViewModel : ViewModelBase
             using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.Open, FileAccess.Read))
             {
                 List<UserMFA> Result = await JsonSerializer.DeserializeAsync<List<UserMFA>>(Stream, cancellationToken: token);
-                AllUserMFA.Clear();
+                AllUserMFAData.Clear();
                 foreach (UserMFA SingleUser in Result)
                 {
-                    AllUserMFA.Add(SingleUser);
+                    AllUserMFAData.Add(SingleUser);
                 }
             }
         }
     }
-    
+
     [RelayCommand]
     private async Task StartAzureGathering(CancellationToken token)
     {
         LoadingRingEnabled = true;
-        
+
         AuthType Flow = Preferences.Get<AuthType>(Strings.Setting_Name_AuthType, AuthType.DeviceCode);
         GraphServiceClient Client = null;
         AzureAuth AzureAuth = new AzureAuth(Log.Logger);
-        
+
         switch (Flow)
         {
             case AuthType.DeviceCode:
@@ -242,7 +242,7 @@ public partial class AzureMFAViewModel : ViewModelBase
                     Preferences.Get<String>(Strings.Setting_Name_AppID, null),
                     Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
                     CreateCallBack: false);
-                
+
                 DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
                 {
                     UserCode = DeviceCode.UserCode;
@@ -251,9 +251,9 @@ public partial class AzureMFAViewModel : ViewModelBase
 
                     return Task.CompletedTask;
                 };
-                
+
                 DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
-  
+
                 Client = AzureAuth.GetClient(
                     Preferences.Get<String>(Strings.Setting_Name_AppID, null),
                     Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
@@ -269,9 +269,9 @@ public partial class AzureMFAViewModel : ViewModelBase
                     Flow);
                 break;
         }
-        
+
         string[] AllGroups = GetGroups();
-        
+
         AzureUser AzureUser = new AzureUser(Log.Logger);
         UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups, token);
 
@@ -280,9 +280,9 @@ public partial class AzureMFAViewModel : ViewModelBase
 
         foreach (UserMFA SingleUser in AllMFAUserResult)
         {
-            AllUserMFA.Add(SingleUser);
+            AllUserMFAData.Add(SingleUser);
         }
-        
+
         LoadingRingEnabled = false;
         ExportEnabled = true;
         CopyUserCodeEnabled = true;
