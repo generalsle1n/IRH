@@ -38,41 +38,37 @@ public partial class AzureMFAViewModel : ViewModelBase
     private const string _dateFormat = "dd_MM_yyyy-HH_mm_ss";
     private const string _fileAppleIdentifier = "public.json";
     private const string _fileMimeType = "application/json";
-    
-    [ObservableProperty]
-    private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
-    
-    [ObservableProperty]
-    private bool _openBrowserEnabled = false;
-    
-    [ObservableProperty]
-    private string _userCode;
-    
-    [ObservableProperty]
-    private bool _copyUserCodeEnabled = false;
-    [ObservableProperty]
-    private bool _loadingRingEnabled = false;
-    [ObservableProperty]
-    private bool _exportEnabled = false;
-    public ObservableCollection<AzureMFAItemControlTemplate> AllGroupFilter { get; }= new ObservableCollection<AzureMFAItemControlTemplate>()
-    {
-        new AzureMFAItemControlTemplate(null, showDelete:false)
-    };
 
-    public ObservableCollection<UserMFA> AllUserMFA { get; } = new ObservableCollection<UserMFA>();
-    
-    public ObservableCollection<AzureMFAItemControlTemplate> AllScopes { get; }= new ObservableCollection<AzureMFAItemControlTemplate>(
-        DefaultValue.AzureMfaPermissions.Select((singleString, index) => new AzureMFAItemControlTemplate(singleString,showDelete:index != 0))
-    );
-    
-    internal List<ReportPrintLevel> AllReportLevel { get; } = Enum.GetValues<ReportPrintLevel>().Cast<ReportPrintLevel>().ToList();
+    [ObservableProperty] private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
+    [ObservableProperty] private bool _openBrowserEnabled = false;
+    [ObservableProperty] private string _userCode;
+    [ObservableProperty] private bool _copyUserCodeEnabled = false;
+    [ObservableProperty] private bool _loadingRingEnabled = false;
+    [ObservableProperty] private bool _exportEnabled = false;
+
+    public ObservableCollection<AzureMFAItemControlTemplate> AllGroupFilter { get; } =
+        new ObservableCollection<AzureMFAItemControlTemplate>()
+        {
+            new AzureMFAItemControlTemplate(null, showDelete: false)
+        };
+
+    public ObservableCollection<UserMFA> AllUserMFAData { get; } = new ObservableCollection<UserMFA>();
+
+    public ObservableCollection<AzureMFAItemControlTemplate> AllScopes { get; } =
+        new ObservableCollection<AzureMFAItemControlTemplate>(
+            DefaultValue.AzureMfaPermissions.Select((singleString, index) =>
+                new AzureMFAItemControlTemplate(singleString, showDelete: index != 0))
+        );
+
+    internal List<ReportPrintLevel> AllReportLevel { get; } =
+        Enum.GetValues<ReportPrintLevel>().Cast<ReportPrintLevel>().ToList();
 
     [RelayCommand]
     private async Task AddNewGroupFilter()
     {
         AllGroupFilter.Add(new AzureMFAItemControlTemplate(null));
     }
-    
+
     [RelayCommand]
     private async Task DeleteGroupFilter(object Sender)
     {
@@ -80,13 +76,13 @@ public partial class AzureMFAViewModel : ViewModelBase
         AzureMFAItemControlTemplate Item = SingleButton.DataContext as AzureMFAItemControlTemplate;
         AllGroupFilter.Remove(Item);
     }
-    
+
     [RelayCommand]
     private async Task AddNewScope()
     {
         AllScopes.Add(new AzureMFAItemControlTemplate(null));
     }
-    
+
     [RelayCommand]
     private async Task DeleteScope(object Sender)
     {
