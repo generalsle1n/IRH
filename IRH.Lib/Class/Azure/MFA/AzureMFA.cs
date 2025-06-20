@@ -36,7 +36,7 @@ namespace IRH.Lib.Class.Azure.MFA
                 UserMFA SingleUserResult = new UserMFA()
                 {
                     User = SingleUser,
-                    MFA = new List<AuthenticationMethod>(),
+                    MFA = new List<AzureAuthenticationMethod>(),
                     AllMFACount = AuthMethods.Value.Count
                 };
 
