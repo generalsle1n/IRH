@@ -70,6 +70,19 @@
                     </StackPanel>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
+            
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_Reset_Main}" Description="{x:Static lang:Strings.Setting_Reset_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="ArrowReset" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Command="{Binding ResetAllSettingsCommand}">
+                            <icons:SymbolIcon Symbol="Delete"/>
+                        </Button>
+                    </StackPanel>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

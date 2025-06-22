@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.SimplePreferences;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -41,6 +42,12 @@ internal partial class SettingViewModel : ViewModelBase
     {
         await Preferences.SetAsync<string>(Strings.Setting_Name_AppID, DefaultValue.AppID);
         CurrentAppID = DefaultValue.AppID;
+    }
+    
+    [RelayCommand]
+    private async Task ResetAllSettings(CancellationToken token)
+    {
+        await Preferences.ClearAsync(cancellationToken: token);
     }
     
     partial void OnSelectedAppThemeChanged(AppTheme value)
