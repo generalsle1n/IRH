@@ -186,9 +186,9 @@ dotnet run -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report
 ```bash
 IRH.exe -Azure -Session --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
 
-./IRH -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+./IRH -Azure -Session --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
 
-dotnet run -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+dotnet run -Azure -Session --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
 ```
 
 ### Azure Audit Login Reporting
