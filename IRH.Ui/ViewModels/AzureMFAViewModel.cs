@@ -21,6 +21,7 @@ using IRH.Lib.Class.Azure.MFA;
 using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Lib.Model.Azure.Result;
+using IRH.Ui.Lib;
 using IRH.Ui.Models.Azure;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
@@ -31,37 +32,34 @@ using Strings = IRH.Ui.Resources.Strings;
 namespace IRH.Ui.ViewModels;
 public partial class AzureMFAViewModel : ViewModelBase
 {
-    private const string _filePickerDisplayName = "Json";
-    private const string _fileNamePrefix = "Result-";
-    private const string _fileNameSuffix = ".json";
-    private const string _filePickerFilter = $"*{_fileNameSuffix}";
-    private const string _dateFormat = "dd_MM_yyyy-HH_mm_ss";
-    private const string _fileAppleIdentifier = "public.json";
-    private const string _fileMimeType = "application/json";
+    private UIHelper _uiHelper = new UIHelper();
+    
+    [ObservableProperty] 
+    private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
+    [ObservableProperty] 
+    private bool _openBrowserEnabled = false;
+    [ObservableProperty] 
+    private string _userCode;
+    [ObservableProperty] 
+    private bool _copyUserCodeEnabled = false;
+    [ObservableProperty] 
+    private bool _loadingRingEnabled = false;
+    [ObservableProperty] 
+    private bool _exportEnabled = false;
 
-    [ObservableProperty] private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
-    [ObservableProperty] private bool _openBrowserEnabled = false;
-    [ObservableProperty] private string _userCode;
-    [ObservableProperty] private bool _copyUserCodeEnabled = false;
-    [ObservableProperty] private bool _loadingRingEnabled = false;
-    [ObservableProperty] private bool _exportEnabled = false;
-
-    public ObservableCollection<AzureMFAItemControlTemplate> AllGroupFilter { get; } =
-        new ObservableCollection<AzureMFAItemControlTemplate>()
+    public ObservableCollection<AzureItemControlTemplate> AllGroupFilter { get; } = new ObservableCollection<AzureItemControlTemplate>()
         {
-            new AzureMFAItemControlTemplate(null, showDelete: false)
+            new AzureItemControlTemplate(null, showDelete: false)
         };
 
     public ObservableCollection<UserMFA> AllUserMFAData { get; } = new ObservableCollection<UserMFA>();
 
-    public ObservableCollection<AzureMFAItemControlTemplate> AllScopes { get; } =
-        new ObservableCollection<AzureMFAItemControlTemplate>(
+    public ObservableCollection<AzureItemControlTemplate> AllScopes { get; } = new ObservableCollection<AzureItemControlTemplate>(
             DefaultValue.AzureMfaPermissions.Select((singleString, index) =>
-                new AzureMFAItemControlTemplate(singleString, showDelete: index != 0))
+                new AzureItemControlTemplate(singleString, showDelete: index != 0))
         );
 
-    internal List<ReportPrintLevel> AllReportLevel { get; } =
-        Enum.GetValues<ReportPrintLevel>().Cast<ReportPrintLevel>().ToList();
+    internal List<ReportPrintLevel> AllReportLevel { get; } = Enum.GetValues<ReportPrintLevel>().Cast<ReportPrintLevel>().ToList();
 
     [RelayCommand]
     private async Task AddNewGroupFilter()
@@ -89,36 +87,6 @@ public partial class AzureMFAViewModel : ViewModelBase
         Button SingleButton = Sender as Button;
         AzureItemControlTemplate Item = SingleButton.DataContext as AzureItemControlTemplate;
         AllScopes.Remove(Item);
-    }
-
-    private string[] GetGroups()
-    {
-        List<string> Groups = new List<string>();
-
-        foreach (AzureMFAItemControlTemplate SingleEntry in AllGroupFilter)
-        {
-            if (SingleEntry.Label is not null)
-            {
-                Groups.Add(SingleEntry.Label);
-            }
-        }
-
-        return Groups.ToArray();
-    }
-
-    private string[] GetPermission()
-    {
-        List<string> Permissions = new List<string>();
-
-        foreach (AzureMFAItemControlTemplate SingleEntry in AllScopes)
-        {
-            if (SingleEntry.Label is not null)
-            {
-                Permissions.Add(SingleEntry.Label);
-            }
-        }
-
-        return Permissions.ToArray();
     }
 
     [RelayCommand]
