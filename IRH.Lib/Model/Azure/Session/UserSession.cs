@@ -1,7 +1,7 @@
 ﻿using Microsoft.Graph.Models;
 using Microsoft.Graph.Users.Item.RevokeSignInSessions;
 
-namespace IRH.Commands.Azure.Reporting.Model
+namespace IRH.Lib.Model.Azure.Session
 {
     public class UserSession
     {
