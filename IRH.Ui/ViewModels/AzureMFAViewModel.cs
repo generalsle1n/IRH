@@ -66,28 +66,28 @@ public partial class AzureMFAViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddNewGroupFilter()
     {
-        AllGroupFilter.Add(new AzureMFAItemControlTemplate(null));
+        AllGroupFilter.Add(new AzureItemControlTemplate(null));
     }
 
     [RelayCommand]
     private async Task DeleteGroupFilter(object Sender)
     {
         Button SingleButton = Sender as Button;
-        AzureMFAItemControlTemplate Item = SingleButton.DataContext as AzureMFAItemControlTemplate;
+        AzureItemControlTemplate Item = SingleButton.DataContext as AzureItemControlTemplate;
         AllGroupFilter.Remove(Item);
     }
 
     [RelayCommand]
     private async Task AddNewScope()
     {
-        AllScopes.Add(new AzureMFAItemControlTemplate(null));
+        AllScopes.Add(new AzureItemControlTemplate(null));
     }
 
     [RelayCommand]
     private async Task DeleteScope(object Sender)
     {
         Button SingleButton = Sender as Button;
-        AzureMFAItemControlTemplate Item = SingleButton.DataContext as AzureMFAItemControlTemplate;
+        AzureItemControlTemplate Item = SingleButton.DataContext as AzureItemControlTemplate;
         AllScopes.Remove(Item);
     }
 
@@ -124,52 +124,19 @@ public partial class AzureMFAViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenBrowserAsync()
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-        ILauncher Launcher = TopLevel.GetTopLevel(MainWindow).Launcher;
-        await Launcher.LaunchUriAsync(DefaultValue.DeviceLoginUrl);
+        _uiHelper.OpenUrlInBrowser(DefaultValue.DeviceLoginUrl);
     }
 
     [RelayCommand]
     private async Task SetUserCodeToClipboard()
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-        IClipboard Clipboard = MainWindow.Clipboard;
-
-        await Clipboard.SetTextAsync(UserCode);
+        await _uiHelper.SetTextToClipboard(UserCode);
     }
 
     [RelayCommand]
     private async Task SaveDataToFile(CancellationToken token)
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-
-        IStorageFile SaveFile = await MainWindow.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
-        {
-            Title = Strings.AzureMFA_SaveFile_Title,
-            FileTypeChoices = new List<FilePickerFileType>()
-            {
-                new FilePickerFileType(_filePickerDisplayName)
-                {
-                    Patterns = new List<string>()
-                    {
-                        _filePickerFilter
-                    },
-                    AppleUniformTypeIdentifiers = new List<string>()
-                    {
-                        _fileAppleIdentifier
-                    },
-                    MimeTypes = new List<string>()
-                    {
-                        _fileMimeType
-                    }
-                }
-            },
-            ShowOverwritePrompt = true,
-            SuggestedFileName = $"{_fileNamePrefix}{DateTimeOffset.Now.ToString(_dateFormat)}{_fileNameSuffix}",
-        });
+        IStorageFile SaveFile = await _uiHelper.GetIStorageFileListForCreateFile();
 
         if (SaveFile is not null)
         {
@@ -184,32 +151,7 @@ public partial class AzureMFAViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadDataFile(CancellationToken token)
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-
-        IReadOnlyList<IStorageFile> OpenFile = await MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
-            {
-                Title = Strings.AzureMFA_SaveFile_Title,
-                AllowMultiple = false,
-                FileTypeFilter = new List<FilePickerFileType>()
-                {
-                    new FilePickerFileType(_filePickerDisplayName)
-                    {
-                        Patterns = new List<string>()
-                        {
-                            _filePickerFilter
-                        },
-                        AppleUniformTypeIdentifiers = new List<string>()
-                        {
-                            _fileAppleIdentifier
-                        },
-                        MimeTypes = new List<string>()
-                        {
-                            _fileMimeType
-                        }
-                    }
-                }
-            });
+        IReadOnlyList<IStorageFile> OpenFile = await _uiHelper.GetIStorageFileListForOpenFile();
 
         if (OpenFile.Any())
         {
@@ -257,7 +199,7 @@ public partial class AzureMFAViewModel : ViewModelBase
                 Client = AzureAuth.GetClient(
                     Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
                     Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
-                    GetPermission(),
+                    _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow,
                     CodeCredential: DeviceCodeCredential);
                 break;
@@ -265,12 +207,12 @@ public partial class AzureMFAViewModel : ViewModelBase
                 Client = Client = AzureAuth.GetClient(
                     Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
                     Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
-                    GetPermission(),
+                    _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow);
                 break;
         }
 
-        string[] AllGroups = GetGroups();
+        string[] AllGroups = _uiHelper.GetContentFromObservableCollection(AllGroupFilter);
 
         AzureUser AzureUser = new AzureUser(Log.Logger);
         UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups, token);
