@@ -23,6 +23,11 @@
                         <icons:SymbolIconSource Symbol="LockShield" />
                     </ui:NavigationViewItem.IconSource>
                 </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Azure Session Revoke" Tag="IRH.Ui.Views.AzureRevokeUserSessionView;IRH.Ui.ViewModels.AzureRevokeUserSessionViewModel">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="PeopleError" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:Frame Name="CurrentPage" Content="{Binding CurrentPage}"/>
         </ui:NavigationView>
