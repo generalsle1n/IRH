@@ -330,6 +330,24 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lösche alle Hintergrund Konfig.
+        /// </summary>
+        public static string Setting_Reset_Description {
+            get {
+                return ResourceManager.GetString("Setting_Reset_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zurücksetzen.
+        /// </summary>
+        public static string Setting_Reset_Main {
+            get {
+                return ResourceManager.GetString("Setting_Reset_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to common.
         /// </summary>
         public static string Setting_TenantID_Default {

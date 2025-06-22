@@ -216,4 +216,10 @@
   <data name="AzureMFA_MFAName_DataGrid" xml:space="preserve">
     <value>Methods</value>
   </data>
+  <data name="Setting_Reset_Main" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Setting_Reset_Description" xml:space="preserve">
+    <value>Delete all stored Backend Config</value>
+  </data>
 </root>

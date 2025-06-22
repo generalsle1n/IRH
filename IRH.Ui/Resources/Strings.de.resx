@@ -216,4 +216,10 @@
   <data name="AzureMFA_MFAName_DataGrid" xml:space="preserve">
     <value>Methoden</value>
   </data>
+  <data name="Setting_Reset_Main" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="Setting_Reset_Description" xml:space="preserve">
+    <value>Lösche alle Hintergrund Konfig</value>
+  </data>
 </root>
