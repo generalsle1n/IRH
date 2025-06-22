@@ -1,8 +1,8 @@
 ﻿namespace IRH.Ui.Models.Azure;
 
-public class AzureMFAItemControlTemplate
+public class AzureItemControlTemplate
 {
-    public AzureMFAItemControlTemplate(string label, bool showDelete=true)
+    public AzureItemControlTemplate(string label, bool showDelete=true)
     {
         Label = label;
         ShowDelete = showDelete;
