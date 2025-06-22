@@ -21,8 +21,9 @@ namespace IRH.Ui.Views
 
         private void SetupLogger()
         {
-            Assembly Current = Assembly.GetExecutingAssembly();
-            string CurrentLocation = Path.GetDirectoryName(Current.Location);
+            Process Current = Process.GetCurrentProcess();
+            
+            string CurrentLocation = Path.GetDirectoryName(Current.MainModule.FileName);
             string LogFolder = Path.Combine(CurrentLocation, _logFolerName);
         
             if (!Directory.Exists(LogFolder))
