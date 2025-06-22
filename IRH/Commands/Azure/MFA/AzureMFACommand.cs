@@ -12,6 +12,7 @@ using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Reflection;
 using System.Text.Json;
+using IRH.Lib;
 using IRH.Lib.Model.Azure.Result;
 using IRH.Lib.Class.Azure.Generel;
 using IRH.Lib.Class.Azure.Auth;
@@ -30,7 +31,7 @@ namespace IRH.Commands.Azure.MFA
         private const string _permissionScopes = "-P";
         private const string _permissionScopesDescription = "Enter the custom permission to access the api, serpated by whitespace";
         private const string _permissionScopesAlias = "--PermissionScope";
-        private string[] _permissionScopesDefaultValue = new string[] { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
+        private string[] _permissionScopesDefaultValue = DefaultValue.AzureMfaPermissions.ToArray();
 
         private const string _reportType = "-R";
         private const string _reportTypeDescription = "How to Report the Data";
