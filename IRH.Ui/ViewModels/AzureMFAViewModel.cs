@@ -255,16 +255,16 @@ public partial class AzureMFAViewModel : ViewModelBase
                 DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
 
                 Client = AzureAuth.GetClient(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, null),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
                     GetPermission(),
                     Flow,
                     CodeCredential: DeviceCodeCredential);
                 break;
             case AuthType.Interactive:
                 Client = Client = AzureAuth.GetClient(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, null),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
                     GetPermission(),
                     Flow);
                 break;
