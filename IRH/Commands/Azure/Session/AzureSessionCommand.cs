@@ -18,10 +18,13 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using IRH.Lib;
+using IRH.Lib.Class.Azure.Session;
+using IRH.Lib.Model.Azure.Session;
 
 namespace IRH.Commands.Azure.Session
 {
-    internal class AzureSession
+    internal class AzureSessionCommand
     {
         private const string _commandName = "-Session";
         private const string _commandDescription = "Revoke single User Session or All";
@@ -38,7 +41,7 @@ namespace IRH.Commands.Azure.Session
         private const string _permissionScopes = "-P";
         private const string _permissionScopesDescription = "Enter the custom permission to access the api, serpated by whitespace";
         private const string _permissionScopesAlias = "--PermissionScope";
-        private string[] _permissionScopesDefaultValue = new string[] { "Directory.Read.All", "User.RevokeSessions.All" };
+        private string[] _permissionScopesDefaultValue = DefaultValue.AzureSessionPermissions.ToArray();
 
         private const string _reportType = "-R";
         private const string _reportTypeDescription = "How to Report the Data";
@@ -56,7 +59,7 @@ namespace IRH.Commands.Azure.Session
 
         private readonly Logger _logger;
 
-        internal AzureSession(Logger Logger)
+        internal AzureSessionCommand(Logger Logger)
         {
             _logger = Logger;
         }
@@ -111,7 +114,9 @@ namespace IRH.Commands.Azure.Session
                 AzureUser AzureUser = new AzureUser(_logger);
                 UserCollectionResponse Users = await AzureUser.GetUsersAsync(Client, Parser.GetValueForOption(Group));
 
-                List<UserSession> AllUsers = await ResetUserSessionsAsync(Client, Users);
+                AzureSession AzureSession = new AzureSession(_logger);
+                
+                List<UserSession> AllUsers = await AzureSession.ResetUserSessionsAsync(Client, Users);
                   
                 switch (Parser.GetValueForOption(ReportTypeOption))
                 {
@@ -130,33 +135,6 @@ namespace IRH.Commands.Azure.Session
             });
 
             return Command;
-        }
-
-        private async Task<List<UserSession>> ResetUserSessionsAsync(GraphServiceClient Client, UserCollectionResponse AllUsers)
-        {
-            List<UserSession> Result = new List<UserSession>();
-            _logger.Information($"Start reseting RefreshToken for {AllUsers.Value.Count} Users");
-
-            int Count = 1;
-
-            foreach (User SingleUser in AllUsers.Value)
-            {
-
-                RevokeSignInSessionsPostResponse SingleUserResetResult = await Client.Users[SingleUser.Id].RevokeSignInSessions.PostAsRevokeSignInSessionsPostResponseAsync();
-
-                UserSession SingleUserResult = new UserSession()
-                {
-                    User = SingleUser,
-                    ResetToken = SingleUserResetResult.Value.Value,
-                    Response = SingleUserResetResult
-                };
-
-                Result.Add(SingleUserResult);
-                _logger.Information($"Process Revokation {Count} from {AllUsers.Value.Count}");
-                Count++;
-            }
-
-            return Result;
         }
 
         private async Task PrintResult(List<UserSession> Result, ReportPrintLevel Level)

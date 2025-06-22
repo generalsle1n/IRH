@@ -60,7 +60,7 @@ namespace IRH.Commands.Azure
             AzureMFACommand AzureMFACommand = new AzureMFACommand(_logger);
             Command AzureMFA = AzureMFACommand.CreateCommand(RootCommand);
 
-            AzureSession AzureSessionCommand = new AzureSession(_logger);
+            AzureSessionCommand AzureSessionCommand = new AzureSessionCommand(_logger);
             Command AzureSession = AzureSessionCommand.CreateCommand(RootCommand);
 
             AzureAuditLog AzureAuditLogCommand = new AzureAuditLog(_logger);
