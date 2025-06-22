@@ -17,44 +17,13 @@ namespace IRH.Ui.ViewModels;
 
 internal partial class SettingViewModel : ViewModelBase
 {
-    private AppTheme _selectedAppTheme = Preferences.Get<AppTheme>(Strings.Setting_Name_AppTheme, AppTheme.System);
-    public AppTheme SelectedAppTheme
+    public SettingViewModel()
     {
-        get
-        {
-            switch (_selectedAppTheme)
-            {
-                case AppTheme.Light:
-                    Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
-                    break;
-                case AppTheme.Dark:
-                    Application.Current!.RequestedThemeVariant = ThemeVariant.Dark;
-                    break;
-                case AppTheme.System:
-                    Application.Current!.RequestedThemeVariant = ThemeVariant.Default;
-                    break;
-            }
-            
-            return _selectedAppTheme;
-        }
-        set
-        {
-            switch (value)
-            {
-                case AppTheme.Light:
-                    Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
-                    break;
-                case AppTheme.Dark:
-                    Application.Current!.RequestedThemeVariant = ThemeVariant.Dark;
-                    break;
-                case AppTheme.System:
-                    Application.Current!.RequestedThemeVariant = ThemeVariant.Default;
-                    break;
-            }
-            Preferences.Set<AppTheme>(Strings.Setting_Name_AppTheme, value);
-            SetProperty(ref _selectedAppTheme, value);
-        }
+        SetAppTheme();
     }
+    
+    [ObservableProperty]
+    private AppTheme _selectedAppTheme = Preferences.Get<AppTheme>(Strings.Setting_Name_AppTheme, AppTheme.System);
     [ObservableProperty]
     private AuthType _selectedAuthType = Preferences.Get<AuthType>(Strings.Setting_Name_AuthType, DefaultValue.AuthType);
     [ObservableProperty]
@@ -114,5 +83,29 @@ internal partial class SettingViewModel : ViewModelBase
     {
         Preferences.Set<bool>(Strings.Setting_Name_AppIDEditEnabled, value);
         AppIDEditEnabled = value;
+    }
+
+    private void SetAppTheme()
+    {
+        switch (SelectedAppTheme)
+        {
+            case AppTheme.Light:
+                Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+                break;
+            case AppTheme.Dark:
+                Application.Current!.RequestedThemeVariant = ThemeVariant.Dark;
+                break;
+            case AppTheme.System:
+                Application.Current!.RequestedThemeVariant = ThemeVariant.Default;
+                break;
+        }
+    }
+    
+    partial void OnSelectedAppThemeChanged(AppTheme value)
+    {
+        Preferences.Set<AppTheme>(Strings.Setting_Name_AppTheme, value);
+        SelectedAppTheme = value;
+        
+        SetAppTheme();
     }
 }
