@@ -6,9 +6,6 @@
              xmlns:lang="using:IRH.Ui.Resources"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              xmlns:vm="using:IRH.Ui.ViewModels"
-             xmlns:sty="using:FluentAvalonia.Styling"
-             xmlns:models="using:IRH.Ui.Models.Azure"
-             xmlns:libAzureResult="using:IRH.Lib.Model.Azure.Result"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:AzureMFAViewModel"
              x:Class="IRH.Ui.Views.AzureMfaView">
