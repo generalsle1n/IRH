@@ -93,11 +93,22 @@ The LDAPMonitor tool allows for continuous monitoring of LDAP directories. It ca
 ### Azure MFA Reporting
 The AzureMFA tool enables comprehensive reporting on Azure Multi-Factor Authentication (MFA) settings. It can:
 
-- Connect to Azure Active Directory using Device Code Authentication.
+- Connect to Azure Active Directory using Device Code Authentication or Interactive.
 - Retrieve user data, including MFA configurations.
 - Filter users by group membership, that should be processed.
 - Provide detailed reports on MFA methods used by each user, available in both CLI and JSON formats.
 - Print detailed information on each MFA method configured for users.
+
+### Azure Session Revoke
+
+The Session Revoke functionality allows to reset user sessions in Entra ID. With this command, you can:
+- Revoke user sessions, either individually or globally.
+- Connect to Azure Active Directory using various authentication methods.
+- Filter users based on their group memberships for processing.
+- Generate detailed reports on the revocation status of individual user sessions.
+- Configure the output type and level of detail for reporting (e.g., CLI output or JSON export).
+- Export results to a JSON file and optionally display them in the CLI.
+
 
 ## Azure Audit Logs
 
@@ -142,7 +153,7 @@ To run this project, you need to specify the paramters in the command line tool 
 ```bash
 -G, --Group (optional): Filter users by group ID(s) to focus on specific subsets of users.
 -P, --PermissionScope (optional): Define custom permission scopes for Azure API access (default: Directory.Read.All, UserAuthenticationMethod.Read.All).
--A, --AppID (required): Application ID for Azure AD.
+-A, --AppID (required): Application ID for Azure AD. (default: c0849608-c8b9-4e86-b37d-fce972a0a7f6)
 -T, --Tenant (optional): Tenant ID (default: common).
 -R, --Report (optional): Report format (default: CLI; options: CLI, Json, CLIAndJson).
 -PL, --PrintLevel (optional): Detail level in the report (default: Brief; options: Brief, Info, Detailed, Hacky).
@@ -157,6 +168,29 @@ IRH.exe -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CL
 dotnet run -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
 ```
 
+### Azure Session Revoke
+#### Command: ``` -Azure -Session ```
+###### Description: Fetches and reports the Multi-Factor Authentication (MFA) settings for Azure AD users, crucial for verifying the security posture and compliance of user accounts.
+
+##### Options: 
+```bash
+-G, --Group (optional): Filter users by group ID(s) to focus on specific subsets of users.
+-P, --PermissionScope (optional): Define custom permission scopes for Azure API access (default: Directory.Read.All, User.RevokeSessions.All).
+-A, --AppID (required): Application ID for Azure AD. (default: c0849608-c8b9-4e86-b37d-fce972a0a7f6)
+-T, --Tenant (optional): Tenant ID (default: common).
+-R, --Report (optional): Report format (default: CLI; options: CLI, Json, CLIAndJson).
+-PL, --PrintLevel (optional): Detail level in the report (default: Brief; options: Brief, Info, Detailed, Hacky).
+```
+
+##### Example:
+```bash
+IRH.exe -Azure -Session --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+
+./IRH -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+
+dotnet run -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report CLI -PL Info
+```
+
 ### Azure Audit Login Reporting
 #### Command: ``` -Azure -Audit -Login ```
 ###### Description: Fetches and reports the the most important Login related Infos for Azure AD users, crucial for verifying the security posture and compliance of user accounts.
@@ -164,7 +198,7 @@ dotnet run -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report
 ##### Options: 
 ```bash
 -P, --PermissionScope (optional): Define custom permission scopes for Azure API access (default: Directory.Read.All, UserAuthenticationMethod.Read.All).
--A, --AppID (required): Application ID for Azure AD.
+-A, --AppID (required): Application ID for Azure AD. (default: c0849608-c8b9-4e86-b37d-fce972a0a7f6)
 -T, --Tenant (optional): Tenant ID (default: common).
 -R, --Report (optional): Report format (default: CLI; options: CLI, Json, CLIAndJson).
 -PL, --PrintLevel (optional): Detail level in the report (default: Brief; options: Brief, Info, Detailed, Hacky).
@@ -185,7 +219,7 @@ dotnet run -Azure -AMFA --AppID "your-app-id" --Tenant "your-tenant-id" --Report
 ##### Options: 
 ```bash
 -P, --PermissionScope (optional): Define custom permission scopes for Azure API access (default: Directory.Read.All, UserAuthenticationMethod.Read.All).
--A, --AppID (required): Application ID for Azure AD.
+-A, --AppID (required): Application ID for Azure AD. (default: c0849608-c8b9-4e86-b37d-fce972a0a7f6)
 -T, --Tenant (optional): Tenant ID (default: common).
 -R, --Report (optional): Report format (default: CLI; options: CLI, Json, CLIAndJson).
 -PL, --PrintLevel (optional): Detail level in the report (default: Brief; options: Brief, Info, Detailed, Hacky).
