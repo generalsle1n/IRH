@@ -239,8 +239,8 @@ public partial class AzureMFAViewModel : ViewModelBase
         {
             case AuthType.DeviceCode:
                 DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, null),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, null),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
                     CreateCallBack: false);
 
                 DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
