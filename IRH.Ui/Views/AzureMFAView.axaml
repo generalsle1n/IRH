@@ -19,14 +19,14 @@
             <ScrollViewer Grid.Column="0">
                     <StackPanel Margin="10" Spacing="10">
                         <StackPanel Spacing="10" MinWidth="381">
-                            <TextBlock Text="{x:Static lang:Strings.AzureMFA_GroupFilter_Label}"/>
+                            <TextBlock Text="{x:Static lang:Strings.Azure_GroupFilter_Label}"/>
                             <Separator/>
                             <ItemsControl ItemsSource="{Binding AllGroupFilter}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Padding="5">
                                             <StackPanel Orientation="Horizontal" Spacing="0">
-                                                <TextBox Width="275" Text="{Binding Label}" Watermark="{x:Static lang:Strings.AzureMFA_GroupFilter_Placeholder}"/>
+                                                <TextBox Width="275" Text="{Binding Label}" Watermark="{x:Static lang:Strings.Azure_GroupFilter_Placeholder}"/>
                                                 <ui:CommandBarSeparator/>
                                                 <StackPanel Orientation="Horizontal" Spacing="3">
                                                     <Button Command="{Binding $parent[ItemsControl].((vm:AzureMFAViewModel)DataContext).AddNewGroupFilterCommand}">
@@ -42,13 +42,13 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                             <Separator/>
-                            <TextBlock Text="{x:Static lang:Strings.AzureMFA_Scope_Label}"/>
+                            <TextBlock Text="{x:Static lang:Strings.Azure_Scope_Label}"/>
                             <ItemsControl ItemsSource="{Binding AllScopes}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Padding="5">
                                             <StackPanel Orientation="Horizontal" Spacing="0">
-                                                <TextBox Width="275" Text="{Binding Label}" Watermark="{x:Static lang:Strings.AzureMFA_Scope_Placeholder}"/>
+                                                <TextBox Width="275" Text="{Binding Label}" Watermark="{x:Static lang:Strings.Azure_Scope_Placeholder}"/>
                                                 <ui:CommandBarSeparator/>
                                                 <StackPanel Orientation="Horizontal" Spacing="3">
                                                     <Button Command="{Binding $parent[ItemsControl].((vm:AzureMFAViewModel)DataContext).AddNewScopeCommand}">
@@ -69,7 +69,7 @@
             <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
                 <DataGrid ItemsSource="{Binding AllUserMFAData}" GridLinesVisibility="All">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_UPN_DataGridHeader}" Binding="{Binding User.UserPrincipalName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_UPN_DataGridHeader}" Binding="{Binding User.UserPrincipalName}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_MFACount_DataGrid}" Binding="{Binding AllMFACount}" IsReadOnly="True"/>
                         <DataGridTemplateColumn Header="MFA" >
                             <DataGridTemplateColumn.CellTemplate >
@@ -103,7 +103,7 @@
         </Grid>
         <ui:CommandBar Grid.Row="1" DefaultLabelPosition="Right">
             <ui:CommandBar.PrimaryCommands>
-                <ui:CommandBarButton VerticalAlignment="Center" Label="{x:Static lang:Strings.AzureMFA_StartProcess_Label}" Command="{Binding StartAzureGatheringCommand}">
+                <ui:CommandBarButton VerticalAlignment="Center" Label="{x:Static lang:Strings.Azure_StartProcess_Label}" Command="{Binding StartAzureGatheringCommand}">
                     <ui:CommandBarButton.IconSource>
                         <icons:SymbolIconSource Symbol="Play"/>
                     </ui:CommandBarButton.IconSource>
@@ -111,7 +111,7 @@
                 <ui:CommandBarSeparator />
                 <ui:CommandBarElementContainer VerticalContentAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="10">
-                        <TextBlock Text="{x:Static lang:Strings.AzureMFA_ReportLevel_Main}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static lang:Strings.Azure_ReportLevel_Main}" VerticalAlignment="Center"/>
                         <ComboBox MinWidth="110" ItemsSource="{Binding AllReportLevel}" SelectedItem="{Binding SelectedReportLevel}"/>    
                     </StackPanel>
                 </ui:CommandBarElementContainer>
@@ -122,7 +122,7 @@
                         <Button IsEnabled="{Binding CopyUserCodeEnabled}" Command="{Binding SetUserCodeToClipboardCommand}">
                             <icons:SymbolIcon Symbol="ClipboardPaste"/>
                         </Button>
-                        <Button ToolTip.Tip="{x:Static lang:Strings.AzureMFA_OpenBrowser_ButtonToolTip}" IsEnabled="{Binding OpenBrowserEnabled}" Command="{Binding OpenBrowserCommand}">
+                        <Button ToolTip.Tip="{x:Static lang:Strings.Azure_OpenBrowser_ButtonToolTip}" IsEnabled="{Binding OpenBrowserEnabled}" Command="{Binding OpenBrowserCommand}">
                             <icons:SymbolIcon Symbol="Globe"/>
                         </Button>
                         <ui:ProgressRing IsVisible="{Binding LoadingRingEnabled}"/>
@@ -130,8 +130,8 @@
                 </ui:CommandBarElementContainer>
             </ui:CommandBar.PrimaryCommands>
             <ui:CommandBar.SecondaryCommands>
-                <ui:CommandBarButton Label="{x:Static lang:Strings.AzureMFA_ExportData_Label}" IsEnabled="{Binding ExportEnabled}" Command="{Binding SaveDataToFileCommand}" />
-                <ui:CommandBarButton Label="{x:Static lang:Strings.AzureMFA_LoadFile_Title}" Command="{Binding LoadDataFileCommand}" />
+                <ui:CommandBarButton Label="{x:Static lang:Strings.Azure_ExportData_Label}" IsEnabled="{Binding ExportEnabled}" Command="{Binding SaveDataToFileCommand}" />
+                <ui:CommandBarButton Label="{x:Static lang:Strings.Azure_LoadFile_Title}" Command="{Binding LoadDataFileCommand}" />
             </ui:CommandBar.SecondaryCommands>
         </ui:CommandBar>
     </Grid>
