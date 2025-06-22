@@ -62,36 +62,90 @@ namespace IRH.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Export Data.
         /// </summary>
-        public static string AzureMFA_ExportData_Label {
+        public static string Azure_ExportData_Label {
             get {
-                return ResourceManager.GetString("AzureMFA_ExportData_Label", resourceCulture);
+                return ResourceManager.GetString("Azure_ExportData_Label", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Group Filter.
         /// </summary>
-        public static string AzureMFA_GroupFilter_Label {
+        public static string Azure_GroupFilter_Label {
             get {
-                return ResourceManager.GetString("AzureMFA_GroupFilter_Label", resourceCulture);
+                return ResourceManager.GetString("Azure_GroupFilter_Label", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Group ID.
         /// </summary>
-        public static string AzureMFA_GroupFilter_Placeholder {
+        public static string Azure_GroupFilter_Placeholder {
             get {
-                return ResourceManager.GetString("AzureMFA_GroupFilter_Placeholder", resourceCulture);
+                return ResourceManager.GetString("Azure_GroupFilter_Placeholder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Load existing MFA Data.
         /// </summary>
-        public static string AzureMFA_LoadFile_Title {
+        public static string Azure_LoadFile_Title {
             get {
-                return ResourceManager.GetString("AzureMFA_LoadFile_Title", resourceCulture);
+                return ResourceManager.GetString("Azure_LoadFile_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Browser to enter Code.
+        /// </summary>
+        public static string Azure_OpenBrowser_ButtonToolTip {
+            get {
+                return ResourceManager.GetString("Azure_OpenBrowser_ButtonToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Printlevel.
+        /// </summary>
+        public static string Azure_ReportLevel_Main {
+            get {
+                return ResourceManager.GetString("Azure_ReportLevel_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Permissions.
+        /// </summary>
+        public static string Azure_Scope_Label {
+            get {
+                return ResourceManager.GetString("Azure_Scope_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permission.
+        /// </summary>
+        public static string Azure_Scope_Placeholder {
+            get {
+                return ResourceManager.GetString("Azure_Scope_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string Azure_StartProcess_Label {
+            get {
+                return ResourceManager.GetString("Azure_StartProcess_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UserPrincipleName.
+        /// </summary>
+        public static string Azure_UPN_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_UPN_DataGridHeader", resourceCulture);
             }
         }
         
@@ -114,24 +168,6 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Browser to enter Code.
-        /// </summary>
-        public static string AzureMFA_OpenBrowser_ButtonToolTip {
-            get {
-                return ResourceManager.GetString("AzureMFA_OpenBrowser_ButtonToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Printlevel.
-        /// </summary>
-        public static string AzureMFA_ReportLevel_Main {
-            get {
-                return ResourceManager.GetString("AzureMFA_ReportLevel_Main", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Save MFA Data.
         /// </summary>
         public static string AzureMFA_SaveFile_Title {
@@ -141,38 +177,11 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Permissions.
+        ///   Looks up a localized string similar to User Session revoked.
         /// </summary>
-        public static string AzureMFA_Scope_Label {
+        public static string AzureSession_ResetSession_DataGridHeader {
             get {
-                return ResourceManager.GetString("AzureMFA_Scope_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Permission.
-        /// </summary>
-        public static string AzureMFA_Scope_Placeholder {
-            get {
-                return ResourceManager.GetString("AzureMFA_Scope_Placeholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Start.
-        /// </summary>
-        public static string AzureMFA_StartProcess_Label {
-            get {
-                return ResourceManager.GetString("AzureMFA_StartProcess_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UserPrincipleName.
-        /// </summary>
-        public static string AzureMFA_UPN_DataGridHeader {
-            get {
-                return ResourceManager.GetString("AzureMFA_UPN_DataGridHeader", resourceCulture);
+                return ResourceManager.GetString("AzureSession_ResetSession_DataGridHeader", resourceCulture);
             }
         }
         

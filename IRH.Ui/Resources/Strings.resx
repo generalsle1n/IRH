@@ -177,40 +177,40 @@
   <data name="Setting_Name_AppIDEditEnabled" xml:space="preserve">
     <value>Setting_Name_AppIDEditEnabled</value>
   </data>
-  <data name="AzureMFA_StartProcess_Label" xml:space="preserve">
+  <data name="Azure_StartProcess_Label" xml:space="preserve">
     <value>Start</value>
   </data>
-  <data name="AzureMFA_ReportLevel_Main" xml:space="preserve">
+  <data name="Azure_ReportLevel_Main" xml:space="preserve">
     <value>Printlevel</value>
   </data>
-  <data name="AzureMFA_GroupFilter_Label" xml:space="preserve">
+  <data name="Azure_GroupFilter_Label" xml:space="preserve">
     <value>Group Filter</value>
   </data>
-  <data name="AzureMFA_GroupFilter_Placeholder" xml:space="preserve">
+  <data name="Azure_GroupFilter_Placeholder" xml:space="preserve">
     <value>Group ID</value>
   </data>
-  <data name="AzureMFA_Scope_Label" xml:space="preserve">
+  <data name="Azure_Scope_Label" xml:space="preserve">
     <value>All Permissions</value>
   </data>
-  <data name="AzureMFA_Scope_Placeholder" xml:space="preserve">
+  <data name="Azure_Scope_Placeholder" xml:space="preserve">
     <value>Permission</value>
   </data>
-  <data name="AzureMFA_OpenBrowser_ButtonToolTip" xml:space="preserve">
+  <data name="Azure_OpenBrowser_ButtonToolTip" xml:space="preserve">
     <value>Open Browser to enter Code</value>
   </data>
-  <data name="AzureMFA_UPN_DataGridHeader" xml:space="preserve">
+  <data name="Azure_UPN_DataGridHeader" xml:space="preserve">
     <value>UserPrincipleName</value>
   </data>
   <data name="AzureMFA_MFACount_DataGrid" xml:space="preserve">
     <value>MFA Count</value>
   </data>
-  <data name="AzureMFA_ExportData_Label" xml:space="preserve">
+  <data name="Azure_ExportData_Label" xml:space="preserve">
     <value>Export Data</value>
   </data>
   <data name="AzureMFA_SaveFile_Title" xml:space="preserve">
     <value>Save MFA Data</value>
   </data>
-  <data name="AzureMFA_LoadFile_Title" xml:space="preserve">
+  <data name="Azure_LoadFile_Title" xml:space="preserve">
     <value>Load existing MFA Data</value>
   </data>
   <data name="AzureMFA_MFAName_DataGrid" xml:space="preserve">
@@ -221,5 +221,8 @@
   </data>
   <data name="Setting_Reset_Description" xml:space="preserve">
     <value>Delete all stored Backend Config</value>
+  </data>
+  <data name="AzureSession_ResetSession_DataGridHeader" xml:space="preserve">
+    <value>User Session revoked</value>
   </data>
 </root>

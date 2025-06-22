@@ -177,40 +177,40 @@
   <data name="Setting_Name_AppIDEditEnabled" xml:space="preserve">
     <value>Setting_Name_AppIDEditEnabled</value>
   </data>
-  <data name="AzureMFA_StartProcess_Label" xml:space="preserve">
+  <data name="Azure_StartProcess_Label" xml:space="preserve">
     <value>Starten</value>
   </data>
-  <data name="AzureMFA_ReportLevel_Main" xml:space="preserve">
+  <data name="Azure_ReportLevel_Main" xml:space="preserve">
     <value>Ausgabetiefe</value>
   </data>
-  <data name="AzureMFA_GroupFilter_Label" xml:space="preserve">
+  <data name="Azure_GroupFilter_Label" xml:space="preserve">
     <value>Gruppen Filter</value>
   </data>
-  <data name="AzureMFA_GroupFilter_Placeholder" xml:space="preserve">
+  <data name="Azure_GroupFilter_Placeholder" xml:space="preserve">
     <value>Gruppen ID</value>
   </data>
-  <data name="AzureMFA_Scope_Label" xml:space="preserve">
+  <data name="Azure_Scope_Label" xml:space="preserve">
     <value>Alle Berechtigungen</value>
   </data>
-  <data name="AzureMFA_Scope_Placeholder" xml:space="preserve">
+  <data name="Azure_Scope_Placeholder" xml:space="preserve">
     <value>Berechtigung</value>
   </data>
-  <data name="AzureMFA_OpenBrowser_ButtonToolTip" xml:space="preserve">
+  <data name="Azure_OpenBrowser_ButtonToolTip" xml:space="preserve">
     <value>Browser öffnen um den Code einzugeben</value>
   </data>
-  <data name="AzureMFA_UPN_DataGridHeader" xml:space="preserve">
+  <data name="Azure_UPN_DataGridHeader" xml:space="preserve">
     <value>UserPrincipleName</value>
   </data>
   <data name="AzureMFA_MFACount_DataGrid" xml:space="preserve">
     <value>MFA Anzahl</value>
   </data>
-  <data name="AzureMFA_ExportData_Label" xml:space="preserve">
+  <data name="Azure_ExportData_Label" xml:space="preserve">
     <value>Daten exportieren</value>
   </data>
   <data name="AzureMFA_SaveFile_Title" xml:space="preserve">
     <value>Speichern der Export Daten</value>
   </data>
-  <data name="AzureMFA_LoadFile_Title" xml:space="preserve">
+  <data name="Azure_LoadFile_Title" xml:space="preserve">
     <value>Laden der bereits exportieren MFA Daten</value>
   </data>
   <data name="AzureMFA_MFAName_DataGrid" xml:space="preserve">
@@ -221,5 +221,8 @@
   </data>
   <data name="Setting_Reset_Description" xml:space="preserve">
     <value>Lösche alle Hintergrund Konfig</value>
+  </data>
+  <data name="AzureSession_ResetSession_DataGridHeader" xml:space="preserve">
+    <value>Benutzer Sitzungen zurückgesetzt</value>
   </data>
 </root>
