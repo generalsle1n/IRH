@@ -46,17 +46,24 @@ namespace IRH.Lib.Class.Azure.Auth
             return Client;
         }
 
-        public BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type)
+        public BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null)
         {
             BGraphServiceClient Client = null;
 
             switch (Type)
             {
                 case AuthType.DeviceCode:
+                    if(CodeCredential is null)
+                    {
                     _logger.Verbose("Create Beta Client with DeviceCode authentication");
                     DeviceCodeCredentialOptions Options = CreateDeviceCodeCredentialOptions(AppIDValue, TenantIDValue);
                     DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(Options);
                     Client = new BGraphServiceClient(DeviceCredentials, ScopesValue);
+                    }
+                    else
+                    {
+                        Client = new BGraphServiceClient(CodeCredential, ScopesValue);
+                    }
                     break;
                 case AuthType.Interactive:
                     _logger.Verbose("Create Beta Client with Interactive authentication");
