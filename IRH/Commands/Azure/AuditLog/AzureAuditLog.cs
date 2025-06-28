@@ -44,7 +44,7 @@ namespace IRH.Commands.Azure.AuditLog
             ExchangeAudit ExchangeAuditCommand = new ExchangeAudit(_logger);
             Command ExchangeCommand = ExchangeAuditCommand.CreateCommand(RootCommand);
             
-            LoginAudit LoginAuditCommand = new LoginAudit(_logger);
+            LoginAuditCommand LoginAuditCommand = new LoginAuditCommand(_logger);
             Command LoginCommand = LoginAuditCommand.CreateCommand(RootCommand);
 
             Command.AddCommand(ExchangeCommand);
