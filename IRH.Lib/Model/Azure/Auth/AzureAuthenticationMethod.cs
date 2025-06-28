@@ -4,6 +4,6 @@ namespace IRH.Lib.Model.Azure.Auth;
 
 public class AzureAuthenticationMethod
 {
-    public List<AzureAuthenticationMethodProperty> MethodProperties { get; set; }
+    public List<AzureMethodProperty> MethodProperties { get; set; }
     public AuthenticationMethod Method { get; set; }
 }

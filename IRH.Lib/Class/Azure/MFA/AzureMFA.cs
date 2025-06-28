@@ -58,16 +58,16 @@ namespace IRH.Lib.Class.Azure.MFA
             return Result;
         }
 
-        public async Task<List<AzureAuthenticationMethodProperty>> GetPropertiesFromAutheticationMethod(AuthenticationMethod Method)
+        public async Task<List<AzureMethodProperty>> GetPropertiesFromAutheticationMethod(AuthenticationMethod Method)
         {
-            List<AzureAuthenticationMethodProperty> Result = new List<AzureAuthenticationMethodProperty>();
+            List<AzureMethodProperty> Result = new List<AzureMethodProperty>();
             
             PropertyInfo[] AllProperties = Method.GetType().GetProperties();
             IEnumerable<PropertyInfo> AllStringVal = AllProperties.Where(prop => prop.PropertyType.Name.Equals("String"));
 
             foreach (PropertyInfo Property in AllProperties)
             {
-                AzureAuthenticationMethodProperty SingleProperty = new AzureAuthenticationMethodProperty()
+                AzureMethodProperty SingleProperty = new AzureMethodProperty()
                 {
                     PropertyName = Property.Name,
                     PropertyValue = Property.GetValue(Method),
