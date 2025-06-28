@@ -9,6 +9,7 @@ using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Reflection;
 using System.Text.Json;
+using IRH.Lib.Class.Azure.Audit;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Class.Azure.Auth;
@@ -126,7 +127,9 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
 
                 AzureAuth Auth = new AzureAuth(_logger);
                 AuditHelper Helper = new AuditHelper(_logger);
-            
+                
+                AzureAudit AzureAudit = new AzureAudit(_logger);
+                
                 GraphServiceClient Client = Auth.GetClientBeta(
                     Parser.GetValueForOption(AppID),
                     Parser.GetValueForOption(TenantID),
@@ -137,13 +140,13 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
                 
                 if (Parser.GetValueForOption(ExistingQuery) is not null)
                 {
-                    CreatedQuery = await Helper.GetQueryFromName(Client, Parser.GetValueForOption(ExistingQuery));
+                    CreatedQuery = await AzureAudit.GetQueryFromName(Client, Parser.GetValueForOption(ExistingQuery));
                 }
                 else
                 {
                     var lol = Parser.GetValueForOption(StartDate);
                     var lol2 = Parser.GetValueForOption(EndDate);
-                    CreatedQuery = await Helper.CreateQuery(
+                    CreatedQuery = await AzureAudit.CreateQuery(
                         Client,
                         Parser.GetValueForOption(StartDate),
                         Parser.GetValueForOption(EndDate),
@@ -152,13 +155,13 @@ namespace IRH.Commands.Azure.AuditLog.Exchange
                    );
                 }
                 
-                CreatedQuery = await Helper.WaitOnQuery(
+                CreatedQuery = await AzureAudit.WaitOnQuery(
                     Client,
                     CreatedQuery,
                     Parser.GetValueForOption(WaitTime)
                     );
 
-                AuditLogRecordCollectionResponse Result = await Helper.GetResultFromQuery(Client, CreatedQuery);
+                AuditLogRecordCollectionResponse Result = await AzureAudit.GetResultFromQuery(Client, CreatedQuery);
 
                 switch (Parser.GetValueForOption(ReportTypeOption))
                 {
