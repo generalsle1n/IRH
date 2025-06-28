@@ -71,7 +71,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="{x:Static lang:Strings.Azure_UPN_DataGridHeader}" Binding="{Binding User.UserPrincipalName}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_MFACount_DataGrid}" Binding="{Binding AllMFACount}" IsReadOnly="True"/>
-                        <DataGridTemplateColumn Header="MFA" >
+                        <DataGridTemplateColumn Header="{x:Static lang:Strings.AzureMFA_MFAHeader_Label}" >
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
                                     <Expander Header="Show Items">
