@@ -60,6 +60,69 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aktivität.
+        /// </summary>
+        public static string Azure_Activity_Placeholder {
+            get {
+                return ResourceManager.GetString("Azure_Activity_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alle Aktivitäten.
+        /// </summary>
+        public static string Azure_AuditActivity_Label {
+            get {
+                return ResourceManager.GetString("Azure_AuditActivity_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Erstellt.
+        /// </summary>
+        public static string Azure_AuditCreated_Label {
+            get {
+                return ResourceManager.GetString("Azure_AuditCreated_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existierende Abfrage.
+        /// </summary>
+        public static string Azure_AuditQuery_Label {
+            get {
+                return ResourceManager.GetString("Azure_AuditQuery_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abfragen ID.
+        /// </summary>
+        public static string Azure_AuditQueryID_PlaceHolder {
+            get {
+                return ResourceManager.GetString("Azure_AuditQueryID_PlaceHolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string Azure_AuditType_Label {
+            get {
+                return ResourceManager.GetString("Azure_AuditType_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Benutzer.
+        /// </summary>
+        public static string Azure_AuditUPN_Label {
+            get {
+                return ResourceManager.GetString("Azure_AuditUPN_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Daten exportieren.
         /// </summary>
         public static string Azure_ExportData_Label {
@@ -87,11 +150,29 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stunde.
+        /// </summary>
+        public static string Azure_Hour_Placeholder {
+            get {
+                return ResourceManager.GetString("Azure_Hour_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Laden der bereits exportieren MFA Daten.
         /// </summary>
         public static string Azure_LoadFile_Title {
             get {
                 return ResourceManager.GetString("Azure_LoadFile_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minute.
+        /// </summary>
+        public static string Azure_Minute_Placeholder {
+            get {
+                return ResourceManager.GetString("Azure_Minute_Placeholder", resourceCulture);
             }
         }
         
@@ -150,11 +231,47 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Datum konfigurieren.
+        /// </summary>
+        public static string AzureLoginAudit_DateMenu_Label {
+            get {
+                return ResourceManager.GetString("AzureLoginAudit_DateMenu_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enddatum.
+        /// </summary>
+        public static string AzureLoginAudit_EndDate_Label {
+            get {
+                return ResourceManager.GetString("AzureLoginAudit_EndDate_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Datum.
+        /// </summary>
+        public static string AzureLoginAudit_StartDate_Label {
+            get {
+                return ResourceManager.GetString("AzureLoginAudit_StartDate_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MFA Anzahl.
         /// </summary>
         public static string AzureMFA_MFACount_DataGrid {
             get {
                 return ResourceManager.GetString("AzureMFA_MFACount_DataGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multifaktor.
+        /// </summary>
+        public static string AzureMFA_MFAHeader_Label {
+            get {
+                return ResourceManager.GetString("AzureMFA_MFAHeader_Label", resourceCulture);
             }
         }
         

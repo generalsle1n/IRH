@@ -225,4 +225,43 @@
   <data name="AzureSession_ResetSession_DataGridHeader" xml:space="preserve">
     <value>Benutzer Sitzungen zurückgesetzt</value>
   </data>
+  <data name="AzureLoginAudit_StartDate_Label" xml:space="preserve">
+    <value>Start Datum</value>
+  </data>
+  <data name="AzureLoginAudit_DateMenu_Label" xml:space="preserve">
+    <value>Datum konfigurieren</value>
+  </data>
+  <data name="AzureLoginAudit_EndDate_Label" xml:space="preserve">
+    <value>Enddatum</value>
+  </data>
+  <data name="Azure_Hour_Placeholder" xml:space="preserve">
+    <value>Stunde</value>
+  </data>
+  <data name="Azure_Minute_Placeholder" xml:space="preserve">
+    <value>Minute</value>
+  </data>
+  <data name="Azure_AuditActivity_Label" xml:space="preserve">
+    <value>Alle Aktivitäten</value>
+  </data>
+  <data name="Azure_Activity_Placeholder" xml:space="preserve">
+    <value>Aktivität</value>
+  </data>
+  <data name="Azure_AuditQueryID_PlaceHolder" xml:space="preserve">
+    <value>Abfragen ID</value>
+  </data>
+  <data name="Azure_AuditQuery_Label" xml:space="preserve">
+    <value>Existierende Abfrage</value>
+  </data>
+  <data name="Azure_AuditCreated_Label" xml:space="preserve">
+    <value>Erstellt</value>
+  </data>
+  <data name="Azure_AuditType_Label" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Azure_AuditUPN_Label" xml:space="preserve">
+    <value>Benutzer</value>
+  </data>
+  <data name="AzureMFA_MFAHeader_Label" xml:space="preserve">
+    <value>Multifaktor</value>
+  </data>
 </root>
