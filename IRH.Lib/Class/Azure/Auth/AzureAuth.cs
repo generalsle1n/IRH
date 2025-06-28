@@ -55,10 +55,10 @@ namespace IRH.Lib.Class.Azure.Auth
                 case AuthType.DeviceCode:
                     if(CodeCredential is null)
                     {
-                    _logger.Verbose("Create Beta Client with DeviceCode authentication");
-                    DeviceCodeCredentialOptions Options = CreateDeviceCodeCredentialOptions(AppIDValue, TenantIDValue);
-                    DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(Options);
-                    Client = new BGraphServiceClient(DeviceCredentials, ScopesValue);
+                        _logger.Verbose("Create Beta Client with DeviceCode authentication");
+                        DeviceCodeCredentialOptions Options = CreateDeviceCodeCredentialOptions(AppIDValue, TenantIDValue);
+                        DeviceCodeCredential DeviceCredentials = CreateDeviceCodeCredential(Options);
+                        Client = new BGraphServiceClient(DeviceCredentials, ScopesValue);
                     }
                     else
                     {
@@ -71,7 +71,6 @@ namespace IRH.Lib.Class.Azure.Auth
                     Client = new BGraphServiceClient(InteractiveCredentials, ScopesValue);
                     break;
             }
-
             return Client;
         }
 
