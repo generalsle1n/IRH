@@ -28,7 +28,7 @@
                         <icons:SymbolIconSource Symbol="PeopleError" />
                     </ui:NavigationViewItem.IconSource>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="Azure Session Revoke" Tag="IRH.Ui.Views.AzureLoginAuditView;IRH.Ui.ViewModels.AzureLoginAuditViewModel">
+                <ui:NavigationViewItem Content="Azure Audit Access" Tag="IRH.Ui.Views.AzureLoginAuditView;IRH.Ui.ViewModels.AzureLoginAuditViewModel">
                     <ui:NavigationViewItem.IconSource>
                         <icons:SymbolIconSource Symbol="CloudCheckmark" />
                     </ui:NavigationViewItem.IconSource>
