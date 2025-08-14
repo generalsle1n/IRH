@@ -26,6 +26,18 @@ namespace IRH.Commands.Azure.Helper
                 search.QueryParameters.Expand = new string[] { "memberOf" };
             });
 
+            PageIterator<User, UserCollectionResponse> Iterator = PageIterator<User, UserCollectionResponse>.CreatePageIterator(Client, AllUsers, (singleUser) =>
+                {
+                    if (!AllUsers.Value.Contains(singleUser))
+                    {
+                        AllUsers.Value.Add(singleUser);
+                    }
+                   
+                    return true;
+                });
+
+            await Iterator.IterateAsync();
+
             if (GroupIDs.Length > 0)
             {
                 _logger.Information("Start on filtering User");
