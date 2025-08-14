@@ -30,7 +30,7 @@ namespace IRH.Commands.Azure.MFA
         private const string _reportType = "-R";
         private const string _reportTypeDescription = "How to Report the Data";
         private const string _reportTypeAlias = "--Report";
-        private const ReportType _reportTypeDefaultValue = ReportType.CLI;
+        private const ReportType _reportTypeDefaultValue = ReportType.CLIAndJson;
 
         private const string _printLevel = "-PL";
         private const string _printLevelDescription = "How detailed to be printed";
