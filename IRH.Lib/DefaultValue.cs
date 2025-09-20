@@ -16,6 +16,7 @@ namespace IRH.Lib
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
         public static readonly List<string> AzureSessionPermissions = new List<string>() { "Directory.Read.All", "User.RevokeSessions.All"};
         public static readonly List<string> AzureLoginAuditPermissions = new List<string>() { "Directory.Read.All", "AuditLogsQuery.Read.All"};
+        public static readonly List<string> AzureMailCleanupPermissions = new List<string>() { "Directory.Read.All", "Mail.ReadWrite" };
         public static readonly List<string> AzureLoginAuditActivities = new List<string>() { "MailboxLogin", "UserLoggedIn", "UserLoginFailed"};
         public static readonly Uri DeviceLoginUrl = new Uri("https://microsoft.com/devicelogin");
         public static readonly ReportType ReportType = ReportType.CLI;
