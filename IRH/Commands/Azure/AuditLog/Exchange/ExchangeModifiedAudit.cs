@@ -1,168 +1,168 @@
-﻿using IRH.Commands.Azure.Helper;
-using IRH.Commands.Azure.Reporting.Model;
-using IRH.Commands.Azure.Reporting;
-using Microsoft.Graph.Beta;
-using Microsoft.Graph.Beta.Models.Security;
-using Microsoft.Kiota.Abstractions.Serialization;
-using Serilog.Core;
-using System.CommandLine;
-using System.CommandLine.Parsing;
-using System.Reflection;
-using System.Text.Json;
-using IRH.Lib.Class.Azure.Audit;
-using IRH.Lib.Model.Azure.Reporting;
-using IRH.Lib.Model.Azure.Auth;
-using IRH.Lib.Class.Azure.Auth;
+﻿//using IRH.Commands.Azure.Helper;
+//using IRH.Commands.Azure.Reporting.Model;
+//using IRH.Commands.Azure.Reporting;
+//using Microsoft.Graph.Beta;
+//using Microsoft.Graph.Beta.Models.Security;
+//using Microsoft.Kiota.Abstractions.Serialization;
+//using Serilog.Core;
+//using System.CommandLine;
+//using System.CommandLine.Parsing;
+//using System.Reflection;
+//using System.Text.Json;
+//using IRH.Lib.Class.Azure.Audit;
+//using IRH.Lib.Model.Azure.Reporting;
+//using IRH.Lib.Model.Azure.Auth;
+//using IRH.Lib.Class.Azure.Auth;
 
-namespace IRH.Commands.Azure.AuditLog.Exchange
-{
-    internal class ExchangeModifiedAudit
-    {
-        private const string _commandName = "-General";
-        private const string _commandDescription = "Get All Audit Logs for Exchange Specific Things";
+//namespace IRH.Commands.Azure.AuditLog.Exchange
+//{
+//    internal class ExchangeModifiedAudit
+//    {
+//        private const string _commandName = "-General";
+//        private const string _commandDescription = "Get All Audit Logs for Exchange Specific Things";
 
-        private const string _permissionScopes = "-P";
-        private const string _permissionScopesDescription = "Enter the custom permission to access the api, serpated by whitespace";
-        private const string _permissionScopesAlias = "--PermissionScope";
-        private string[] _permissionScopesDefaultValue = new string[] { "Directory.Read.All", "AuditLogsQuery.Read.All" };
+//        private const string _permissionScopes = "-P";
+//        private const string _permissionScopesDescription = "Enter the custom permission to access the api, serpated by whitespace";
+//        private const string _permissionScopesAlias = "--PermissionScope";
+//        private string[] _permissionScopesDefaultValue = new string[] { "Directory.Read.All", "AuditLogsQuery.Read.All" };
 
-        private const string _defaultActivities = "-AC";
-        private const string _defaultActivitiesDescription = "Enter the Default Activities that should be searched in the Audit Logs (Seperated By Whitespace)";
-        private const string _defaultActivitiesAlias = "--Activities";
-        private string[] _defaultActivitiesDefaultValue = new string[] { "New-TransportRule", "New-InboxRule", "Set-Mailbox", "Set-TransportRule", "Set-InboxRule" };
+//        private const string _defaultActivities = "-AC";
+//        private const string _defaultActivitiesDescription = "Enter the Default Activities that should be searched in the Audit Logs (Seperated By Whitespace)";
+//        private const string _defaultActivitiesAlias = "--Activities";
+//        private string[] _defaultActivitiesDefaultValue = new string[] { "New-TransportRule", "New-InboxRule", "Set-Mailbox", "Set-TransportRule", "Set-InboxRule" };
 
-        private const string _waitQueryTime = "-QT";
-        private const string _waitQueryTimeDescription = "Enter the Value how long to wait between the single query checks (In Seconds)";
-        private const string _waitQueryTimeAlias = "--QueryWait";
-        private const int _waitQueryTimeDefaultValue = 10;
+//        private const string _waitQueryTime = "-QT";
+//        private const string _waitQueryTimeDescription = "Enter the Value how long to wait between the single query checks (In Seconds)";
+//        private const string _waitQueryTimeAlias = "--QueryWait";
+//        private const int _waitQueryTimeDefaultValue = 10;
 
-        private const string _reportType = "-R";
-        private const string _reportTypeDescription = "How to Report the Data";
-        private const string _reportTypeAlias = "--Report";
-        private const ReportType _reportTypeDefaultValue = ReportType.CLI;
+//        private const string _reportType = "-R";
+//        private const string _reportTypeDescription = "How to Report the Data";
+//        private const string _reportTypeAlias = "--Report";
+//        private const ReportType _reportTypeDefaultValue = ReportType.CLI;
 
-        private const string _printLevel = "-PL";
-        private const string _printLevelDescription = "How detailed to be printed";
-        private const string _printLevelAlias = "--PrintLevel";
-        private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
+//        private const string _printLevel = "-PL";
+//        private const string _printLevelDescription = "How detailed to be printed";
+//        private const string _printLevelAlias = "--PrintLevel";
+//        private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
 
-        private const string _exisitingQuery = "-EQ";
-        private const string _exisitingQueryDescription = "Enter the Name of the Existing Query to use the result";
-        private const string _exisitingQueryAlias = "--ExisitingQuery";
+//        private const string _exisitingQuery = "-EQ";
+//        private const string _exisitingQueryDescription = "Enter the Name of the Existing Query to use the result";
+//        private const string _exisitingQueryAlias = "--ExisitingQuery";
 
-        private const string _globalAppIDName = "A";
-        private const string _globalTenantIDName = "T";
-        private const string _globalAuthClientProviderName = "AU";
-        private const string _globalFilterParamterName = "FP";
-        private const string _globalFilterValueName = "FV";
-        private const string _globalStartDateName = "S";
-        private const string _globalEndDateName = "E";
+//        private const string _globalAppIDName = "A";
+//        private const string _globalTenantIDName = "T";
+//        private const string _globalAuthClientProviderName = "AU";
+//        private const string _globalFilterParamterName = "FP";
+//        private const string _globalFilterValueName = "FV";
+//        private const string _globalStartDateName = "S";
+//        private const string _globalEndDateName = "E";
 
-        private readonly Logger _logger;
+//        private readonly Logger _logger;
 
-        internal ExchangeModifiedAudit(Logger Logger)
-        {
-            _logger = Logger;
-        }
+//        internal ExchangeModifiedAudit(Logger Logger)
+//        {
+//            _logger = Logger;
+//        }
 
-        internal Command CreateCommand(RootCommand RootCommand)
-        {
-            Command Command = new Command(name: _commandName, description: _commandDescription);
+//        internal Command CreateCommand(RootCommand RootCommand)
+//        {
+//            Command Command = new Command(name: _commandName, description: _commandDescription);
 
-            Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
-            Option<string[]> Activities = new Option<string[]>(name: _defaultActivities, description: _defaultActivitiesDescription);
-            Option<int> WaitTime = new Option<int>(name: _waitQueryTime, description: _waitQueryTimeDescription);
-            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, description: _reportTypeDescription);
-            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
-            Option<string> ExistingQuery = new Option<string>(name: _exisitingQuery, description: _exisitingQueryDescription);
+//            Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
+//            Option<string[]> Activities = new Option<string[]>(name: _defaultActivities, description: _defaultActivitiesDescription);
+//            Option<int> WaitTime = new Option<int>(name: _waitQueryTime, description: _waitQueryTimeDescription);
+//            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, description: _reportTypeDescription);
+//            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
+//            Option<string> ExistingQuery = new Option<string>(name: _exisitingQuery, description: _exisitingQueryDescription);
 
-            Scopes.AllowMultipleArgumentsPerToken = true;
-            Activities.AllowMultipleArgumentsPerToken = true;
+//            Scopes.AllowMultipleArgumentsPerToken = true;
+//            Activities.AllowMultipleArgumentsPerToken = true;
 
-            Scopes.AddAlias(_permissionScopesAlias);
-            Activities.AddAlias(_defaultActivitiesAlias);
-            WaitTime.AddAlias(_waitQueryTimeAlias);
-            ReportTypeOption.AddAlias(_reportTypeAlias);
-            PrintLevel.AddAlias(_printLevelAlias);
-            ExistingQuery.AddAlias(_exisitingQueryAlias);
+//            Scopes.AddAlias(_permissionScopesAlias);
+//            Activities.AddAlias(_defaultActivitiesAlias);
+//            WaitTime.AddAlias(_waitQueryTimeAlias);
+//            ReportTypeOption.AddAlias(_reportTypeAlias);
+//            PrintLevel.AddAlias(_printLevelAlias);
+//            ExistingQuery.AddAlias(_exisitingQueryAlias);
 
-            Scopes.SetDefaultValue(_permissionScopesDefaultValue);
-            Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
-            WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
-            ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
-            PrintLevel.SetDefaultValue(_printLevelDefaultValue);
+//            Scopes.SetDefaultValue(_permissionScopesDefaultValue);
+//            Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
+//            WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
+//            ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
+//            PrintLevel.SetDefaultValue(_printLevelDefaultValue);
 
-            Command.AddOption(Scopes);
-            Command.AddOption(Activities);
-            Command.AddOption(WaitTime);
-            Command.AddOption(ReportTypeOption);
-            Command.AddOption(PrintLevel);
-            Command.AddOption(ExistingQuery);
+//            Command.AddOption(Scopes);
+//            Command.AddOption(Activities);
+//            Command.AddOption(WaitTime);
+//            Command.AddOption(ReportTypeOption);
+//            Command.AddOption(PrintLevel);
+//            Command.AddOption(ExistingQuery);
 
-            Command.SetHandler(async (Context) =>
-            {
-                ParseResult Parser = Context.ParseResult;
-                CommandResult AzureCommandResult = Parser.CommandResult.Parent.Parent.Parent as CommandResult;
-                CommandResult AuditCommandResult = Parser.CommandResult.Parent.Parent as CommandResult;
-                CommandResult ExchangeAuditCommandResult = Parser.CommandResult.Parent as CommandResult;
+//            Command.SetHandler(async (Context) =>
+//            {
+//                ParseResult Parser = Context.ParseResult;
+//                CommandResult AzureCommandResult = Parser.CommandResult.Parent.Parent.Parent as CommandResult;
+//                CommandResult AuditCommandResult = Parser.CommandResult.Parent.Parent as CommandResult;
+//                CommandResult ExchangeAuditCommandResult = Parser.CommandResult.Parent as CommandResult;
 
-                Option<string> AppID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAppIDName)).First() as Option<string>;
-                Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
-                Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
-                Option<string[]> FilterParameter = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterParamterName)).First() as Option<string[]>;
-                Option<string[]> FilterValue = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterValueName)).First() as Option<string[]>;
-                Option<DateTime> StartDate= ExchangeAuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalStartDateName)).First() as Option<DateTime>;
-                Option<DateTime> EndDate = ExchangeAuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalEndDateName)).First() as Option<DateTime>;
+//                Option<string> AppID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAppIDName)).First() as Option<string>;
+//                Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
+//                Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
+//                Option<string[]> FilterParameter = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterParamterName)).First() as Option<string[]>;
+//                Option<string[]> FilterValue = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterValueName)).First() as Option<string[]>;
+//                Option<DateTime> StartDate= ExchangeAuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalStartDateName)).First() as Option<DateTime>;
+//                Option<DateTime> EndDate = ExchangeAuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalEndDateName)).First() as Option<DateTime>;
                 
-                AzureAuth Auth = new AzureAuth(_logger);
-                AuditHelper Helper = new AuditHelper(_logger);
-                AzureAudit AzureAudit = new AzureAudit(_logger);
-                GraphServiceClient Client = Auth.GetClientBeta(
-                    Parser.GetValueForOption(AppID),
-                    Parser.GetValueForOption(TenantID),
-                    Parser.GetValueForOption(Scopes),
-                    Parser.GetValueForOption(AuthProviderType)
-                    );
-                AuditLogQuery CreatedQuery;
+//                AzureAuth Auth = new AzureAuth(_logger);
+//                AuditHelper Helper = new AuditHelper(_logger);
+//                AzureAudit AzureAudit = new AzureAudit(_logger);
+//                GraphServiceClient Client = Auth.GetClientBeta(
+//                    Parser.GetValueForOption(AppID),
+//                    Parser.GetValueForOption(TenantID),
+//                    Parser.GetValueForOption(Scopes),
+//                    Parser.GetValueForOption(AuthProviderType)
+//                    );
+//                AuditLogQuery CreatedQuery;
                 
-                if (Parser.GetValueForOption(ExistingQuery) is not null)
-                {
-                    CreatedQuery = await AzureAudit.GetQueryFromName(Client, Parser.GetValueForOption(ExistingQuery));
-                }
-                else
-                {
-                    CreatedQuery = await AzureAudit.CreateQuery(
-                        Client,
-                        Parser.GetValueForOption(StartDate),
-                        Parser.GetValueForOption(EndDate),
-                        Parser.GetValueForOption(Activities)
-                   );
-                }
+//                if (Parser.GetValueForOption(ExistingQuery) is not null)
+//                {
+//                    CreatedQuery = await AzureAudit.GetQueryFromName(Client, Parser.GetValueForOption(ExistingQuery));
+//                }
+//                else
+//                {
+//                    CreatedQuery = await AzureAudit.CreateQuery(
+//                        Client,
+//                        Parser.GetValueForOption(StartDate),
+//                        Parser.GetValueForOption(EndDate),
+//                        Parser.GetValueForOption(Activities)
+//                   );
+//                }
                 
-                CreatedQuery = await AzureAudit.WaitOnQuery(
-                    Client,
-                    CreatedQuery,
-                    Parser.GetValueForOption(WaitTime)
-                    );
+//                CreatedQuery = await AzureAudit.WaitOnQuery(
+//                    Client,
+//                    CreatedQuery,
+//                    Parser.GetValueForOption(WaitTime)
+//                    );
 
-                AuditLogRecordCollectionResponse Result = await AzureAudit.GetResultFromQuery(Client, CreatedQuery);
+//                AuditLogRecordCollectionResponse Result = await AzureAudit.GetResultFromQuery(Client, CreatedQuery);
 
-                switch (Parser.GetValueForOption(ReportTypeOption))
-                {
-                    case ReportType.CLI:
-                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
-                        break;
-                    case ReportType.Json:
-                        await Helper.ExportToJson(Result);
-                        break;
-                    case ReportType.CLIAndJson:
-                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
-                        await Helper.ExportToJson(Result);
-                        break;
-                }
-            });
+//                switch (Parser.GetValueForOption(ReportTypeOption))
+//                {
+//                    case ReportType.CLI:
+//                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
+//                        break;
+//                    case ReportType.Json:
+//                        await Helper.ExportToJson(Result);
+//                        break;
+//                    case ReportType.CLIAndJson:
+//                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
+//                        await Helper.ExportToJson(Result);
+//                        break;
+//                }
+//            });
 
-            return Command;
-        }
-    }
-}
+//            return Command;
+//        }
+//    }
+//}

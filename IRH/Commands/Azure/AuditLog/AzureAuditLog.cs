@@ -1,55 +1,55 @@
-﻿using IRH.Commands.Azure.AuditLog.Exchange;
-using IRH.Commands.Azure.AuditLog.Login;
-using Serilog.Core;
-using System.CommandLine;
+﻿//using IRH.Commands.Azure.AuditLog.Exchange;
+//using IRH.Commands.Azure.AuditLog.Login;
+//using Serilog.Core;
+//using System.CommandLine;
 
-namespace IRH.Commands.Azure.AuditLog
-{
-    internal class AzureAuditLog
-    {
-        private const string _commandName = "-Audit";
-        private const string _commandDescription = "Operate with the Audit System from Microsoft";
+//namespace IRH.Commands.Azure.AuditLog
+//{
+//    internal class AzureAuditLog
+//    {
+//        private const string _commandName = "-Audit";
+//        private const string _commandDescription = "Operate with the Audit System from Microsoft";
 
-        private const string _filterOnParameter = "-FP";
-        private const string _filterOnParameterDescription = "Filter on Parameternames (Displayfilter), Wildcards are supported (This Setting works only on Printlevel Info and above) its also possible to enter multiple values seperated by whitespace";
-        private const string _filterOnParameterAlias = "--FilterParameter";
+//        private const string _filterOnParameter = "-FP";
+//        private const string _filterOnParameterDescription = "Filter on Parameternames (Displayfilter), Wildcards are supported (This Setting works only on Printlevel Info and above) its also possible to enter multiple values seperated by whitespace";
+//        private const string _filterOnParameterAlias = "--FilterParameter";
 
-        private const string _filterOnParameterValue = "-FV";
-        private const string _filterOnParameterValueDescription = "Filter on Paramtervalue (Datafilter): Syntax --> ParamterName:ParameterValue (Example: Id:241af6fe-955d-4884-b27d-08dc93695d85), if you specify multiple serpated by whitespace it have an AND Operator, there is an Wildcard Support for the parametervalue";
-        private const string _filterOnParameterValueAlias = "--FilterValue";
+//        private const string _filterOnParameterValue = "-FV";
+//        private const string _filterOnParameterValueDescription = "Filter on Paramtervalue (Datafilter): Syntax --> ParamterName:ParameterValue (Example: Id:241af6fe-955d-4884-b27d-08dc93695d85), if you specify multiple serpated by whitespace it have an AND Operator, there is an Wildcard Support for the parametervalue";
+//        private const string _filterOnParameterValueAlias = "--FilterValue";
 
-        private readonly Logger _logger;
+//        private readonly Logger _logger;
 
-        internal AzureAuditLog(Logger Logger)
-        {
-            _logger = Logger;
-        }
+//        internal AzureAuditLog(Logger Logger)
+//        {
+//            _logger = Logger;
+//        }
 
-        internal Command CreateCommand(RootCommand RootCommand)
-        {
-            Command Command = new Command(name: _commandName, description: _commandDescription);
+//        internal Command CreateCommand(RootCommand RootCommand)
+//        {
+//            Command Command = new Command(name: _commandName, description: _commandDescription);
 
-            Option<string[]> FilterOnParameter = new Option<string[]>(name: _filterOnParameter, description: _filterOnParameterDescription);
-            Option<string[]> FilterOnParameterValue = new Option<string[]>(name: _filterOnParameterValue, description: _filterOnParameterValueDescription);
+//            Option<string[]> FilterOnParameter = new Option<string[]>(name: _filterOnParameter, description: _filterOnParameterDescription);
+//            Option<string[]> FilterOnParameterValue = new Option<string[]>(name: _filterOnParameterValue, description: _filterOnParameterValueDescription);
             
-            FilterOnParameter.AddAlias(_filterOnParameterAlias);
-            FilterOnParameterValue.AddAlias(_filterOnParameterValueAlias);
+//            FilterOnParameter.AddAlias(_filterOnParameterAlias);
+//            FilterOnParameterValue.AddAlias(_filterOnParameterValueAlias);
 
-            FilterOnParameter.AllowMultipleArgumentsPerToken = true;
-            FilterOnParameterValue.AllowMultipleArgumentsPerToken = true;
+//            FilterOnParameter.AllowMultipleArgumentsPerToken = true;
+//            FilterOnParameterValue.AllowMultipleArgumentsPerToken = true;
 
-            Command.AddGlobalOption(FilterOnParameter);
-            Command.AddGlobalOption(FilterOnParameterValue);
+//            Command.AddGlobalOption(FilterOnParameter);
+//            Command.AddGlobalOption(FilterOnParameterValue);
 
-            ExchangeAudit ExchangeAuditCommand = new ExchangeAudit(_logger);
-            Command ExchangeCommand = ExchangeAuditCommand.CreateCommand(RootCommand);
+//            ExchangeAudit ExchangeAuditCommand = new ExchangeAudit(_logger);
+//            Command ExchangeCommand = ExchangeAuditCommand.CreateCommand(RootCommand);
             
-            LoginAuditCommand LoginAuditCommand = new LoginAuditCommand(_logger);
-            Command LoginCommand = LoginAuditCommand.CreateCommand(RootCommand);
+//            LoginAuditCommand LoginAuditCommand = new LoginAuditCommand(_logger);
+//            Command LoginCommand = LoginAuditCommand.CreateCommand(RootCommand);
 
-            Command.AddCommand(ExchangeCommand);
-            Command.AddCommand(LoginCommand);
-            return Command;
-        }
-    }
-}
+//            Command.AddCommand(ExchangeCommand);
+//            Command.AddCommand(LoginCommand);
+//            return Command;
+//        }
+//    }
+//}
