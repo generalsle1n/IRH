@@ -16,15 +16,15 @@ Logger Logger = new LoggerConfiguration()
 
 RootCommand RootCommand = new RootCommand(_commandDescription);
 
-//LDAPMonitor LM = new LDAPMonitor(Logger);
+LDAPMonitor LM = new LDAPMonitor(Logger);
 //RemoteExecution RM = new RemoteExecution(Logger);
 AzureFunctions AF = new AzureFunctions(Logger);
 
-//Command LdapMonitor = LM.CreateCommand(RootCommand);
+Command LdapMonitor = LM.CreateCommand(RootCommand);
 //Command RemoteExecution = RM.CreateCommand(RootCommand);
 Command AzureFunctions = AF.CreateCommand(RootCommand);
 
-//RootCommand.Subcommands.Add(LdapMonitor);
+RootCommand.Subcommands.Add(LdapMonitor);
 //RootCommand.Subcommands.Add(RemoteExecution);
 RootCommand.Subcommands.Add(AzureFunctions);
 

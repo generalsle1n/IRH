@@ -66,18 +66,14 @@ namespace IRH.Commands.Azure
             Command.Options.Add(TenantID);
             Command.Options.Add(AuthType);
 
-            //Command.AddGlobalOption(AppID);
-            //Command.AddGlobalOption(TenantID);
-            //Command.AddGlobalOption(AuthType);
-
             AzureMFACommand AzureMFACommand = new AzureMFACommand(_logger);
             Command AzureMFA = AzureMFACommand.CreateCommand(RootCommand);
 
             AzureSessionCommand AzureSessionCommand = new AzureSessionCommand(_logger);
             Command AzureSession = AzureSessionCommand.CreateCommand(RootCommand);
 
-            //AzureAuditLog AzureAuditLogCommand = new AzureAuditLog(_logger);
-            //Command AzureAuditLog = AzureAuditLogCommand.CreateCommand(RootCommand);
+            AzureAuditLog AzureAuditLogCommand = new AzureAuditLog(_logger);
+            Command AzureAuditLog = AzureAuditLogCommand.CreateCommand(RootCommand);
 
             //AzureMailCleanupCommand AzureMailCleanupCommand = new AzureMailCleanupCommand(_logger);
             //Command AzureMCU = AzureMailCleanupCommand.CreateCommand(RootCommand);
@@ -85,7 +81,7 @@ namespace IRH.Commands.Azure
 
             Command.Add(AzureMFA);
             Command.Add(AzureSession);
-            //Command.AddCommand(AzureAuditLog);
+            Command.Add(AzureAuditLog);
             //Command.Add(AzureMCU);
 
             return Command;
