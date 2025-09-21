@@ -39,9 +39,9 @@ namespace IRH.Commands.Azure.MFA
         private const string _printLevelAlias = "--PrintLevel";
         private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
 
-        private const string _globalAppIDName = "A";
-        private const string _globalTenantIDName = "T";
-        private const string _globalAuthClientProviderName = "AU";
+        //private const string _globalAppIDName = "A";
+        //private const string _globalTenantIDName = "T";
+        //private const string _globalAuthClientProviderName = "AU";
 
         private readonly Logger _logger;
 
