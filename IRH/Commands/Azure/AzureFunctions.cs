@@ -4,7 +4,7 @@ using Serilog.Core;
 using System.CommandLine;
 using IRH.Commands.Azure.Session;
 using IRH.Lib.Model.Azure.Auth;
-//using IRH.Commands.Azure.MCU;
+using IRH.Commands.Azure.MCU;
 
 namespace IRH.Commands.Azure
 {
@@ -75,14 +75,13 @@ namespace IRH.Commands.Azure
             AzureAuditLog AzureAuditLogCommand = new AzureAuditLog(_logger);
             Command AzureAuditLog = AzureAuditLogCommand.CreateCommand(RootCommand);
 
-            //AzureMailCleanupCommand AzureMailCleanupCommand = new AzureMailCleanupCommand(_logger);
-            //Command AzureMCU = AzureMailCleanupCommand.CreateCommand(RootCommand);
-
+            AzureMailCommand AzureMailCleanupCommand = new AzureMailCommand(_logger);
+            Command AzureMCU = AzureMailCleanupCommand.CreateCommand(RootCommand);
 
             Command.Add(AzureMFA);
             Command.Add(AzureSession);
             Command.Add(AzureAuditLog);
-            //Command.Add(AzureMCU);
+            Command.Add(AzureMCU);
 
             return Command;
         }
