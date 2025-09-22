@@ -286,5 +286,15 @@ namespace IRH.Lib.Class.Azure.Auth
             
             return Result;
         }
+        private async Task<ServicePrincipal> GetGraphPrincipalAsync(GraphServiceClient Client)
+        {
+            ServicePrincipalCollectionResponse GraphPrincipalCollection = await Client.ServicePrincipals.GetAsync(filter =>
+            {
+                filter.QueryParameters.Filter = $"displayName eq 'Microsoft Graph'";
+            });
+            ServicePrincipal GraphPrincipal = GraphPrincipalCollection.Value.First();
+
+            return GraphPrincipal;
+        }
     }
 }
