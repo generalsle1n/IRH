@@ -210,5 +210,22 @@ namespace IRH.Lib.Class.Azure.Auth
                 }
             }
         }
+        private async Task WaitForGraphServiceClientAsync(GraphServiceClient Client)
+        {
+            OrganizationCollectionResponse Response = null;
+            
+            while (Response is null)
+            {
+                try
+                {
+                    Response = await Client.Organization.GetAsync();
+                }
+                catch (AuthenticationFailedException exception)
+                {
+                    _logger.Information("Secret is active but not published waiting");
+                    await Task.Delay(DefaultValue.DefaultWaitTime);
+                }
+            }
+        }
     }
 }
