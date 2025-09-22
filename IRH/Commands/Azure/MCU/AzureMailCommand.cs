@@ -134,6 +134,7 @@ namespace IRH.Commands.Azure.MCU
                 //Todo: Implement Event Meeting support
                 //Todo: Implement Just single user
                 //Todo: Implement Group support
+                //Todo: Add Regex support
 
                 AzureAuth Auth = new AzureAuth(_logger);
 

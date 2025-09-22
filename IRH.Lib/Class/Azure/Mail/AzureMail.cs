@@ -68,7 +68,6 @@ namespace IRH.Lib.Class.Azure.Mail
             
             return Result;
         }
-
         public async Task DeleteMails(GraphServiceClient Client, List<UserMailCollection> UserMailCollection)
         {
             foreach(UserMailCollection Collection in UserMailCollection)
