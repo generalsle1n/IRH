@@ -6,19 +6,11 @@ using IRH.Lib.Class.Azure.Mail;
 using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Mail;
 using IRH.Lib.Model.Azure.Reporting;
-using IRH.Lib.Model.Azure.Result;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Serilog.Core;
-using System;
-using System.Collections.Generic;
 using System.CommandLine;
-using System.CommandLine.Parsing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace IRH.Commands.Azure.MCU
 {
