@@ -159,5 +159,21 @@ namespace IRH.Lib.Class.Azure.Auth
             
             return Result;
         }
+        private async Task<Application> GetOperatorApplicationAsync(GraphServiceClient Client)
+        {
+            Application Result = null;
+
+            ApplicationCollectionResponse AppCollection = await Client.Applications.GetAsync(filter =>
+            {
+                filter.QueryParameters.Filter = $"DisplayName eq '{DefaultValue.OperatorDisplayName}'";
+            });
+
+            if (AppCollection.Value.Count == 1)
+            {
+                Result = AppCollection.Value.First();
+            }
+
+            return Result;
+        }
     }
 }
