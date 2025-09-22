@@ -45,7 +45,6 @@ namespace IRH.Lib.Class.Azure.Auth
 
             return Client;
         }
-
         public BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null)
         {
             BGraphServiceClient Client = null;
@@ -73,7 +72,6 @@ namespace IRH.Lib.Class.Azure.Auth
             }
             return Client;
         }
-
         public DeviceCodeCredential CreateDeviceCodeCredential(DeviceCodeCredentialOptions Options)
         {
             _logger.Verbose($"Create DeviceCodeCredential with AppID: {Options.ClientId} and TenantID: {Options.TenantId}");
