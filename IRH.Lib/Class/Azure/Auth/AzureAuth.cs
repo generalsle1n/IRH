@@ -35,11 +35,13 @@ namespace IRH.Lib.Class.Azure.Auth
                     {
                         Client = new GraphServiceClient(CodeCredential, ScopesValue);
                     }
+
                     break;
                 case AuthType.Interactive:
                     _logger.Verbose("Create Client with Interactive authentication");
                     InteractiveBrowserCredential InteractiveCredentials = CreateInteractiveBrowserCredential(AppIDValue, TenantIDValue);
                     Client = new GraphServiceClient(InteractiveCredentials, ScopesValue);
+
                     break;
             }
 
