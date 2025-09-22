@@ -70,6 +70,7 @@ namespace IRH.Lib.Class.Azure.Auth
                     Client = new BGraphServiceClient(InteractiveCredentials, ScopesValue);
                     break;
             }
+        
             return Client;
         }
         public DeviceCodeCredential CreateDeviceCodeCredential(DeviceCodeCredentialOptions Options)
