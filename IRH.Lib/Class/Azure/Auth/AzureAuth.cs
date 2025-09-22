@@ -45,6 +45,20 @@ namespace IRH.Lib.Class.Azure.Auth
                     break;
             }
 
+            if (ElevateToAppAccess && ElevatePermission is not null)
+            {
+                _logger.Information("Start evalating access with an operator app");
+                
+                ApplicationLogin AppLogin = await CreateAppRegistrationAsync(Client, ElevatePermission);
+                ClientSecretCredential ClientSecret = CreateClientSecretCredential(AppLogin);
+                
+                await WaitForSecretAsync(ClientSecret);
+                
+                Client = new GraphServiceClient(ClientSecret, DefaultValue.AzureDefaultPermission);
+
+                await WaitForGraphServiceClientAsync(Client);
+            }
+            
             return Client;
         }
         public BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null)
