@@ -139,11 +139,13 @@ namespace IRH.Commands.Azure.MCU
 
                 AzureAuth Auth = new AzureAuth(_logger);
 
-                GraphServiceClient Client = Auth.GetClient(
+                GraphServiceClient Client = await Auth.GetClientAsync(
                     parseResult.GetRequiredValue<string>(AzureFunctions._publicAppID),
                     parseResult.GetRequiredValue<string>(AzureFunctions._publicTenantID),
-                    parseResult.GetRequiredValue(Scopes),
-                    parseResult.GetRequiredValue<AuthType>(AzureFunctions._authClientProvider)
+                    DefaultValue.AzureAppRegistrationPermissions.ToArray(),
+                    parseResult.GetRequiredValue<AuthType>(AzureFunctions._authClientProvider),
+                    ElevateToAppAccess: true,
+                    ElevatePermission: parseResult.GetRequiredValue(Scopes)
                     );
 
                 AzureUser AzureUser = new AzureUser(_logger);
