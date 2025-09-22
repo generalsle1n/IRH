@@ -79,7 +79,6 @@ namespace IRH.Lib.Class.Azure.Mail
                 }
             }
         }
-
         private string CreateGraphFilter(string[] SubjectFilter, DateTime StartFilter, DateTime EndFilter)
         {
             string StartDateFilter = $"ReceivedDateTime ge {StartFilter.ToString(DefaultValue.DefaultDateFormat)}";
