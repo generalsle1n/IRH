@@ -30,11 +30,9 @@ namespace IRH.Commands.Azure.MCU
         private const MailAction _mailActionDefaultValue = MailAction.Preview;
         private const bool _mailActionIsRequired = true;
 
-        private const string _searchSource = "-S";
-        private const string _searchSourceDescription = "Set the Source to search in --> All (Search through all users) | Group (Just search through mailboxes in group)| SingleUser (just search through an single mailbox)";
-        private const string _searchSourceAlias = "--SearchSource";
-        private const MailSearchSource _searchSourceDefaultValue = MailSearchSource.All;
-        private const bool _searchSourceIsRequired = true;
+        private const string _filterOnGroup = "-G";
+        private const string _filterOnGroupDescription = "Enter the ID for the Group or multiple seperated by whitespace";
+        private const string _filterOnGroupAlias = "--Group";
 
         private const string _subjectFilter = "-FS";
         private const string _subjectFilterDescription = "Filter for mails that match the subject (There can be multiple Values applied seperated by whitespace)";
@@ -85,11 +83,11 @@ namespace IRH.Commands.Azure.MCU
                 Required = _mailActionIsRequired
             };
 
-            Option<MailSearchSource> SearchSourceOption = new Option<MailSearchSource>(name: _searchSource, aliases: _searchSourceAlias)
+            Option<string[]> Group = new Option<string[]>(name: _filterOnGroup, aliases: _filterOnGroupAlias)
             {
-                Description = _searchSourceDescription,
-                DefaultValueFactory = (result) => _searchSourceDefaultValue,
-                Required = _searchSourceIsRequired
+                Description = _filterOnGroupDescription,
+                AllowMultipleArgumentsPerToken = true,
+                DefaultValueFactory = (result) => new string[] {}
             };
 
             Option<string[]> FilterSubjectOption = new Option<string[]>(name: _subjectFilter, aliases: _subjectFilterAlias)
@@ -124,7 +122,7 @@ namespace IRH.Commands.Azure.MCU
 
             Command.Options.Add(Scopes);
             Command.Options.Add(MailActionOption);
-            Command.Options.Add(SearchSourceOption);
+            Command.Options.Add(Group);
             Command.Options.Add(FilterSubjectOption);
             Command.Options.Add(FilterStartDateOption);
             Command.Options.Add(FilterEndDateOption);
