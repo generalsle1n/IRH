@@ -89,7 +89,7 @@ namespace IRH.Commands.Azure.MFA
             {
                 AzureAuth Auth = new AzureAuth(_logger);
                 
-                GraphServiceClient Client = Auth.GetClient(
+                GraphServiceClient Client = await Auth.GetClientAsync(
                     parseResult.GetRequiredValue<string>(AzureFunctions._publicAppID),
                     parseResult.GetRequiredValue<string>(AzureFunctions._publicTenantID),
                     parseResult.GetRequiredValue(Scopes),

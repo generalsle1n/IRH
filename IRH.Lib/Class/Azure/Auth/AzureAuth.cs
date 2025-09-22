@@ -18,7 +18,7 @@ namespace IRH.Lib.Class.Azure.Auth
 
         private readonly ILogger _logger;
 
-        public GraphServiceClient GetClient(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null)
+        public async Task<GraphServiceClient> GetClientAsync(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null, bool ElevateToAppAccess = false, string[] ElevatePermission = null)
         {
             GraphServiceClient Client = null;
             switch (Type)
