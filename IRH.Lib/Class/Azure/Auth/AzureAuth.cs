@@ -256,5 +256,35 @@ namespace IRH.Lib.Class.Azure.Auth
 
             return ServicePrincipal;
         }
+        private async Task<ServicePrincipal> GetOrCreateServicePrincipalAsnc(GraphServiceClient Client, Application OperatorApp)
+        {
+            ServicePrincipal Result = null;
+            
+            ServicePrincipalCollectionResponse ServicePrincipal = await Client.ServicePrincipals.GetAsync(filter =>
+            {
+                filter.QueryParameters.Filter = $"AppId eq '{OperatorApp.AppId}'";
+                filter.QueryParameters.Expand = new string[] {"AppRoleAssignedTo"};
+                filter.QueryParameters.Select = new string[]{"AppRoleAssignedTo"};
+            });
+
+            if (ServicePrincipal.Value.Count == 0)
+            {
+                _logger.Information($"No ServicePrincipal found for {OperatorApp.DisplayName}");
+                ServicePrincipal serviceBody = new ServicePrincipal
+                {
+                    AppId = OperatorApp.AppId,
+                };
+                
+                Result = await Client.ServicePrincipals.PostAsync(serviceBody);
+                _logger.Information($"Created ServicePrincipal for {OperatorApp.DisplayName}");
+            }
+            else
+            {
+                _logger.Information($"ServicePrincipal found for {OperatorApp.DisplayName}");
+                Result = ServicePrincipal.Value.First();
+            }
+            
+            return Result;
+        }
     }
 }
