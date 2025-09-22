@@ -117,5 +117,17 @@ namespace IRH.Lib.Class.Azure.Auth
             // https://learn.microsoft.com/dotnet/api/azure.identity.interactivebrowsercredential
             return new InteractiveBrowserCredential(Options);
         }
+        private ClientSecretCredential CreateClientSecretCredential(ApplicationLogin AppLogin)
+        {
+            ClientSecretCredentialOptions Options = new ClientSecretCredentialOptions
+            {
+                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
+            };
+
+            // https://learn.microsoft.com/dotnet/api/azure.identity.clientsecretcredential
+            ClientSecretCredential ClientSecretCredential = new ClientSecretCredential(AppLogin.TenantId, AppLogin.Id, AppLogin.Credential.SecretText, Options);
+            
+            return ClientSecretCredential;
+        }
     }
 }
