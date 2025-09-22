@@ -175,5 +175,22 @@ namespace IRH.Lib.Class.Azure.Auth
 
             return Result;
         }
+        private async Task<PasswordCredential> CreateApplicationSecretAsync(GraphServiceClient Client, Application OperatorApp, ServicePrincipal ServicePrincipal)
+        {
+            AddPasswordPostRequestBody AddPassword = new AddPasswordPostRequestBody
+            {
+                PasswordCredential = new PasswordCredential
+                {
+                    DisplayName = DateTime.Now.ToString(),
+                    StartDateTime = DateTimeOffset.Now.AddMinutes(-DefaultValue.DefaultSecretPeriod),
+                    EndDateTime = DateTimeOffset.Now.AddMinutes(DefaultValue.DefaultSecretPeriod)
+                },
+            };
+
+            PasswordCredential Result = await Client.Applications[OperatorApp.Id].AddPassword.PostAsync(AddPassword);
+            _logger.Information($"Created App Login for {OperatorApp.DisplayName}");
+            
+            return Result;
+        }
     }
 }
