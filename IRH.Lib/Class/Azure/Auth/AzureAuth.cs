@@ -311,5 +311,17 @@ namespace IRH.Lib.Class.Azure.Auth
             
             return Result;
         }
+        private async Task<string> GetTenantIdAsync(GraphServiceClient Client)
+        {
+            string Result = string.Empty;
+            _logger.Information("Gathering Tenant ID");
+
+            OrganizationCollectionResponse Organization = await Client.Organization.GetAsync();
+            Result = Organization.Value.First().Id;
+            
+            _logger.Information($"Found Tenant ID: {Organization.Value.First().Id}");
+            
+            return Result;
+        }
     }
 }
