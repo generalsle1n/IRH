@@ -149,8 +149,8 @@ public partial class AzureMFAViewModel : ViewModelBase
         {
             case AuthType.DeviceCode:
                 DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     CreateCallBack: false);
 
                 DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
@@ -164,17 +164,17 @@ public partial class AzureMFAViewModel : ViewModelBase
 
                 DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
 
-                Client = AzureAuth.GetClient(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                Client = await AzureAuth.GetClientAsync(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow,
                     CodeCredential: DeviceCodeCredential);
                 break;
             case AuthType.Interactive:
-                Client = Client = AzureAuth.GetClient(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                Client = Client = await AzureAuth.GetClientAsync(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow);
                 break;

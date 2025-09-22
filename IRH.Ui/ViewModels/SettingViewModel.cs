@@ -27,9 +27,9 @@ internal partial class SettingViewModel : ViewModelBase
     [ObservableProperty]
     private AuthType _selectedAuthType = Preferences.Get<AuthType>(Strings.Setting_Name_AuthType, DefaultValue.AuthType);
     [ObservableProperty]
-    private string _currentTenantID = Preferences.Get<string>(Strings.Setting_Name_TenantID, DefaultValue.TenantID);
+    private string _currentTenantID = Preferences.Get<string>(Strings.Setting_Name_TenantID, DefaultValue.TenantId);
     [ObservableProperty]
-    private string _currentAppID = Preferences.Get<string>(Strings.Setting_Name_AppID, DefaultValue.AppID);
+    private string _currentAppID = Preferences.Get<string>(Strings.Setting_Name_AppID, DefaultValue.AppId);
     [ObservableProperty]
     private bool _tenantIDEditEnabled = Preferences.Get<bool>(Strings.Setting_Name_TenantIDEditEnabled, false);
     [ObservableProperty]
@@ -40,14 +40,14 @@ internal partial class SettingViewModel : ViewModelBase
     [RelayCommand]
     private async Task ResetTenantID()
     {
-        await Preferences.SetAsync<string>(Strings.Setting_Name_TenantID, DefaultValue.TenantID);
-        CurrentTenantID = DefaultValue.TenantID;
+        await Preferences.SetAsync<string>(Strings.Setting_Name_TenantID, DefaultValue.TenantId);
+        CurrentTenantID = DefaultValue.TenantId;
     }
     [RelayCommand]
     private async Task ResetAppID()
     {
-        await Preferences.SetAsync<string>(Strings.Setting_Name_AppID, DefaultValue.AppID);
-        CurrentAppID = DefaultValue.AppID;
+        await Preferences.SetAsync<string>(Strings.Setting_Name_AppID, DefaultValue.AppId);
+        CurrentAppID = DefaultValue.AppId;
     }
     
     [RelayCommand]

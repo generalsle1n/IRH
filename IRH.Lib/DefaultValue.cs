@@ -10,8 +10,8 @@ namespace IRH.Lib
 {
     public class DefaultValue
     {
-        public const string TenantID = "common";
-        public const string AppID = "c0849608-c8b9-4e86-b37d-fce972a0a7f6";
+        public const string TenantId = "common";
+        public const string AppId = "c0849608-c8b9-4e86-b37d-fce972a0a7f6";
         public const string OperatorDisplayName = "IRH_Scanner_Operator_For_User_Access";
         public const int DefaultSecretPeriod = 30;
         public const int DefaultWaitTime = 1000;
