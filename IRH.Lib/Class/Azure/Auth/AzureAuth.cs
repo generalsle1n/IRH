@@ -79,7 +79,6 @@ namespace IRH.Lib.Class.Azure.Auth
             _logger.Verbose($"Create DeviceCodeCredential with AppID: {Options.ClientId} and TenantID: {Options.TenantId}");
             return new DeviceCodeCredential(Options);
         }
-
         public DeviceCodeCredentialOptions CreateDeviceCodeCredentialOptions(string AppID, string TenantID, bool CreateCallBack = true)
         {
             DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
