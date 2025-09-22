@@ -129,5 +129,35 @@ namespace IRH.Lib.Class.Azure.Auth
             
             return ClientSecretCredential;
         }
+        public async Task<ApplicationLogin> CreateAppRegistrationAsync(GraphServiceClient Client, string[] Permissions)
+        {
+            ApplicationLogin Result = new ApplicationLogin();
+            Application OperatorApp = await GetOperatorApplicationAsync(Client);
+            
+            if (OperatorApp is null)
+            {
+                _logger.Information("Operator Not Found so its need to be created");
+
+                OperatorApp = new Application()
+                {
+                    DisplayName = DefaultValue.OperatorDisplayName,
+                };
+
+                OperatorApp = await Client.Applications.PostAsync(OperatorApp);
+                
+                _logger.Information($"Operator Created with Name: {OperatorApp.DisplayName} and  Id: {OperatorApp.AppId}");
+            }
+
+            ServicePrincipal Principal = await AssignApplicationPermissionAsync(Client, OperatorApp, Permissions);
+            
+            PasswordCredential Credential = await CreateApplicationSecretAsync(Client, OperatorApp, Principal);
+            
+            Result.Id = OperatorApp.AppId;
+            Result.Credential = Credential;
+            Result.RawApplication = OperatorApp;
+            Result.TenantId = await GetTenantIdAsync(Client);
+            
+            return Result;
+        }
     }
 }
