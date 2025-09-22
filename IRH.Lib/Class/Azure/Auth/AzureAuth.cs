@@ -296,5 +296,20 @@ namespace IRH.Lib.Class.Azure.Auth
 
             return GraphPrincipal;
         }
+        private async Task<List<string>> ResolvePermissionIDsAsync(GraphServiceClient Client, string[] Permissions)
+        {
+            List<string> Result = new List<string>();
+            
+            ServicePrincipal GraphPrincipal = await GetGraphPrincipalAsync(Client);
+
+            foreach (string SinglePermission in Permissions)
+            {
+                string ResolvedId = GraphPrincipal.AppRoles.Where(singleAppRole => singleAppRole.Value.Equals(SinglePermission)).First().Id.ToString();
+                Result.Add(ResolvedId);
+                _logger.Information($"Resolved Permission {SinglePermission} to {ResolvedId}");
+            }
+            
+            return Result;
+        }
     }
 }
