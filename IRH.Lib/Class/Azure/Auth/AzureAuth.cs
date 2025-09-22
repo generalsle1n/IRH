@@ -11,6 +11,7 @@ namespace IRH.Lib.Class.Azure.Auth
 {
     public class AzureAuth
     {
+        //ToDo Dispose App
         public AzureAuth(ILogger logger)
         {
             _logger = logger;
