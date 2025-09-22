@@ -30,37 +30,46 @@ namespace IRH.Lib.Class.Azure.Mail
                 {
                     filter.QueryParameters.Filter = CreateGraphFilter(SubjectFilter, StartFilter, EndFilter);
                 });
+                bool UserHasMailbox = await CheckIfMailboxExists(Client, SingleUser);
 
-                PageIterator<Message, MessageCollectionResponse> Iterator = PageIterator<Message, MessageCollectionResponse>.CreatePageIterator(Client, MailResult, (singleMail) =>
+                if (UserHasMailbox)
                 {
-                    if (!MailResult.Value.Contains(singleMail))
+                    MessageCollectionResponse MailResult = await Client.Users[SingleUser.Id].Messages.GetAsync((filter) =>
                     {
-                        MailResult.Value.Add(singleMail);
+                        filter.QueryParameters.Filter = CreateGraphFilter(SubjectFilter, StartFilter, EndFilter);
+                    });
+
+                    PageIterator<Message, MessageCollectionResponse> Iterator = PageIterator<Message, MessageCollectionResponse>.CreatePageIterator(Client, MailResult, (singleMail) =>
+                    {
+                        if (!MailResult.Value.Contains(singleMail))
+                        {
+                            MailResult.Value.Add(singleMail);
+                        }
+
+                        return true;
+                    });
+
+                    await Iterator.IterateAsync();
+
+                    _logger.Information($"Gatherd Mail data for User {Count}");
+
+                    UserMailCollection Collection = new UserMailCollection()
+                    {
+                        User = SingleUser,
+                        Mail = new List<Message>()
+                    };
+
+                    foreach(Message SingleMessage in MailResult.Value)
+                    {
+                        Collection.Mail.Add(SingleMessage);
                     }
 
-                    return true;
-                });
-
-                await Iterator.IterateAsync();
-
-                _logger.Information($"Gatherd Mail data for User {Count}");
-
-                UserMailCollection Collection = new UserMailCollection()
-                {
-                    User = SingleUser,
-                    Mail = new List<Message>()
-                };
-
-                foreach(Message SingleMessage in MailResult.Value)
-                {
-                    Collection.Mail.Add(SingleMessage);
+                    Result.Add(Collection);
                 }
-
-                Result.Add(Collection);
-
+                
                 Count++;
             }
-
+            
             return Result;
         }
 
