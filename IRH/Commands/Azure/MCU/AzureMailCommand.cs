@@ -147,12 +147,7 @@ namespace IRH.Commands.Azure.MCU
                     );
 
                 AzureUser AzureUser = new AzureUser(_logger);
-                UserCollectionResponse Users = null;
-
-                if(parseResult.GetRequiredValue(SearchSourceOption) == MailSearchSource.All)
-                {
-                    Users = await AzureUser.GetUsersAsync(Client, new string[] { });
-                }
+                UserCollectionResponse Users = await AzureUser.GetUsersAsync(Client, parseResult.GetRequiredValue(Group));
                 
                 AzureMail AzureMail = new AzureMail(_logger);
                 List<UserMailCollection> UserMailCollection = await AzureMail.GetMails(Client, Users, parseResult.GetValue(FilterSubjectOption), parseResult.GetRequiredValue(FilterStartDateOption), parseResult.GetRequiredValue(FilterEndDateOption));
