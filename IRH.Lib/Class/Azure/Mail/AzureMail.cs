@@ -26,10 +26,6 @@ namespace IRH.Lib.Class.Azure.Mail
             foreach (User SingleUser in UserCollection.Value)
             {
                 _logger.Information($"Processing User {Count} from {UserCollection.Value.Count}");
-                MessageCollectionResponse MailResult = await Client.Users[SingleUser.Id].Messages.GetAsync((filter) =>
-                {
-                    filter.QueryParameters.Filter = CreateGraphFilter(SubjectFilter, StartFilter, EndFilter);
-                });
                 bool UserHasMailbox = await CheckIfMailboxExists(Client, SingleUser);
 
                 if (UserHasMailbox)
