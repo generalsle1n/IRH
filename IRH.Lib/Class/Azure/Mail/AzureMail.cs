@@ -9,7 +9,6 @@ namespace IRH.Lib.Class.Azure.Mail
 {
     public class AzureMail
     {
-        private const string _dateFormat = "yyyy-MM-dd";
         public AzureMail(ILogger logger)
         {
             _logger = logger;
@@ -83,8 +82,8 @@ namespace IRH.Lib.Class.Azure.Mail
 
         private string CreateGraphFilter(string[] SubjectFilter, DateTime StartFilter, DateTime EndFilter)
         {
-            string StartDateFilter = $"ReceivedDateTime ge {StartFilter.ToString(_dateFormat)}";
-            string EndDateFilter = $"ReceivedDateTime le {EndFilter.ToString(_dateFormat)}";
+            string StartDateFilter = $"ReceivedDateTime ge {StartFilter.ToString(DefaultValue.DefaultDateFormat)}";
+            string EndDateFilter = $"ReceivedDateTime le {EndFilter.ToString(DefaultValue.DefaultDateFormat)}";
 
             string GraphFilter = $"{StartDateFilter} and {EndDateFilter}";
 
