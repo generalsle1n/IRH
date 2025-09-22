@@ -100,7 +100,6 @@ namespace IRH.Lib.Class.Azure.Auth
 
             return Options;
         }
-
         private InteractiveBrowserCredential CreateInteractiveBrowserCredential(string AppID, string TenantID)
         {
             _logger.Verbose($"Create InteractiveBrowserCredentialOptions with AppID: {AppID} and TenantID: {TenantID}");
