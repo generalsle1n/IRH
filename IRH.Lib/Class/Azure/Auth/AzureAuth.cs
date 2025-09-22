@@ -227,5 +227,34 @@ namespace IRH.Lib.Class.Azure.Auth
                 }
             }
         }
+        private async Task<ServicePrincipal> AssignApplicationPermissionAsync(GraphServiceClient Client, Application OperatorApp, string[] Permissions)
+        {
+            ServicePrincipal ServicePrincipal = await GetOrCreateServicePrincipalAsnc(Client, OperatorApp);
+            
+            AppRoleAssignmentCollectionResponse CurrentRoles = await Client.ServicePrincipals[ServicePrincipal.Id].AppRoleAssignments.GetAsync();
+            
+            List<string> PermissionIDs = await ResolvePermissionIDsAsync(Client, Permissions);
+            ServicePrincipal GraphPrincipal = await GetGraphPrincipalAsync(Client);
+            
+            foreach (string singlePermission in PermissionIDs)
+            {
+                bool Contains = CurrentRoles.Value.Any(role => role.AppRoleId.ToString().Equals(singlePermission));
+
+                if (Contains == false)
+                {
+                    AppRoleAssignment AppRoleAssignment = new AppRoleAssignment()
+                    {
+                        PrincipalId = Guid.Parse(ServicePrincipal.Id),
+                        ResourceId = Guid.Parse(GraphPrincipal.Id), // Microsoft Graph App ID
+                        AppRoleId = Guid.Parse(singlePermission) //Permission ID
+                    };
+                    await Client.ServicePrincipals[ServicePrincipal.Id].AppRoleAssignedTo.PostAsync(AppRoleAssignment);
+                    
+                    _logger.Information($"Assigned App Role {singlePermission} for {ServicePrincipal.DisplayName}");
+                }
+            }
+
+            return ServicePrincipal;
+        }
     }
 }
