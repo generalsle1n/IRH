@@ -1,10 +1,10 @@
 ﻿using Azure.Identity;
 using IRH.Lib.Model.Azure.Auth;
 using Microsoft.Graph;
-using Microsoft.Graph.Beta.Models;
-using Microsoft.Graph.Beta.Models.ManagedTenants;
 using Serilog;
-using System.Runtime.CompilerServices;
+using Azure.Core;
+using Microsoft.Graph.Applications.Item.AddPassword;
+using Microsoft.Graph.Models;
 using BGraphServiceClient = Microsoft.Graph.Beta.GraphServiceClient;
 
 namespace IRH.Lib.Class.Azure.Auth
