@@ -102,5 +102,21 @@ namespace IRH.Lib.Class.Azure.Mail
 
             return GraphFilter;
         }
+        private async Task<bool> CheckIfMailboxExists(GraphServiceClient Client, User SingleUser)
+        {
+            bool MailboxExists = true;
+            
+            try
+            {
+                MailboxSettings Settings = await Client.Users[SingleUser.Id].MailboxSettings.GetAsync();
+            }
+            catch (ODataError ex)
+            {
+                MailboxExists = false;
+                _logger.Information($"No Mailbox for User {SingleUser.UserPrincipalName}");
+            }
+            
+            return MailboxExists;
+        }
     }
 }
