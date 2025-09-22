@@ -192,5 +192,23 @@ namespace IRH.Lib.Class.Azure.Auth
             
             return Result;
         }
+        private async Task WaitForSecretAsync(ClientSecretCredential ClientSecret)
+        {
+            TokenRequestContext Context = new  TokenRequestContext(DefaultValue.AzureDefaultPermission.ToArray());
+            AccessToken Token = new AccessToken();
+            
+            while (Token.Token is null)
+            {
+                try
+                {
+                    Token = await ClientSecret.GetTokenAsync(Context);
+                }
+                catch (AuthenticationFailedException exception)
+                {
+                    await Task.Delay(DefaultValue.DefaultWaitTime);
+                    _logger.Information($"Secret not active waiting for 1 sec");
+                }
+            }
+        }
     }
 }
