@@ -155,14 +155,9 @@ namespace IRH.Commands.Azure.MCU
                 {
                     Users = await AzureUser.GetUsersAsync(Client, new string[] { });
                 }
-
-                UserCollectionResponse filter = new UserCollectionResponse()
-                {
-                    Value = new List<User>()
-                };
-
+                
                 AzureMail AzureMail = new AzureMail(_logger);
-                List<UserMailCollection> UserMailCollection = await AzureMail.GetMails(Client, filter, parseResult.GetValue(FilterSubjectOption), parseResult.GetRequiredValue(FilterStartDateOption), parseResult.GetRequiredValue(FilterEndDateOption));
+                List<UserMailCollection> UserMailCollection = await AzureMail.GetMails(Client, Users, parseResult.GetValue(FilterSubjectOption), parseResult.GetRequiredValue(FilterStartDateOption), parseResult.GetRequiredValue(FilterEndDateOption));
                 
                 if(parseResult.GetRequiredValue(MailActionOption) == MailAction.Delete)
                 {
