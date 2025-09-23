@@ -33,6 +33,11 @@
                         <icons:SymbolIconSource Symbol="CloudCheckmark" />
                     </ui:NavigationViewItem.IconSource>
                 </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Azure Mail Processing" Tag="IRH.Ui.Views.AzureMailView;IRH.Ui.ViewModels.AzureMailViewModel">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="MailDismiss" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:Frame Name="CurrentPage" Content="{Binding CurrentPage}"/>
         </ui:NavigationView>
