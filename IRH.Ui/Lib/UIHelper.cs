@@ -31,6 +31,20 @@ public class UIHelper
         await Clipboard.SetTextAsync(text);
     }
 
+    internal static ObservableCollection<AzureItemControlTemplate> CreateObservableItemControlTemplateFromList(List<string> Items)
+    {
+        ObservableCollection<AzureItemControlTemplate> Result = new ObservableCollection<AzureItemControlTemplate>();
+        
+        foreach (string SingleItem in Items)
+        {
+            AzureItemControlTemplate SingleControl = new AzureItemControlTemplate(SingleItem, showDelete: false);
+            
+            Result.Add(SingleControl);
+        }
+
+        return Result;
+    }
+
     internal async Task OpenUrlInBrowser(Uri url)
     {
         IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
