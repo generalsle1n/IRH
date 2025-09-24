@@ -195,6 +195,15 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Received.
+        /// </summary>
+        public static string Azure_Mail_Received_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Received_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subject.
         /// </summary>
         public static string Azure_Mail_Subject_DataGridHeader {

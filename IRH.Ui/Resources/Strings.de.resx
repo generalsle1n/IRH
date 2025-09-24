@@ -273,4 +273,7 @@
   <data name="Azure_Mail_Deleted_DataGridHeader" xml:space="preserve">
     <value>Mail gelöscht</value>
   </data>
+  <data name="Azure_Mail_Received_DataGridHeader" xml:space="preserve">
+    <value>Erhalten an</value>
+  </data>
 </root>
