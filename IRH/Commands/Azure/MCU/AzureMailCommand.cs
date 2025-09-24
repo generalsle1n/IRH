@@ -58,8 +58,8 @@ namespace IRH.Commands.Azure.MCU
         private const string _printLevelAlias = "--PrintLevel";
         private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
 
-
         private readonly Logger _logger;
+
         internal AzureMailCommand(Logger Logger)
         {
             _logger = Logger;
@@ -161,7 +161,7 @@ namespace IRH.Commands.Azure.MCU
                         await AzureMail.DeleteMails(Client, SingleUser);
                     }
                 }
-                
+
                 switch (parseResult.GetRequiredValue(ReportTypeOption))
                 {
                     case ReportType.CLI:
@@ -204,6 +204,7 @@ namespace IRH.Commands.Azure.MCU
                 }
             }
         }
+
         private async Task ExportToJson(List<UserMailCollection> Result)
         {
             _logger.Information("Converting List into Json");
