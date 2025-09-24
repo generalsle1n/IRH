@@ -10,6 +10,7 @@ namespace IRH.Lib.Model.Azure.Mail
     public class UserMailCollection
     {
         public User User { get; set; }
-        public List<Message> Mail { get; set; }
+        public List<MailStatus> Mails { get; set; }
+        
     }
 }

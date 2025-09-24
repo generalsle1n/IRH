@@ -267,4 +267,10 @@
   <data name="AzureMFA_MFAHeader_Label" xml:space="preserve">
     <value>Multifactor</value>
   </data>
+  <data name="Azure_Mail_Subject_DataGridHeader" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="Azure_Mail_From_DataGridHeader" xml:space="preserve">
+    <value>From Mail</value>
+  </data>
 </root>
