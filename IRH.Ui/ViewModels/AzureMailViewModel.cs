@@ -36,12 +36,6 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     {
         AllScopes = UIHelper.CreateObservableItemControlTemplateFromList(DefaultValue.AzureMailCleanupPermissions)
     };
-
-    [RelayCommand]
-    private void OpenMail()
-    {
-        Console.WriteLine();
-    }
     
     public void Receive(List<UserMailCollection> message)
     {
