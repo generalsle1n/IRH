@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Ui.Lib;
@@ -35,6 +37,8 @@ public partial class AzureActionBarViewModel : ViewModelBase
     
     [ObservableProperty] 
     private bool _exportEnabled = false;
+
+    public required Type DataType;
     
     private readonly UIHelper _uiHelper = new UIHelper();
     
@@ -65,6 +69,16 @@ public partial class AzureActionBarViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadDataFile(CancellationToken token)
     {
-        throw new NotImplementedException();
+        IReadOnlyList<IStorageFile> OpenFile = await _uiHelper.GetIStorageFileListForOpenFile();
+
+        if (OpenFile.Any())
+        {
+            Uri SinglePath = OpenFile[0].Path;
+            using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.Open, FileAccess.Read))
+            {
+                object Data = await JsonSerializer.DeserializeAsync(Stream, DataType, cancellationToken: token);
+                WeakReferenceMessenger.Default.Send(Data);
+            }
+        }
     }
 }
