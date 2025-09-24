@@ -86,6 +86,13 @@ namespace IRH.Lib.Class.Azure.Mail
                     Count++;
                 }
             }
+        public async Task DeleteMails(GraphServiceClient Client, UserMailCollection UserMailCollection)
+        {
+            _logger.Information($"Processing User {UserMailCollection.User.UserPrincipalName}");
+            
+            await Client.Users[UserMailCollection.User.Id].Messages[UserMailCollection.MailStatus.Mail.Id].PermanentDelete.PostAsync();
+            
+            _logger.Information($"Deleted Mail {UserMailCollection.MailStatus.Mail.Subject} fromfor User {UserMailCollection.User.UserPrincipalName}");
         }
         private string CreateGraphFilter(string[] SubjectFilter, DateTime StartFilter, DateTime EndFilter)
         {
