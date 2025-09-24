@@ -156,7 +156,10 @@ namespace IRH.Commands.Azure.MCU
                 if(parseResult.GetRequiredValue(MailActionOption) == MailAction.Delete)
                 {
                     _logger.Information($"Mail Action is set to Delete, start delete");
-                    await AzureMail.DeleteMails(Client, UserMailCollection);
+                    foreach (UserMailCollection SingleUser in UserMailCollection)
+                    {
+                        await AzureMail.DeleteMails(Client, SingleUser);
+                    }
                 }
                 
                 switch (parseResult.GetRequiredValue(ReportTypeOption))
