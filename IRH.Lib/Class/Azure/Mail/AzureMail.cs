@@ -49,12 +49,6 @@ namespace IRH.Lib.Class.Azure.Mail
 
                     _logger.Information($"Gatherd Mail data for User {Count}");
 
-                    UserMailCollection Collection = new UserMailCollection()
-                    {
-                        User = SingleUser,
-                        Mails = new List<MailStatus>()
-                    };
-
                     foreach(Message SingleMessage in MailResult.Value)
                     {
                         Result.Add(new UserMailCollection()
