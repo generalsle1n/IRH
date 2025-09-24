@@ -8,10 +8,14 @@ using IRH.Ui.ViewModels.Template;
 
 namespace IRH.Ui.ViewModels;
 
-public partial class AzureMailViewModel : ViewModelBase
+public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMailCollection>>
 {
+    public AzureMailViewModel()
+    {
+        WeakReferenceMessenger.Default.Register(this);
+    }
     public ObservableCollection<UserMailCollection> AllMails { get; set; } = new ObservableCollection<UserMailCollection>();
-    
+   
     [ObservableProperty] 
     private AzureActionBarViewModel _azureActionBarViewModel = new AzureActionBarViewModel();
     
@@ -26,4 +30,12 @@ public partial class AzureMailViewModel : ViewModelBase
     {
         AllScopes = UIHelper.CreateObservableItemControlTemplateFromList(DefaultValue.AzureMailCleanupPermissions)
     };
+    public void Receive(List<UserMailCollection> message)
+    {
+        AllMails.Clear();
+        foreach (UserMailCollection SingleMail in message)
+        {
+            AllMails.Add(SingleMail);
+        }
+    }
 }
