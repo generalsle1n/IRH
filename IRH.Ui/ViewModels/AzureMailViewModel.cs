@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib;
 using IRH.Lib.Model.Azure.Mail;
@@ -17,7 +20,10 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     public ObservableCollection<UserMailCollection> AllMails { get; set; } = new ObservableCollection<UserMailCollection>();
    
     [ObservableProperty] 
-    private AzureActionBarViewModel _azureActionBarViewModel = new AzureActionBarViewModel();
+    private AzureActionBarViewModel _azureActionBarViewModel = new AzureActionBarViewModel()
+    {
+        DataType = (new List<UserMailCollection>()).GetType()
+    };
     
     [ObservableProperty]
     private AzureGroupViewModel _azureGroupViewModel = new AzureGroupViewModel();
@@ -30,6 +36,13 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     {
         AllScopes = UIHelper.CreateObservableItemControlTemplateFromList(DefaultValue.AzureMailCleanupPermissions)
     };
+
+    [RelayCommand]
+    private void OpenMail()
+    {
+        Console.WriteLine();
+    }
+    
     public void Receive(List<UserMailCollection> message)
     {
         AllMails.Clear();
