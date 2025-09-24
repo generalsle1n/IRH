@@ -168,6 +168,24 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ursprungs-Mail.
+        /// </summary>
+        public static string Azure_Mail_From_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_From_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Betreff.
+        /// </summary>
+        public static string Azure_Mail_Subject_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Subject_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minute.
         /// </summary>
         public static string Azure_Minute_Placeholder {
