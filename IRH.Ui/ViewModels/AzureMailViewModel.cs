@@ -1,7 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib;
+using IRH.Lib.Model.Azure.Mail;
 using IRH.Ui.Lib;
-using IRH.Ui.Models.Azure;
 using IRH.Ui.ViewModels.Template;
 
 namespace IRH.Ui.ViewModels;
