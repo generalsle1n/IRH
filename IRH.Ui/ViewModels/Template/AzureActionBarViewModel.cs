@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using IRH.Lib;
 using IRH.Lib.Model.Azure.Reporting;
+using IRH.Ui.Lib;
 
 namespace IRH.Ui.ViewModels.Template;
 
@@ -32,6 +34,8 @@ public partial class AzureActionBarViewModel : ViewModelBase
     
     [ObservableProperty] 
     private bool _exportEnabled = false;
+    
+    private readonly UIHelper _uiHelper = new UIHelper();
     
     [RelayCommand]
     private async Task StartAzureGathering(CancellationToken token)
