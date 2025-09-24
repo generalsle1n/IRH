@@ -181,20 +181,20 @@ namespace IRH.Commands.Azure.MCU
         {
             foreach (UserMailCollection SingleUser in Result)
             {
-                _logger.Information($"User: {SingleUser.User.UserPrincipalName} -> Count Mails {SingleUser.Mail.Count})");
+                _logger.Information($"User: {SingleUser.User.UserPrincipalName} -> Count Mails {SingleUser.Mails.Count})");
 
                 if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                 {
-                    foreach (Message SingleMessage in SingleUser.Mail)
+                    foreach (MailStatus SingleMailStatus in SingleUser.Mails)
                     {
-                        _logger.Information($" | Subject: {SingleMessage.Subject} - Received: {SingleMessage.ReceivedDateTime} - From: {SingleMessage.Sender.EmailAddress.Address}");
+                        _logger.Information($" | Subject: {SingleMailStatus.Mail.Subject} - Received: {SingleMailStatus.Mail.ReceivedDateTime} - From: {SingleMailStatus.Mail.Sender.EmailAddress.Address}");
                         if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                         {
-                            _logger.Information($" | | Has Attachment: {SingleMessage.HasAttachments} - Was Read: {SingleMessage.IsRead}");
+                            _logger.Information($" | | Has Attachment: {SingleMailStatus.Mail.HasAttachments} - Was Read: {SingleMailStatus.Mail.IsRead}");
 
                             if (Level == ReportPrintLevel.Hacky)
                             {
-                                _logger.Information($" | | | Id: {SingleMessage.Id}");
+                                _logger.Information($" | | | Id: {SingleMailStatus.Mail.Id}");
                             }
                         }
                     }

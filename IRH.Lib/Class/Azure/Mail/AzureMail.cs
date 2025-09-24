@@ -52,12 +52,16 @@ namespace IRH.Lib.Class.Azure.Mail
                     UserMailCollection Collection = new UserMailCollection()
                     {
                         User = SingleUser,
-                        Mail = new List<Message>()
+                        Mails = new List<MailStatus>()
                     };
 
                     foreach(Message SingleMessage in MailResult.Value)
                     {
-                        Collection.Mail.Add(SingleMessage);
+                        Collection.Mails.Add(new MailStatus()
+                        {
+                            Mail = SingleMessage,
+                            Deleted = false
+                        });
                     }
 
                     Result.Add(Collection);
@@ -72,13 +76,13 @@ namespace IRH.Lib.Class.Azure.Mail
         {
             foreach(UserMailCollection Collection in UserMailCollection)
             {
-                _logger.Information($"Processing User {Collection.User.UserPrincipalName} with {Collection.Mail.Count} mails to delete");
+                _logger.Information($"Processing User {Collection.User.UserPrincipalName} with {Collection.Mails.Count} mails to delete");
                 int Count = 1;
                 
-                foreach (Message SingleMessage in Collection.Mail)
+                foreach (MailStatus SingleMailStatus in Collection.Mails)
                 {
-                    await Client.Users[Collection.User.Id].Messages[SingleMessage.Id].DeleteAsync();
-                    _logger.Information($"Deleted Mail {Count} from {Collection.Mail.Count} for User {Collection.User.UserPrincipalName}");
+                    await Client.Users[Collection.User.Id].Messages[SingleMailStatus.Mail.Id].DeleteAsync();
+                    _logger.Information($"Deleted Mail {Count} from {Collection.Mails.Count} for User {Collection.User.UserPrincipalName}");
                     Count++;
                 }
             }
