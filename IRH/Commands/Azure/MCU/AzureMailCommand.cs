@@ -46,7 +46,7 @@ namespace IRH.Commands.Azure.MCU
         private const string _endDateFilter = "-FED";
         private const string _endDateFilterDescription = "Enter the End of the Investigation (Just in Format DD.MM.YYYY)";
         private const string _endDateFilterAlias = "--FilterEnd";
-        private DateTime _endDateFilterDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(1).AddTicks(-1);
+        private DateTime _endDateFilterDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(2).AddTicks(-1);
 
         private const string _reportType = "-R";
         private const string _reportTypeDescription = "How to Report the Data";
