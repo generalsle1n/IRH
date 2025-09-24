@@ -182,22 +182,22 @@ namespace IRH.Commands.Azure.MCU
 
         private async Task PrintResult(List<UserMailCollection> Result, ReportPrintLevel Level)
         {
-            foreach (UserMailCollection SingleUser in Result)
+            IEnumerable<IGrouping<string, UserMailCollection>> userGrouped = Result.GroupBy(user => user.User.UserPrincipalName);
+            foreach (IGrouping<string, UserMailCollection> SingleUser in userGrouped)
             {
-                _logger.Information($"User: {SingleUser.User.UserPrincipalName} -> Count Mails {SingleUser.Mails.Count})");
+                _logger.Information($"User: {SingleUser.Key} -> Count Mails {SingleUser.Count()})");
 
                 if (Level == ReportPrintLevel.Info || Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                 {
-                    foreach (MailStatus SingleMailStatus in SingleUser.Mails)
+                    foreach (UserMailCollection SingleMailStatus in SingleUser)
                     {
-                        _logger.Information($" | Subject: {SingleMailStatus.Mail.Subject} - Received: {SingleMailStatus.Mail.ReceivedDateTime} - From: {SingleMailStatus.Mail.Sender.EmailAddress.Address}");
+                        _logger.Information($" | Subject: {SingleMailStatus.MailStatus.Mail.Subject} - Received: {SingleMailStatus.MailStatus.Mail.ReceivedDateTime} - From: {SingleMailStatus.MailStatus.Mail.Sender.EmailAddress.Address}");
                         if (Level == ReportPrintLevel.Detailed || Level == ReportPrintLevel.Hacky)
                         {
-                            _logger.Information($" | | Has Attachment: {SingleMailStatus.Mail.HasAttachments} - Was Read: {SingleMailStatus.Mail.IsRead}");
-
+                            _logger.Information($" | | Has Attachment: {SingleMailStatus.MailStatus.Mail.HasAttachments} - Was Read: {SingleMailStatus.MailStatus.Mail.IsRead}");
                             if (Level == ReportPrintLevel.Hacky)
                             {
-                                _logger.Information($" | | | Id: {SingleMailStatus.Mail.Id}");
+                                _logger.Information($" | | | Id: {SingleMailStatus.MailStatus.Mail.Id}");
                             }
                         }
                     }
