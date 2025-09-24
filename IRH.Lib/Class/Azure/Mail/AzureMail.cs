@@ -57,14 +57,16 @@ namespace IRH.Lib.Class.Azure.Mail
 
                     foreach(Message SingleMessage in MailResult.Value)
                     {
-                        Collection.Mails.Add(new MailStatus()
+                        Result.Add(new UserMailCollection()
                         {
-                            Mail = SingleMessage,
+                            User = SingleUser,
+                            MailStatus = new MailStatus()
+                            {
+                                Mail = SingleMessage,
+                            },
                             Deleted = false
                         });
                     }
-
-                    Result.Add(Collection);
                 }
                 
                 Count++;
@@ -72,20 +74,6 @@ namespace IRH.Lib.Class.Azure.Mail
             
             return Result;
         }
-        public async Task DeleteMails(GraphServiceClient Client, List<UserMailCollection> UserMailCollection)
-        {
-            foreach(UserMailCollection Collection in UserMailCollection)
-            {
-                _logger.Information($"Processing User {Collection.User.UserPrincipalName} with {Collection.Mails.Count} mails to delete");
-                int Count = 1;
-                
-                foreach (MailStatus SingleMailStatus in Collection.Mails)
-                {
-                    await Client.Users[Collection.User.Id].Messages[SingleMailStatus.Mail.Id].DeleteAsync();
-                    _logger.Information($"Deleted Mail {Count} from {Collection.Mails.Count} for User {Collection.User.UserPrincipalName}");
-                    Count++;
-                }
-            }
         public async Task DeleteMails(GraphServiceClient Client, UserMailCollection UserMailCollection)
         {
             _logger.Information($"Processing User {UserMailCollection.User.UserPrincipalName}");
