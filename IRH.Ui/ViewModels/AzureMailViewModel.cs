@@ -10,17 +10,20 @@ namespace IRH.Ui.ViewModels;
 
 public partial class AzureMailViewModel : ViewModelBase
 {
-    [ObservableProperty]
+    public ObservableCollection<UserMailCollection> AllMails { get; set; } = new ObservableCollection<UserMailCollection>();
+    
+    [ObservableProperty] 
     private AzureActionBarViewModel _azureActionBarViewModel = new AzureActionBarViewModel();
+    
+    [ObservableProperty]
+    private AzureGroupViewModel _azureGroupViewModel = new AzureGroupViewModel();
+    
+    [ObservableProperty]
+    private AzureDateViewModel _azureDateViewModel = new AzureDateViewModel();
     
     [ObservableProperty]
     private AzureScopeViewModel _azureScopeViewModel = new AzureScopeViewModel()
     {
         AllScopes = UIHelper.CreateObservableItemControlTemplateFromList(DefaultValue.AzureMailCleanupPermissions)
     };
-    
-    [ObservableProperty]
-    private AzureGroupViewModel _azureGroupViewModel = new AzureGroupViewModel();
-    [ObservableProperty]
-    private AzureDateViewModel _azureDateViewModel = new AzureDateViewModel();
 }
