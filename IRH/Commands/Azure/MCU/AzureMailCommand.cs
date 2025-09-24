@@ -159,6 +159,7 @@ namespace IRH.Commands.Azure.MCU
                     foreach (UserMailCollection SingleUser in UserMailCollection)
                     {
                         await AzureMail.DeleteMails(Client, SingleUser);
+                        SingleUser.Deleted = true;
                     }
                 }
 
