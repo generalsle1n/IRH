@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:template="using:IRH.Ui.Views.Template"
              xmlns:viewModel="using:IRH.Ui.ViewModels"
+             xmlns:lang="using:IRH.Ui.Resources"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModel:AzureMailViewModel"
              x:Class="IRH.Ui.Views.AzureMailView">
