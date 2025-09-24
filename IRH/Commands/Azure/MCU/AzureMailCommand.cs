@@ -145,14 +145,14 @@ namespace IRH.Commands.Azure.MCU
                     parseResult.GetRequiredValue<AuthType>(AzureFunctions._authClientProvider),
                     ElevateToAppAccess: true,
                     ElevatePermission: parseResult.GetRequiredValue(Scopes)
-                    );
+                );
 
                 AzureUser AzureUser = new AzureUser(_logger);
                 UserCollectionResponse Users = await AzureUser.GetUsersAsync(Client, parseResult.GetRequiredValue(Group));
-                
+
                 AzureMail AzureMail = new AzureMail(_logger);
-                List<UserMailCollection> UserMailCollection = await AzureMail.GetMails(Client, Users, parseResult.GetValue(FilterSubjectOption), parseResult.GetRequiredValue(FilterStartDateOption), parseResult.GetRequiredValue(FilterEndDateOption));
-                
+                List<UserMailCollection> UserMailCollection = await AzureMail.GetMails(Client, Users,parseResult.GetValue(FilterSubjectOption), parseResult.GetRequiredValue(FilterStartDateOption), parseResult.GetRequiredValue(FilterEndDateOption));
+
                 if(parseResult.GetRequiredValue(MailActionOption) == MailAction.Delete)
                 {
                     _logger.Information($"Mail Action is set to Delete, start delete");
