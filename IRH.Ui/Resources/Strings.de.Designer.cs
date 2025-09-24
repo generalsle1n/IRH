@@ -168,6 +168,15 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mail gelöscht.
+        /// </summary>
+        public static string Azure_Mail_Deleted_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Deleted_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ursprungs-Mail.
         /// </summary>
         public static string Azure_Mail_From_DataGridHeader {

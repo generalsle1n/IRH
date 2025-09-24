@@ -270,4 +270,7 @@
   <data name="Azure_Mail_From_DataGridHeader" xml:space="preserve">
     <value>Ursprungs-Mail</value>
   </data>
+  <data name="Azure_Mail_Deleted_DataGridHeader" xml:space="preserve">
+    <value>Mail gelöscht</value>
+  </data>
 </root>
