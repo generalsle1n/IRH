@@ -24,9 +24,9 @@ public class UiHelper
     private const string _fileMimeType = "application/json";
     internal async Task SetTextToClipboard(string text)
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-        IClipboard Clipboard = MainWindow.Clipboard;
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
+        IClipboard Clipboard = MainWindow.Clipboard!;
 
         await Clipboard.SetTextAsync(text);
     }
@@ -47,16 +47,16 @@ public class UiHelper
 
     internal async Task OpenUrlInBrowserAsync(Uri url)
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-        ILauncher Launcher = TopLevel.GetTopLevel(MainWindow).Launcher;
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
+        ILauncher Launcher = TopLevel.GetTopLevel(MainWindow)!.Launcher;
         await Launcher.LaunchUriAsync(url);
     }
 
     internal async Task<IReadOnlyList<IStorageFile>> GetIStorageFileListForOpenFile()
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
 
         IReadOnlyList<IStorageFile> OpenFile = await MainWindow.StorageProvider.OpenFilePickerAsync(CreateFilePickerOpenOptions());
         
@@ -65,10 +65,10 @@ public class UiHelper
     
     internal async Task<IStorageFile> GetIStorageFileListForCreateFile()
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
 
-        IStorageFile SaveFile = await MainWindow.StorageProvider.SaveFilePickerAsync(CreateFilePickerSaveOptions());
+        IStorageFile SaveFile = (await MainWindow.StorageProvider.SaveFilePickerAsync(CreateFilePickerSaveOptions()))!;
         
         return SaveFile;
     }
