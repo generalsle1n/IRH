@@ -60,6 +60,15 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aktion.
+        /// </summary>
+        public static string Azure_Action_Label {
+            get {
+                return ResourceManager.GetString("Azure_Action_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aktivität.
         /// </summary>
         public static string Azure_Activity_Placeholder {
@@ -164,6 +173,24 @@ namespace IRH.Ui.Resources {
         public static string Azure_LoadFile_Title {
             get {
                 return ResourceManager.GetString("Azure_LoadFile_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AnschauenUndLöschen.
+        /// </summary>
+        public static string Azure_Mail_Action_Delete_Text {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Action_Delete_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anzeigen.
+        /// </summary>
+        public static string Azure_Mail_Action_Preview_Text {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Action_Preview_Text", resourceCulture);
             }
         }
         

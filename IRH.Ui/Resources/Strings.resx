@@ -279,4 +279,13 @@
   <data name="Azure_Mail_Received_DataGridHeader" xml:space="preserve">
     <value>Received</value>
   </data>
+  <data name="Azure_Action_Label" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Azure_Mail_Action_Preview_Text" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Azure_Mail_Action_Delete_Text" xml:space="preserve">
+    <value>ViewAndDelete</value>
+  </data>
 </root>
