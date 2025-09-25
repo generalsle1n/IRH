@@ -77,7 +77,7 @@ public partial class AzureLoginAuditViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenBrowserAsync(CancellationToken token)
     {
-        _uiHelper.OpenUrlInBrowser(DefaultValue.DeviceLoginUrl);
+        await _uiHelper.OpenUrlInBrowserAsync(DefaultValue.DeviceLoginUrl);
     }
     [RelayCommand]
     private async Task LoadDataFile(CancellationToken token)

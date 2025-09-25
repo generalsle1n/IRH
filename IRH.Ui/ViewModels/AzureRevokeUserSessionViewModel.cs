@@ -99,7 +99,7 @@ public partial class AzureRevokeUserSessionViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenBrowserAsync()
     {
-        _uiHelper.OpenUrlInBrowser(DefaultValue.DeviceLoginUrl);
+        await _uiHelper.OpenUrlInBrowserAsync(DefaultValue.DeviceLoginUrl);
     }
     
     [RelayCommand]

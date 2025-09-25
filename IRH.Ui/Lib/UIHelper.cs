@@ -45,7 +45,7 @@ public class UIHelper
         return Result;
     }
 
-    internal async Task OpenUrlInBrowser(Uri url)
+    internal async Task OpenUrlInBrowserAsync(Uri url)
     {
         IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
         Window MainWindow = AppLifeTime.MainWindow;
