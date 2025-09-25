@@ -103,7 +103,7 @@ public class UiHelper
                 {
                     Patterns = new List<string>()
                     {
-                        _filePickerFilter
+                        DefaultUiValue.FilePickerFilter
                     },
                     AppleUniformTypeIdentifiers = new List<string>()
                     {
