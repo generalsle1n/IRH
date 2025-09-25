@@ -76,7 +76,7 @@ public partial class AzureActionBarViewModel : ViewModelBase
             Uri SinglePath = OpenFile[0].Path;
             using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.Open, FileAccess.Read))
             {
-                object Data = await JsonSerializer.DeserializeAsync(Stream, DataType, cancellationToken: token);
+                object Data = (await JsonSerializer.DeserializeAsync(Stream, DataType, cancellationToken: token))!;
                 WeakReferenceMessenger.Default.Send(Data);
             }
         }
