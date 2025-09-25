@@ -16,7 +16,7 @@ namespace IRH.Ui.Views
         private const string _logFolerName = "logs";
         private const string _logFileName = "Log.txt";
         
-        private DataMessageRouter DataMessageRouter = new DataMessageRouter();
+        private DataMessageRouter _dataMessageRouter = new DataMessageRouter();
         
         public MainWindow()
         {
