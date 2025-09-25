@@ -36,7 +36,7 @@ public partial class AzureRevokeUserSessionViewModel : ViewModelBase
 {
     
     
-    private UIHelper _uiHelper = new UIHelper();
+    private UiHelper _uiHelper = new UiHelper();
     [ObservableProperty] 
     private bool _openBrowserEnabled = false;
     [ObservableProperty] 

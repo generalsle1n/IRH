@@ -32,7 +32,7 @@ using Strings = IRH.Ui.Resources.Strings;
 namespace IRH.Ui.ViewModels;
 public partial class AzureMFAViewModel : ViewModelBase
 {
-    private UIHelper _uiHelper = new UIHelper();
+    private UiHelper _uiHelper = new UiHelper();
     
     [ObservableProperty] 
     private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;

@@ -34,7 +34,7 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     [ObservableProperty]
     private AzureScopeViewModel _azureScopeViewModel = new AzureScopeViewModel()
     {
-        AllScopes = UIHelper.CreateObservableItemControlTemplateFromList(DefaultValue.AzureMailCleanupPermissions)
+        AllScopes = UiHelper.CreateObservableItemControlTemplateFromList(DefaultValue.AzureMailCleanupPermissions)
     };
     
     public void Receive(List<UserMailCollection> message)

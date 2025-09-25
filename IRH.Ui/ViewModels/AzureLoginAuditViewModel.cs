@@ -32,7 +32,7 @@ namespace IRH.Ui.ViewModels;
 
 public partial class AzureLoginAuditViewModel : ViewModelBase
 {
-    private UIHelper _uiHelper = new UIHelper();
+    private UiHelper _uiHelper = new UiHelper();
     [ObservableProperty] 
     private string _userCode;
     [ObservableProperty] 

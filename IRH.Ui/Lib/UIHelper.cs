@@ -13,7 +13,7 @@ using IRH.Ui.Resources;
 
 namespace IRH.Ui.Lib;
 
-public class UIHelper
+public class UiHelper
 {
     private const string _filePickerDisplayName = "Json";
     private const string _fileNamePrefix = "Result-";

@@ -40,7 +40,7 @@ public partial class AzureActionBarViewModel : ViewModelBase
 
     public required Type DataType;
     
-    private readonly UIHelper _uiHelper = new UIHelper();
+    private readonly UiHelper _uiHelper = new UiHelper();
     
     [RelayCommand]
     private async Task StartAzureGathering(CancellationToken token)
