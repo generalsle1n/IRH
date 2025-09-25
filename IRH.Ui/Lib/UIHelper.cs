@@ -66,7 +66,7 @@ public class UiHelper
         return SaveFile;
     }
     
-    internal FilePickerOpenOptions CreateFilePickerOpenOptions()
+    private FilePickerOpenOptions CreateFilePickerOpenOptions()
     {
         
         return new FilePickerOpenOptions()
@@ -93,7 +93,7 @@ public class UiHelper
             }
         };
     }
-    internal FilePickerSaveOptions CreateFilePickerSaveOptions()
+    private FilePickerSaveOptions CreateFilePickerSaveOptions()
     {
         return new FilePickerSaveOptions()
         {
