@@ -15,7 +15,7 @@ internal class DataMessageRouter
 
     private void RegisterRouter()
     {
-        WeakReferenceMessenger.Default.Register<object?>(this, (sender,data) =>
+        WeakReferenceMessenger.Default.Register<object>(this, (_,data) =>
         {
             Type DataType = data.GetType();
 
