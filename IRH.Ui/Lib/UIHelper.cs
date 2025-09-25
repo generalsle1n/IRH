@@ -7,7 +7,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
-using IRH.Lib;
 using IRH.Ui.Models.Azure;
 using IRH.Ui.Resources;
 
