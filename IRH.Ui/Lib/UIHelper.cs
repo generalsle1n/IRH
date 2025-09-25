@@ -31,11 +31,11 @@ public class UiHelper
         await Clipboard.SetTextAsync(text);
     }
 
-    internal static ObservableCollection<AzureItemControlTemplate> CreateObservableItemControlTemplateFromList(List<string> Items)
+    internal static ObservableCollection<AzureItemControlTemplate> CreateObservableItemControlTemplateFromList(List<string> items)
     {
         ObservableCollection<AzureItemControlTemplate> Result = new ObservableCollection<AzureItemControlTemplate>();
         
-        foreach (string SingleItem in Items)
+        foreach (string SingleItem in items)
         {
             AzureItemControlTemplate SingleControl = new AzureItemControlTemplate(SingleItem, showDelete: false);
             
@@ -128,11 +128,11 @@ public class UiHelper
         };
     }
     
-    internal string[] GetContentFromObservableCollection(ObservableCollection<AzureItemControlTemplate> Collection)
+    internal string[] GetContentFromObservableCollection(ObservableCollection<AzureItemControlTemplate> collection)
     {
         List<string> Groups = new List<string>();
 
-        foreach (AzureItemControlTemplate SingleEntry in Collection)
+        foreach (AzureItemControlTemplate SingleEntry in collection)
         {
             if (SingleEntry.Label is not null)
             {
