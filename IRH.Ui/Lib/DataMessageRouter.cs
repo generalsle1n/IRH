@@ -24,7 +24,7 @@ internal class DataMessageRouter
                 Type Generic = DataType.GenericTypeArguments[0];
                 if (Generic.Name.Equals(MessageType))
                 {
-                    WeakReferenceMessenger.Default.Send<List<UserMailCollection>>(data as List<UserMailCollection>);
+                    WeakReferenceMessenger.Default.Send((data as List<UserMailCollection>)!);
                 }
             }
         });
