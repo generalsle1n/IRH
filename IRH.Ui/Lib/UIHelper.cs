@@ -15,13 +15,6 @@ namespace IRH.Ui.Lib;
 
 public class UiHelper
 {
-    private const string _filePickerDisplayName = "Json";
-    private const string _fileNamePrefix = "Result-";
-    private const string _fileNameSuffix = ".json";
-    private const string _filePickerFilter = $"*{_fileNameSuffix}";
-    private const string _dateFormat = "dd_MM_yyyy-HH_mm_ss";
-    private const string _fileAppleIdentifier = "public.json";
-    private const string _fileMimeType = "application/json";
     internal async Task SetTextToClipboard(string text)
     {
         IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
@@ -82,19 +75,19 @@ public class UiHelper
             AllowMultiple = false,
             FileTypeFilter = new List<FilePickerFileType>()
             {
-                new FilePickerFileType(_filePickerDisplayName)
+                new FilePickerFileType(DefaultUiValue.FilePickerDisplayName)
                 {
                     Patterns = new List<string>()
                     {
-                        _filePickerFilter
+                        DefaultUiValue.FilePickerFilter
                     },
                     AppleUniformTypeIdentifiers = new List<string>()
                     {
-                        _fileAppleIdentifier
+                        DefaultUiValue.FileAppleIdentifier
                     },
                     MimeTypes = new List<string>()
                     {
-                        _fileMimeType
+                        DefaultUiValue.FileMimeType
                     }
                 }
             }
@@ -107,7 +100,7 @@ public class UiHelper
             Title = Strings.AzureMFA_SaveFile_Title,
             FileTypeChoices = new List<FilePickerFileType>()
             {
-                new FilePickerFileType(_filePickerDisplayName)
+                new FilePickerFileType(DefaultUiValue.FilePickerDisplayName)
                 {
                     Patterns = new List<string>()
                     {
@@ -115,16 +108,16 @@ public class UiHelper
                     },
                     AppleUniformTypeIdentifiers = new List<string>()
                     {
-                        _fileAppleIdentifier
+                        DefaultUiValue.FileAppleIdentifier
                     },
                     MimeTypes = new List<string>()
                     {
-                        _fileMimeType
+                        DefaultUiValue.FileMimeType
                     }
                 }
             },
             ShowOverwritePrompt = true,
-            SuggestedFileName = $"{_fileNamePrefix}{DateTimeOffset.Now.ToString(_dateFormat)}{_fileNameSuffix}",
+            SuggestedFileName = $"{DefaultUiValue.FileNamePrefix}{DateTimeOffset.Now.ToString(DefaultUiValue.DateFormat)}{DefaultUiValue.FileNameSuffix}",
         };
     }
     
