@@ -134,10 +134,7 @@ public class UiHelper
 
         foreach (AzureItemControlTemplate SingleEntry in collection)
         {
-            if (SingleEntry.Label is not null)
-            {
-                Groups.Add(SingleEntry.Label);
-            }
+            Groups.Add(SingleEntry.Label);
         }
 
         return Groups.ToArray();
