@@ -84,5 +84,6 @@
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
         </StackPanel>
+        <!-- Mache test option für logging + set language switch -->
     </ScrollViewer>
 </UserControl>
