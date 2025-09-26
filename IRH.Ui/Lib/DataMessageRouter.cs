@@ -18,7 +18,10 @@ internal class DataMessageRouter
         WeakReferenceMessenger.Default.Register<object>(this, (_,data) =>
         {
             Type DataType = data.GetType();
-
+            
+            //https://learn.microsoft.com/de-de/dotnet/communitytoolkit/diagnostics/guard
+            //IsAssignable to
+            
             foreach (string MessageType in DataMessageRouterConfig.Types)
             {
                 Type Generic = DataType.GenericTypeArguments[0];
