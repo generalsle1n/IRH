@@ -15,8 +15,35 @@
                     <template:AzureGroupView DataContext="{Binding AzureGroupViewModel}" />
                     <template:AzureDateView DataContext="{Binding AzureDateViewModel}" />
                     <template:AzureScopeView DataContext="{Binding AzureScopeViewModel}" />
+                    <template:AzureActionView DataContext="{Binding AzureActionViewModel}" /> 
                 </StackPanel>
             </ScrollViewer>
+            <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
+                <DataGrid ItemsSource="{Binding AllMails}" GridLinesVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_UPN_DataGridHeader}"
+                                            Binding="{Binding User.UserPrincipalName}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_Mail_Subject_DataGridHeader}"
+                                            Binding="{Binding MailStatus.Mail.Subject}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_Mail_Received_DataGridHeader}"
+                                            Binding="{Binding MailStatus.Mail.ReceivedDateTime}" />
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_Mail_From_DataGridHeader}"
+                                            Binding="{Binding MailStatus.Mail.From.EmailAddress.Address}"
+                                            IsReadOnly="True" />
+                        <DataGridCheckBoxColumn Header="{x:Static lang:Strings.Azure_Mail_Deleted_DataGridHeader}"
+                                                Binding="{Binding Deleted}" IsReadOnly="True" />
+                        <DataGridTemplateColumn Header="Open">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Open"
+                                            Command="{Binding $parent[DataGrid].((viewModel:AzureMailViewModel)DataContext).OpenMailCommand}"
+                                            CommandParameter="{Binding MailStatus}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
         </Grid>
         <template:AzureActionBarView Grid.Row="1" DataContext="{Binding AzureActionBarViewModel}" />
     </Grid>
