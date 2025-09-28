@@ -3,14 +3,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib;
 using IRH.Ui.Models.Azure;
+using IRH.Ui.Models.Message;
 
 namespace IRH.Ui.ViewModels.Template;
 
 public partial class AzureScopeViewModel : ViewModelBase
 {
-    internal ObservableCollection<AzureItemControlTemplate> AllScopes { get; set; }
+    public AzureScopeViewModel()
+    {
+        WeakReferenceMessenger.Default.Register<AzureScopeViewModel, AzureScopeRequestMessage>(this, (_, data) =>
+        {
+            data.Reply(AllScopes);
+        });
+    }
+
     public required ObservableCollection<AzureItemControlTemplate> AllScopes { get; set; }
 
     [RelayCommand]
