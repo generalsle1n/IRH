@@ -12,15 +12,17 @@ using IRH.Lib;
 using IRH.Lib.Model.Azure.Mail;
 using IRH.Ui.Lib;
 using IRH.Ui.Models.Azure;
+using IRH.Ui.Models.Message.Send;
 using IRH.Ui.ViewModels.Template;
 
 namespace IRH.Ui.ViewModels;
 
-public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMailCollection>>
+public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMailCollection>>, IRecipient<AzureGraphViewModelMessageGeneric<AzureMailViewModel>>
 {
     public AzureMailViewModel()
     {
-        WeakReferenceMessenger.Default.Register(this);
+        WeakReferenceMessenger.Default.Register<List<UserMailCollection>>(this);
+        WeakReferenceMessenger.Default.Register<AzureGraphViewModelMessageGeneric<AzureMailViewModel>>(this);
     }
     
     [ObservableProperty]
@@ -81,5 +83,11 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
         {
             AllMails.Add(SingleMail);
         }
+    }
+
+    public void Receive(AzureGraphViewModelMessageGeneric<AzureMailViewModel> message)
+    {
+        Console.WriteLine();
+        throw new NotImplementedException();
     }
 }
