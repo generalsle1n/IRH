@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib.Model.Azure.Mail;
 using IRH.Ui.Config;
+using IRH.Ui.Models.Message.Send;
+using IRH.Ui.ViewModels;
 
 namespace IRH.Ui.Lib;
 
-internal class DataMessageRouter
+internal class DataMessageRouter : IRecipient<AzureGraphViewModelMessageBase>
 {
     internal DataMessageRouter()
     {
+        WeakReferenceMessenger.Default.Register<AzureGraphViewModelMessageBase>(this);
         RegisterRouter();
     }
 
@@ -31,5 +34,22 @@ internal class DataMessageRouter
                 }
             }
         });
+    }
+
+    public void Receive(AzureGraphViewModelMessageBase message)
+    {
+        Type BaseType = typeof(AzureGraphViewModelMessageGeneric<>);
+        
+        if (message.Requester == typeof(AzureMailViewModel))
+        {
+            Console.WriteLine();
+            Type GenericType = GenericType = BaseType.MakeGenericType(message.Requester);
+            AzureGraphViewModelMessageGeneric<AzureMailViewModel> SendMessage = Activator.CreateInstance(GenericType) as AzureGraphViewModelMessageGeneric<AzureMailViewModel>;
+            
+            SendMessage.Client = message.Client;
+            SendMessage.Requester = message.Requester;
+            
+            WeakReferenceMessenger.Default.Send(SendMessage);
+        }
     }
 }
