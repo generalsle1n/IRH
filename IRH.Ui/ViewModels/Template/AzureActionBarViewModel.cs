@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
+using Avalonia.SimplePreferences;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib;
+using IRH.Lib.Class.Azure.Auth;
+using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Ui.Lib;
+using IRH.Ui.Models.Azure;
+using IRH.Ui.Models.Message;
+using Microsoft.Graph;
+using Serilog;
 
 namespace IRH.Ui.ViewModels.Template;
 
