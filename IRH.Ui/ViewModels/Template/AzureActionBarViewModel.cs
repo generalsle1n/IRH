@@ -45,7 +45,6 @@ public partial class AzureActionBarViewModel : ViewModelBase
     [RelayCommand]
     private async Task StartAzureGathering(CancellationToken token)
     {
-        throw new NotImplementedException();
         LoadingRingEnabled = true;
 
         AuthType Flow = Preferences.Get<AuthType>(Resources.Strings.Setting_Name_AuthType, AuthType.DeviceCode);
