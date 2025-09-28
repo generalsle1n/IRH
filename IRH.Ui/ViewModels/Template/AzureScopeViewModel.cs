@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib;
 using IRH.Ui.Models.Azure;
-using IRH.Ui.Models.Message;
+using IRH.Ui.Models.Message.Request;
 
 namespace IRH.Ui.ViewModels.Template;
 
