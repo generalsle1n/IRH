@@ -22,7 +22,9 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     {
         WeakReferenceMessenger.Default.Register(this);
     }
-    public ObservableCollection<UserMailCollection> AllMails { get; set; } = new ObservableCollection<UserMailCollection>();
+    
+    [ObservableProperty]
+    private ObservableCollection<UserMailCollection> _allMails = new ObservableCollection<UserMailCollection>();
    
     [ObservableProperty] 
     private AzureActionBarViewModel _azureActionBarViewModel = new AzureActionBarViewModel()
