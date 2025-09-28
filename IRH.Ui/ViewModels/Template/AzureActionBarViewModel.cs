@@ -18,6 +18,7 @@ using IRH.Lib.Model.Azure.Reporting;
 using IRH.Ui.Lib;
 using IRH.Ui.Models.Azure;
 using IRH.Ui.Models.Message;
+using IRH.Ui.Models.Message.Request;
 using Microsoft.Graph;
 using Serilog;
 
@@ -47,6 +48,8 @@ public partial class AzureActionBarViewModel : ViewModelBase
     private bool _exportEnabled = false;
 
     public required Type DataType;
+
+    public required Type ParentViewModel;
     
     private readonly UiHelper _uiHelper = new UiHelper();
     
