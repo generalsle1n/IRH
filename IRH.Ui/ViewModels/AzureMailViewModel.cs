@@ -29,7 +29,8 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     [ObservableProperty] 
     private AzureActionBarViewModel _azureActionBarViewModel = new AzureActionBarViewModel()
     {
-        DataType = (new List<UserMailCollection>()).GetType()
+        DataType = typeof(List<UserMailCollection>),
+        ParentViewModel = typeof(AzureMailViewModel)
     };
     
     [ObservableProperty]
