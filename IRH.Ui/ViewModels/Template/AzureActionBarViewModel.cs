@@ -46,6 +46,13 @@ public partial class AzureActionBarViewModel : ViewModelBase
     private async Task StartAzureGathering(CancellationToken token)
     {
         throw new NotImplementedException();
+        LoadingRingEnabled = true;
+
+        AuthType Flow = Preferences.Get<AuthType>(Resources.Strings.Setting_Name_AuthType, AuthType.DeviceCode);
+        GraphServiceClient Client = null;
+        AzureAuth AzureAuth = new AzureAuth(Log.Logger);
+        
+        ObservableCollection<AzureItemControlTemplate> AllScopes  = WeakReferenceMessenger.Default.Send<AzureScopeRequestMessage>().Response;
     }
 
     [RelayCommand]
