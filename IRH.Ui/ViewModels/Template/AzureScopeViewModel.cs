@@ -11,6 +11,7 @@ namespace IRH.Ui.ViewModels.Template;
 public partial class AzureScopeViewModel : ViewModelBase
 {
     internal ObservableCollection<AzureItemControlTemplate> AllScopes { get; set; }
+    public required ObservableCollection<AzureItemControlTemplate> AllScopes { get; set; }
 
     [RelayCommand]
     private async Task AddNewScope()
