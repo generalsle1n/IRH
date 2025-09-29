@@ -60,6 +60,51 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aktion.
+        /// </summary>
+        public static string Azure_Action_Label {
+            get {
+                return ResourceManager.GetString("Azure_Action_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kopiere den Geräte Code welcher angezeigt wird in die Zwischenablage.
+        /// </summary>
+        public static string Azure_ActionBar_CopyDeviceCode_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_CopyDeviceCode_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Öffne die Microsoft Geräte Code Anmledung Seite in dem Standart Browser.
+        /// </summary>
+        public static string Azure_ActionBar_OpenDeviceCodePage_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_OpenDeviceCodePage_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Startet den aktuellen Azure Prozess um die Daten auszuwerten.
+        /// </summary>
+        public static string Azure_ActionBar_Start_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_Start_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weitere Einstellungen.
+        /// </summary>
+        public static string Azure_ActionBar_ThreeDotsMenu_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_ThreeDotsMenu_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aktivität.
         /// </summary>
         public static string Azure_Activity_Placeholder {
@@ -123,11 +168,92 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Konfiguriere das End Datum wo die Suche enden soll.
+        /// </summary>
+        public static string Azure_DateFilter_Date_End_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Date_End_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Konfiguriere das Start Datum wo die Suche starten soll.
+        /// </summary>
+        public static string Azure_DateFilter_Date_Start_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Date_Start_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Konfiguriere die Uhrzeit bei welcher die Suche enden soll.
+        /// </summary>
+        public static string Azure_DateFilter_Time_End_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Time_End_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Konfiguriere die Uhrzeit bei welcher die Suche starten soll.
+        /// </summary>
+        public static string Azure_DateFilter_Time_Start_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Time_Start_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Löschen.
+        /// </summary>
+        public static string Azure_DeleteItem_Label {
+            get {
+                return ResourceManager.GetString("Azure_DeleteItem_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Es werden keine Items gelöscht.
+        /// </summary>
+        public static string Azure_DeleteItem_Off_Label {
+            get {
+                return ResourceManager.GetString("Azure_DeleteItem_Off_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items werden gelöscht.
+        /// </summary>
+        public static string Azure_DeleteItem_On_Label {
+            get {
+                return ResourceManager.GetString("Azure_DeleteItem_On_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Daten exportieren.
         /// </summary>
         public static string Azure_ExportData_Label {
             get {
                 return ResourceManager.GetString("Azure_ExportData_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hinzufügen eines weiteren Gruppen Filter (Entra Gruppen Guid).
+        /// </summary>
+        public static string Azure_GroupFilter_Button_Add_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_GroupFilter_Button_Add_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Löschen des ausgewählten Gruppen Filter.
+        /// </summary>
+        public static string Azure_GroupFilter_Button_Remove_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_GroupFilter_Button_Remove_ToolTip", resourceCulture);
             }
         }
         
@@ -168,6 +294,69 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anschauen Und Löschen.
+        /// </summary>
+        public static string Azure_Mail_Action_Delete_Text {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Action_Delete_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anzeigen.
+        /// </summary>
+        public static string Azure_Mail_Action_Preview_Text {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Action_Preview_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mail gelöscht.
+        /// </summary>
+        public static string Azure_Mail_Deleted_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Deleted_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ursprungs-Mail.
+        /// </summary>
+        public static string Azure_Mail_From_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_From_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Öffne die aktuelle Mail im Browser.
+        /// </summary>
+        public static string Azure_Mail_OpenMail_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_Mail_OpenMail_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Erhalten an.
+        /// </summary>
+        public static string Azure_Mail_Received_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Received_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Betreff.
+        /// </summary>
+        public static string Azure_Mail_Subject_DataGridHeader {
+            get {
+                return ResourceManager.GetString("Azure_Mail_Subject_DataGridHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minute.
         /// </summary>
         public static string Azure_Minute_Placeholder {
@@ -195,6 +384,15 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Füge einen neuen Scope hinzu (Berechtigung welcher IRH.Ui verwenden soll).
+        /// </summary>
+        public static string Azure_Scope_Add_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_Scope_Add_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Alle Berechtigungen.
         /// </summary>
         public static string Azure_Scope_Label {
@@ -213,11 +411,56 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entferne den aktuellen Scope (Berechtigung).
+        /// </summary>
+        public static string Azure_Scope_Remove_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_Scope_Remove_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starten.
         /// </summary>
         public static string Azure_StartProcess_Label {
             get {
                 return ResourceManager.GetString("Azure_StartProcess_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Füge eine Betreff Filter hinzu welcher verwendet wird um die Mails zu durchsuchen (Der Filter ist ein: Contains KEIN Equals).
+        /// </summary>
+        public static string Azure_SubjectFilter_Add_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Add_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Betreff Filter.
+        /// </summary>
+        public static string Azure_SubjectFilter_Label {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Betreff.
+        /// </summary>
+        public static string Azure_SubjectFilter_Placeholder {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entferne den aktuellen Betreff Filter.
+        /// </summary>
+        public static string Azure_SubjectFilter_Remove_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Remove_ToolTip", resourceCulture);
             }
         }
         
@@ -357,6 +600,24 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ändern sie die aktuelle Sprache.
+        /// </summary>
+        public static string Setting_AppLanguage_Description {
+            get {
+                return ResourceManager.GetString("Setting_AppLanguage_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprache.
+        /// </summary>
+        public static string Setting_AppLanguage_Main {
+            get {
+                return ResourceManager.GetString("Setting_AppLanguage_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ändern des aktuellen Theme.
         /// </summary>
         public static string Setting_AppTheme_Description {
@@ -407,6 +668,15 @@ namespace IRH.Ui.Resources {
         public static string Setting_Name_AppIDEditEnabled {
             get {
                 return ResourceManager.GetString("Setting_Name_AppIDEditEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_Name_AppLanguage.
+        /// </summary>
+        public static string Setting_Name_AppLanguage {
+            get {
+                return ResourceManager.GetString("Setting_Name_AppLanguage", resourceCulture);
             }
         }
         

@@ -1,0 +1,41 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModel="using:IRH.Ui.ViewModels.Template"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:lang="using:IRH.Ui.Resources"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModel:AzureDateViewModel"
+             x:Class="IRH.Ui.Views.Template.AzureDateView">
+    <StackPanel Spacing="10" MinWidth="381">
+        <TextBlock Text="{x:Static lang:Strings.AzureLoginAudit_DateMenu_Label}" FontWeight="Bold" />
+        <!-- <Separator /> -->
+        <Border Padding="5">
+            <StackPanel Spacing="5">
+                <TextBlock MinWidth="75" Text="{x:Static lang:Strings.AzureLoginAudit_StartDate_Label}" />
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CalendarDatePicker SelectedDate="{Binding SelectedStartDate}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Date_Start_ToolTip}" />
+                    <ui:CommandBarSeparator />
+                    <TimePicker SelectedTime="{Binding SelectedStartTime}"
+                                ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Time_Start_ToolTip}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Padding="5">
+            <StackPanel Spacing="5">
+                <TextBlock MinWidth="75" Text="{x:Static lang:Strings.AzureLoginAudit_EndDate_Label}" />
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CalendarDatePicker SelectedDate="{Binding SelectedEndDate}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Date_End_ToolTip}" />
+                    <ui:CommandBarSeparator />
+                    <TimePicker SelectedTime="{Binding SelectedEndTime}"
+                                ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Time_End_ToolTip}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Separator />
+    </StackPanel>
+</UserControl>

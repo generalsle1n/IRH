@@ -6,6 +6,8 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
+using IRH.Ui.Lib;
+using IRH.Ui.Models.Generel;
 using Serilog;
 
 namespace IRH.Ui.Views
@@ -14,10 +16,14 @@ namespace IRH.Ui.Views
     {
         private const string _logFolerName = "logs";
         private const string _logFileName = "Log.txt";
+        
+        private DataMessageRouter _dataMessageRouter = new DataMessageRouter();
+        
         public MainWindow()
         {
             InitializeComponent();
             SetupLogger();
+            SplashScreen = new SplashScreen();
         }
 
         private void SetupLogger()

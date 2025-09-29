@@ -1,48 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
-using IRH.Lib;
 using IRH.Ui.Models.Azure;
 using IRH.Ui.Resources;
 
 namespace IRH.Ui.Lib;
 
-public class UIHelper
+public class UiHelper
 {
-    private const string _filePickerDisplayName = "Json";
-    private const string _fileNamePrefix = "Result-";
-    private const string _fileNameSuffix = ".json";
-    private const string _filePickerFilter = $"*{_fileNameSuffix}";
-    private const string _dateFormat = "dd_MM_yyyy-HH_mm_ss";
-    private const string _fileAppleIdentifier = "public.json";
-    private const string _fileMimeType = "application/json";
     internal async Task SetTextToClipboard(string text)
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-        IClipboard Clipboard = MainWindow.Clipboard;
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
+        IClipboard Clipboard = MainWindow.Clipboard!;
 
         await Clipboard.SetTextAsync(text);
     }
 
-    internal async Task OpenUrlInBrowser(Uri url)
+    internal static ObservableCollection<AzureItemControlTemplate> CreateObservableItemControlTemplateFromList(List<string> items)
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
-        ILauncher Launcher = TopLevel.GetTopLevel(MainWindow).Launcher;
+        ObservableCollection<AzureItemControlTemplate> Result = new ObservableCollection<AzureItemControlTemplate>();
+        
+        foreach (string SingleItem in items)
+        {
+            AzureItemControlTemplate SingleControl = new AzureItemControlTemplate(SingleItem, showDelete: false);
+            
+            Result.Add(SingleControl);
+        }
+
+        return Result;
+    }
+
+    internal async Task OpenUrlInBrowserAsync(Uri url)
+    {
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
+        ILauncher Launcher = TopLevel.GetTopLevel(MainWindow)!.Launcher;
         await Launcher.LaunchUriAsync(url);
     }
 
     internal async Task<IReadOnlyList<IStorageFile>> GetIStorageFileListForOpenFile()
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
 
         IReadOnlyList<IStorageFile> OpenFile = await MainWindow.StorageProvider.OpenFilePickerAsync(CreateFilePickerOpenOptions());
         
@@ -51,15 +58,15 @@ public class UIHelper
     
     internal async Task<IStorageFile> GetIStorageFileListForCreateFile()
     {
-        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime;
-        Window MainWindow = AppLifeTime.MainWindow;
+        IClassicDesktopStyleApplicationLifetime AppLifeTime = (IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!;
+        Window MainWindow = AppLifeTime.MainWindow!;
 
-        IStorageFile SaveFile = await MainWindow.StorageProvider.SaveFilePickerAsync(CreateFilePickerSaveOptions());
+        IStorageFile SaveFile = (await MainWindow.StorageProvider.SaveFilePickerAsync(CreateFilePickerSaveOptions()))!;
         
         return SaveFile;
     }
     
-    internal FilePickerOpenOptions CreateFilePickerOpenOptions()
+    private FilePickerOpenOptions CreateFilePickerOpenOptions()
     {
         
         return new FilePickerOpenOptions()
@@ -68,64 +75,79 @@ public class UIHelper
             AllowMultiple = false,
             FileTypeFilter = new List<FilePickerFileType>()
             {
-                new FilePickerFileType(_filePickerDisplayName)
+                new FilePickerFileType(DefaultUiValue.FilePickerDisplayName)
                 {
                     Patterns = new List<string>()
                     {
-                        _filePickerFilter
+                        DefaultUiValue.FilePickerFilter
                     },
                     AppleUniformTypeIdentifiers = new List<string>()
                     {
-                        _fileAppleIdentifier
+                        DefaultUiValue.FileAppleIdentifier
                     },
                     MimeTypes = new List<string>()
                     {
-                        _fileMimeType
+                        DefaultUiValue.FileMimeType
                     }
                 }
             }
         };
     }
-    internal FilePickerSaveOptions CreateFilePickerSaveOptions()
+    private FilePickerSaveOptions CreateFilePickerSaveOptions()
     {
         return new FilePickerSaveOptions()
         {
             Title = Strings.AzureMFA_SaveFile_Title,
             FileTypeChoices = new List<FilePickerFileType>()
             {
-                new FilePickerFileType(_filePickerDisplayName)
+                new FilePickerFileType(DefaultUiValue.FilePickerDisplayName)
                 {
                     Patterns = new List<string>()
                     {
-                        _filePickerFilter
+                        DefaultUiValue.FilePickerFilter
                     },
                     AppleUniformTypeIdentifiers = new List<string>()
                     {
-                        _fileAppleIdentifier
+                        DefaultUiValue.FileAppleIdentifier
                     },
                     MimeTypes = new List<string>()
                     {
-                        _fileMimeType
+                        DefaultUiValue.FileMimeType
                     }
                 }
             },
             ShowOverwritePrompt = true,
-            SuggestedFileName = $"{_fileNamePrefix}{DateTimeOffset.Now.ToString(_dateFormat)}{_fileNameSuffix}",
+            SuggestedFileName = $"{DefaultUiValue.FileNamePrefix}{DateTimeOffset.Now.ToString(DefaultUiValue.DateFormat)}{DefaultUiValue.FileNameSuffix}",
         };
     }
     
-    internal string[] GetContentFromObservableCollection(ObservableCollection<AzureItemControlTemplate> Collection)
+    internal string[] GetContentFromObservableCollection(ObservableCollection<AzureItemControlTemplate> collection, bool removeEmpty = false)
     {
         List<string> Groups = new List<string>();
 
-        foreach (AzureItemControlTemplate SingleEntry in Collection)
+        foreach (AzureItemControlTemplate SingleEntry in collection)
         {
-            if (SingleEntry.Label is not null)
-            {
-                Groups.Add(SingleEntry.Label);
-            }
+            Groups.Add(SingleEntry.Label);
         }
 
+        List<string> FilterGroup = new List<string>();
+        
+        if (removeEmpty)
+        {
+            foreach (string SingleGroup in Groups)
+            {
+                if (SingleGroup is not null)
+                {
+                    if (!SingleGroup.Equals(string.Empty))
+                    {
+                        FilterGroup.Add(SingleGroup);
+                    }
+                }
+            }
+            
+            Groups = FilterGroup;
+        }
+        
         return Groups.ToArray();
     }
 }

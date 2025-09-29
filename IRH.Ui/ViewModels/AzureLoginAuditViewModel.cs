@@ -32,7 +32,7 @@ namespace IRH.Ui.ViewModels;
 
 public partial class AzureLoginAuditViewModel : ViewModelBase
 {
-    private UIHelper _uiHelper = new UIHelper();
+    private UiHelper _uiHelper = new UiHelper();
     [ObservableProperty] 
     private string _userCode;
     [ObservableProperty] 
@@ -77,7 +77,7 @@ public partial class AzureLoginAuditViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenBrowserAsync(CancellationToken token)
     {
-        _uiHelper.OpenUrlInBrowser(DefaultValue.DeviceLoginUrl);
+        await _uiHelper.OpenUrlInBrowserAsync(DefaultValue.DeviceLoginUrl);
     }
     [RelayCommand]
     private async Task LoadDataFile(CancellationToken token)
@@ -161,8 +161,8 @@ public partial class AzureLoginAuditViewModel : ViewModelBase
         {
             case AuthType.DeviceCode:
                 DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     CreateCallBack: false);
         
                 DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
@@ -177,16 +177,16 @@ public partial class AzureLoginAuditViewModel : ViewModelBase
                 DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
         
                 Client = AzureAuth.GetClientBeta(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow,
                     CodeCredential: DeviceCodeCredential);
                 break;
             case AuthType.Interactive:
                 Client = Client = AzureAuth.GetClientBeta(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow);
                 break;

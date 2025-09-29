@@ -267,4 +267,94 @@
   <data name="AzureMFA_MFAHeader_Label" xml:space="preserve">
     <value>Multifactor</value>
   </data>
+  <data name="Azure_Mail_Subject_DataGridHeader" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="Azure_Mail_From_DataGridHeader" xml:space="preserve">
+    <value>From Mail</value>
+  </data>
+  <data name="Azure_Mail_Deleted_DataGridHeader" xml:space="preserve">
+    <value>Mail deleted</value>
+  </data>
+  <data name="Azure_Mail_Received_DataGridHeader" xml:space="preserve">
+    <value>Received</value>
+  </data>
+  <data name="Azure_Action_Label" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Azure_Mail_Action_Preview_Text" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Azure_Mail_Action_Delete_Text" xml:space="preserve">
+    <value>View And Delete</value>
+  </data>
+  <data name="Azure_SubjectFilter_Label" xml:space="preserve">
+    <value>Subject Filter</value>
+  </data>
+  <data name="Azure_SubjectFilter_Placeholder" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="Azure_DeleteItem_Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Azure_DeleteItem_On_Label" xml:space="preserve">
+    <value>Items getting deleted</value>
+  </data>
+  <data name="Azure_DeleteItem_Off_Label" xml:space="preserve">
+    <value>No Items will be deleted</value>
+  </data>
+  <data name="Azure_GroupFilter_Button_Add_ToolTip" xml:space="preserve">
+    <value>Add new Group Filter (Entra ID Group Guid)</value>
+  </data>
+  <data name="Azure_GroupFilter_Button_Remove_ToolTip" xml:space="preserve">
+    <value>Delete current Group Filter</value>
+  </data>
+  <data name="Azure_DateFilter_Date_Start_ToolTip" xml:space="preserve">
+    <value>Configure the start Date where Search should begin</value>
+  </data>
+  <data name="Azure_DateFilter_Date_End_ToolTip" xml:space="preserve">
+    <value>Configure the end Date where Search should end</value>
+  </data>
+  <data name="Azure_DateFilter_Time_End_ToolTip" xml:space="preserve">
+    <value>Configure the end Time where the Search should end</value>
+  </data>
+  <data name="Azure_DateFilter_Time_Start_ToolTip" xml:space="preserve">
+    <value>Configure the start Time where the Search should start</value>
+  </data>
+  <data name="Azure_Scope_Add_ToolTip" xml:space="preserve">
+    <value>Add an new Scope (Permission which IRH.Ui should use)</value>
+  </data>
+  <data name="Azure_Scope_Remove_ToolTip" xml:space="preserve">
+    <value>Remove the current Scope (Permission)</value>
+  </data>
+  <data name="Azure_SubjectFilter_Add_ToolTip" xml:space="preserve">
+    <value>Add an new Subject Text where should be used to filter for Mails (The filter is an contains NOT Equals)</value>
+  </data>
+  <data name="Azure_SubjectFilter_Remove_ToolTip" xml:space="preserve">
+    <value>Remove the current Subject Filter</value>
+  </data>
+  <data name="Azure_ActionBar_Start_ToolTip" xml:space="preserve">
+    <value>Start the selected Azure Process to evaluate the data</value>
+  </data>
+  <data name="Azure_ActionBar_CopyDeviceCode_ToolTip" xml:space="preserve">
+    <value>Copy the Device Code that is displayed to the Clipboard</value>
+  </data>
+  <data name="Azure_ActionBar_OpenDeviceCodePage_ToolTip" xml:space="preserve">
+    <value>Open the Microsoft Device Login Page in the default Browser</value>
+  </data>
+  <data name="Azure_ActionBar_ThreeDotsMenu_ToolTip" xml:space="preserve">
+    <value>More Options</value>
+  </data>
+  <data name="Azure_Mail_OpenMail_ToolTip" xml:space="preserve">
+    <value>Open the current Mail in the browser</value>
+  </data>
+  <data name="Setting_AppLanguage_Main" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Setting_AppLanguage_Description" xml:space="preserve">
+    <value>Change the current language</value>
+  </data>
+  <data name="Setting_Name_AppLanguage" xml:space="preserve">
+    <value>Setting_Name_AppLanguage</value>
+  </data>
 </root>

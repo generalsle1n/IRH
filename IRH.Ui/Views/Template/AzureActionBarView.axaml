@@ -1,0 +1,53 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModel="using:IRH.Ui.ViewModels.Template"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:lang="using:IRH.Ui.Resources"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModel:AzureActionBarViewModel"
+             x:Class="IRH.Ui.Views.Template.AzureActionBarView">
+
+    <ui:CommandBar DefaultLabelPosition="Right">
+        <ui:CommandBar.PrimaryCommands>
+            <ui:CommandBarButton VerticalAlignment="Center" Label="{x:Static lang:Strings.Azure_StartProcess_Label}"
+                                 Command="{Binding StartAzureGatheringCommand}"
+                                 ToolTip.Tip="{x:Static lang:Strings.Azure_ActionBar_Start_ToolTip}">
+                <ui:CommandBarButton.IconSource>
+                    <icons:SymbolIconSource Symbol="Play" />
+                </ui:CommandBarButton.IconSource>
+            </ui:CommandBarButton>
+            <ui:CommandBarSeparator />
+            <ui:CommandBarElementContainer VerticalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="10">
+                    <TextBlock Text="{x:Static lang:Strings.Azure_ReportLevel_Main}" VerticalAlignment="Center" />
+                    <ComboBox MinWidth="110" ItemsSource="{Binding AllReportLevel}"
+                              SelectedItem="{Binding SelectedReportLevel}" />
+                </StackPanel>
+            </ui:CommandBarElementContainer>
+            <ui:CommandBarSeparator />
+            <ui:CommandBarElementContainer>
+                <StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
+                    <TextBox Text="{Binding UserCode}" IsReadOnly="True" MinWidth="100" />
+                    <Button IsEnabled="{Binding CopyUserCodeEnabled}" Command="{Binding SetUserCodeToClipboardCommand}"
+                            ToolTip.Tip="{x:Static lang:Strings.Azure_ActionBar_CopyDeviceCode_ToolTip}">
+                        <icons:SymbolIcon Symbol="ClipboardPaste" />
+                    </Button>
+                    <Button ToolTip.Tip="{x:Static lang:Strings.Azure_ActionBar_OpenDeviceCodePage_ToolTip}"
+                            IsEnabled="{Binding OpenBrowserEnabled}" Command="{Binding OpenBrowserCommand}">
+                        <icons:SymbolIcon Symbol="Globe" />
+                    </Button>
+                    <ui:ProgressRing IsVisible="{Binding LoadingRingEnabled}" />
+                </StackPanel>
+            </ui:CommandBarElementContainer>
+        </ui:CommandBar.PrimaryCommands>
+        <ui:CommandBar.SecondaryCommands>
+            <ui:CommandBarButton Label="{x:Static lang:Strings.Azure_ExportData_Label}"
+                                 IsEnabled="{Binding ExportEnabled}" Command="{Binding SaveDataToFileCommand}" />
+            <ui:CommandBarButton Label="{x:Static lang:Strings.Azure_LoadFile_Title}"
+                                 Command="{Binding LoadDataFileCommand}" />
+        </ui:CommandBar.SecondaryCommands>
+    </ui:CommandBar>
+</UserControl>

@@ -129,38 +129,46 @@ namespace IRH.Commands.LDAPMonitor
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
 
-            Option<string> Domain = new Option<string>(name: _domainName, description: _domainDescription);
-            Option<string> Username = new Option<string>(name: _userName, description: _userDescription);
-            Option<string> Password = new Option<string>(name: _passwordName, description: _passwordDescription);
-            Option<int> Port = new Option<int>(name: _portName, description: _portDescription);
-
-            Domain.AddAlias(_domainNameAlias);
-            Username.AddAlias(_userNameAlias);
-            Password.AddAlias(_passwordNameAlias);
-            Port.AddAlias(_portNameAlias);
-
-            Domain.IsRequired = _domainIsRequired;
-            Username.IsRequired = _userIsRequired;
-            Password.IsRequired = _passwordIsRequired;
-
-            Port.SetDefaultValue(_portDefaultValue);
-
-            Command.AddOption(Domain);
-            Command.AddOption(Username);
-            Command.AddOption(Password);
-            Command.AddOption(Port);
-
-            Command.SetHandler((DomainValue, UsernameValue, PasswordValue, PortValue) =>
+            Option<string> Domain = new Option<string>(name: _domainName, aliases: _domainNameAlias)
             {
-                RegisterLdap(DomainValue, PortValue, UsernameValue, PasswordValue);
+                Description = _domainDescription,
+                Required = _domainIsRequired,
+            };
 
+            Option<string> Username = new Option<string>(name: _userName, aliases: _userNameAlias)
+            {
+                Description = _userDescription,
+                Required = _userIsRequired,
+            };
+
+            Option<string> Password = new Option<string>(name: _passwordName, aliases: _passwordNameAlias)
+            {
+                Description = _passwordDescription,
+                Required = _passwordIsRequired,
+            };
+
+            Option<int> Port = new Option<int>(name: _portName, aliases: _portNameAlias)
+            {
+                Description = _portDescription,
+                DefaultValueFactory = (result) => _portDefaultValue,
+            };
+
+
+            Command.Options.Add(Domain);
+            Command.Options.Add(Username);
+            Command.Options.Add(Password);
+            Command.Options.Add(Port);
+
+            Command.SetAction(async parseResult =>
+            {
+                RegisterLdap(parseResult.GetRequiredValue(Domain), parseResult.GetRequiredValue(Port), parseResult.GetRequiredValue(Username), parseResult.GetRequiredValue(Password));
                 string RootDN = GetDSNRoot();
+                
                 _logger.Information($"Root DN found: {RootDN}");
 
                 CreateMonitor(RootDN);
                 Console.ReadLine();
-
-            }, Domain, Username, Password, Port);
+            });
 
             return Command;
         }

@@ -32,7 +32,7 @@ using Strings = IRH.Ui.Resources.Strings;
 namespace IRH.Ui.ViewModels;
 public partial class AzureMFAViewModel : ViewModelBase
 {
-    private UIHelper _uiHelper = new UIHelper();
+    private UiHelper _uiHelper = new UiHelper();
     
     [ObservableProperty] 
     private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
@@ -92,7 +92,7 @@ public partial class AzureMFAViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenBrowserAsync()
     {
-        _uiHelper.OpenUrlInBrowser(DefaultValue.DeviceLoginUrl);
+        await _uiHelper.OpenUrlInBrowserAsync(DefaultValue.DeviceLoginUrl);
     }
 
     [RelayCommand]
@@ -149,8 +149,8 @@ public partial class AzureMFAViewModel : ViewModelBase
         {
             case AuthType.DeviceCode:
                 DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     CreateCallBack: false);
 
                 DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
@@ -164,17 +164,17 @@ public partial class AzureMFAViewModel : ViewModelBase
 
                 DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
 
-                Client = AzureAuth.GetClient(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                Client = await AzureAuth.GetClientAsync(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow,
                     CodeCredential: DeviceCodeCredential);
                 break;
             case AuthType.Interactive:
-                Client = Client = AzureAuth.GetClient(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppID),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantID),
+                Client = Client = await AzureAuth.GetClientAsync(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
                     _uiHelper.GetContentFromObservableCollection(AllScopes),
                     Flow);
                 break;
@@ -186,7 +186,7 @@ public partial class AzureMFAViewModel : ViewModelBase
         UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups, token);
 
         AzureMFA AzureMFA = new AzureMFA(Log.Logger);
-        List<UserMFA> AllMFAUserResult = await AzureMFA.GetAllUsersMFA(Client, AllUser);
+        List<UserMFA> AllMFAUserResult = await AzureMFA.GetAllUsersMFA(Client, AllUser, token);
 
         foreach (UserMFA SingleUser in AllMFAUserResult)
         {

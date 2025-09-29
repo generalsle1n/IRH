@@ -1,14 +1,7 @@
-﻿using IRH.Commands.Azure.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Serilog.Core;
+﻿using Serilog.Core;
 using System.CommandLine;
 using Microsoft.Graph.Beta;
 using Microsoft.Graph.Beta.Models.Security;
-using System.CommandLine.Parsing;
 using IRH.Commands.Azure.Helper;
 using IRH.Lib.Class.Azure.Audit;
 using IRH.Lib.Model.Azure.Reporting;
@@ -27,15 +20,15 @@ namespace IRH.Commands.Azure.AuditLog.Login
         private const string _permissionScopesAlias = "--PermissionScope";
         private string[] _permissionScopesDefaultValue = new string[] { "Directory.Read.All", "AuditLogsQuery.Read.All" };
 
-        private const string _startDate = "-S";
-        private const string _startDateDescription = "Enter the Start of the Investigation (Just in Format DD.MM.YYYY)";
-        private const string _startDateAlias = "--Start";
-        private DateTime _startDateDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+        //private const string _startDate = "-S";
+        //private const string _startDateDescription = "Enter the Start of the Investigation (Just in Format DD.MM.YYYY)";
+        //private const string _startDateAlias = "--Start";
+        //private DateTime _startDateDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-        private const string _endDate = "-E";
-        private const string _endDateDescription = "Enter the End of the Investigation (Just in Format DD.MM.YYYY)";
-        private const string _endDateAlias = "--End";
-        private DateTime _endDateDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(1).AddTicks(-1);
+        //private const string _endDate = "-E";
+        //private const string _endDateDescription = "Enter the End of the Investigation (Just in Format DD.MM.YYYY)";
+        //private const string _endDateAlias = "--End";
+        //private DateTime _endDateDefaultValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(1).AddTicks(-1);
 
         private const string _defaultActivities = "-AC";
         private const string _defaultActivitiesDescription = "Enter the Default Activities that should be searched in the Audit Logs (Seperated By Whitespace)";
@@ -78,107 +71,102 @@ namespace IRH.Commands.Azure.AuditLog.Login
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
 
-            Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
-            Option<DateTime> StartDate = new Option<DateTime>(name: _startDate, description: _startDateDescription);
-            Option<DateTime> EndDate = new Option<DateTime>(name: _endDate, description: _endDateDescription);
-            Option<string[]> Activities = new Option<string[]>(name: _defaultActivities, description: _defaultActivitiesDescription);
-            Option<int> WaitTime = new Option<int>(name: _waitQueryTime, description: _waitQueryTimeDescription);
-            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, description: _reportTypeDescription);
-            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
-            Option<string> ExistingQuery = new Option<string>(name: _exisitingQuery, description: _exisitingQueryDescription);
-
-            Scopes.AllowMultipleArgumentsPerToken = true;
-            Activities.AllowMultipleArgumentsPerToken = true;
-
-            Scopes.AddAlias(_permissionScopesAlias);
-            StartDate.AddAlias(_startDateAlias);
-            EndDate.AddAlias(_endDateAlias);
-            Activities.AddAlias(_defaultActivitiesAlias);
-            WaitTime.AddAlias(_waitQueryTimeAlias);
-            ReportTypeOption.AddAlias(_reportTypeAlias);
-            PrintLevel.AddAlias(_printLevelAlias);
-            ExistingQuery.AddAlias(_exisitingQueryAlias);
-
-            Scopes.SetDefaultValue(_permissionScopesDefaultValue);
-            Activities.SetDefaultValue(_defaultActivitiesDefaultValue);
-            WaitTime.SetDefaultValue(_waitQueryTimeDefaultValue);
-            StartDate.SetDefaultValue(_startDateDefaultValue);
-            EndDate.SetDefaultValue(_endDateDefaultValue);
-            ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
-            PrintLevel.SetDefaultValue(_printLevelDefaultValue);
-
-            Command.AddOption(Scopes);
-            Command.AddOption(StartDate);
-            Command.AddOption(EndDate);
-            Command.AddOption(Activities);
-            Command.AddOption(WaitTime);
-            Command.AddOption(ReportTypeOption);
-            Command.AddOption(PrintLevel);
-            Command.AddOption(ExistingQuery);
-
-            Command.SetHandler(async (Context) =>
+            Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, aliases: _permissionScopesAlias)
             {
-                ParseResult Parser = Context.ParseResult;
-                CommandResult AzureCommandResult = Parser.CommandResult.Parent.Parent as CommandResult;
-                CommandResult AuditCommandResult = Parser.CommandResult.Parent as CommandResult;
+                Description = _permissionScopesDescription,
+                AllowMultipleArgumentsPerToken = true,
+                DefaultValueFactory = (result) => _permissionScopesDefaultValue,
+            };
 
-                Option<string> AppID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAppIDName)).First() as Option<string>;
-                Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
-                Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
-                Option<string[]> FilterParameter = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterParamterName)).First() as Option<string[]>;
-                Option<string[]> FilterValue = AuditCommandResult.Command.Options.Where(id => id.Name.Equals(_globalFilterValueName)).First() as Option<string[]>;
+            Option<string[]> Activities = new Option<string[]>(name: _defaultActivities, aliases: _defaultActivitiesAlias)
+            {
+                Description = _defaultActivitiesDescription,
+                AllowMultipleArgumentsPerToken = true,
+                DefaultValueFactory = (result) => _defaultActivitiesDefaultValue,
+            };
 
+            Option<int> WaitTime = new Option<int>(name: _waitQueryTime, aliases: _waitQueryTimeAlias)
+            {
+                Description = _waitQueryTimeDescription,
+                DefaultValueFactory = (result) => _waitQueryTimeDefaultValue,
+            };
+
+            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, aliases: _reportTypeAlias)
+            {
+                Description = _reportTypeDescription,
+                DefaultValueFactory = (result) => _reportTypeDefaultValue,
+            };
+
+            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, aliases: _printLevelAlias)
+            {
+                Description = _printLevelDescription,
+                DefaultValueFactory = (result) => _printLevelDefaultValue,
+            };
+
+            Option<string> ExistingQuery = new Option<string>(name: _exisitingQuery, aliases: _exisitingQueryAlias)
+            {
+                Description = _exisitingQueryDescription
+            };
+
+            Command.Options.Add(Scopes);
+            Command.Options.Add(Activities);
+            Command.Options.Add(WaitTime);
+            Command.Options.Add(ReportTypeOption);
+            Command.Options.Add(PrintLevel);
+            Command.Options.Add(ExistingQuery);
+
+            Command.SetAction(async parseResult =>
+            {
                 AzureAuth Auth = new AzureAuth(_logger);
                 AuditHelper Helper = new AuditHelper(_logger);
-                
+
                 AzureAudit AzureAudit = new AzureAudit(_logger);
-                
+
                 GraphServiceClient Client = Auth.GetClientBeta(
-                    Parser.GetValueForOption(AppID),
-                    Parser.GetValueForOption(TenantID),
-                    Parser.GetValueForOption(Scopes),
-                    Parser.GetValueForOption(AuthProviderType)
+                    parseResult.GetRequiredValue<string>(AzureFunctions._publicAppID),
+                    parseResult.GetRequiredValue<string>(AzureFunctions._publicTenantID),
+                    parseResult.GetRequiredValue(Scopes),
+                    parseResult.GetRequiredValue<AuthType>(AzureFunctions._authClientProvider)
                     );
 
                 AuditLogQuery CreatedQuery;
 
-                if (Parser.GetValueForOption(ExistingQuery) is not null)
+                if (parseResult.GetValue(ExistingQuery) is not null)
                 {
-                    CreatedQuery = await AzureAudit.GetQueryFromName(Client, Parser.GetValueForOption(ExistingQuery));
-                    if(CreatedQuery is null)
+                    CreatedQuery = await AzureAudit.GetQueryFromName(Client, parseResult.GetRequiredValue(ExistingQuery));
+                    if (CreatedQuery is null)
                     {
-                        _logger.Warning($"No Query with the Name {Parser.GetValueForOption(ExistingQuery)} found, is there an typo?");
+                        _logger.Warning($"No Query with the Name {parseResult.GetRequiredValue(ExistingQuery)} found, is there an typo?");
                         Environment.Exit(-1);
                     }
-                }
-                else
+                }else
                 {
                     CreatedQuery = await AzureAudit.CreateQuery(
                         Client,
-                        Parser.GetValueForOption(StartDate),
-                        Parser.GetValueForOption(EndDate),
-                        Parser.GetValueForOption(Activities)
+                        parseResult.GetRequiredValue<DateTime>(AzureAuditLog._startDate),
+                        parseResult.GetRequiredValue<DateTime>(AzureAuditLog._endDate),
+                        parseResult.GetRequiredValue(Activities)
                    );
                 }
 
                 CreatedQuery = await AzureAudit.WaitOnQuery(
                     Client,
                     CreatedQuery,
-                    Parser.GetValueForOption(WaitTime)
+                    parseResult.GetRequiredValue(WaitTime)
                     );
 
                 AuditLogRecordCollectionResponse Result = await AzureAudit.GetResultFromQuery(Client, CreatedQuery);
 
-                switch (Parser.GetValueForOption(ReportTypeOption))
+                switch (parseResult.GetRequiredValue(ReportTypeOption))
                 {
                     case ReportType.CLI:
-                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
+                        await Helper.PrintResult(Result, parseResult.GetRequiredValue(PrintLevel), parseResult.GetRequiredValue<string[]>(AzureAuditLog._filterOnParameter), parseResult.GetRequiredValue<string[]>(AzureAuditLog._filterOnParameterValue));
                         break;
                     case ReportType.Json:
                         await Helper.ExportToJson(Result);
                         break;
                     case ReportType.CLIAndJson:
-                        await Helper.PrintResult(Result, Parser.GetValueForOption(PrintLevel), Parser.GetValueForOption(FilterParameter), Parser.GetValueForOption(FilterValue));
+                        await Helper.PrintResult(Result, parseResult.GetRequiredValue(PrintLevel), parseResult.GetRequiredValue<string[]>(AzureAuditLog._filterOnParameter), parseResult.GetRequiredValue<string[]>(AzureAuditLog._filterOnParameterValue));
                         await Helper.ExportToJson(Result);
                         break;
                 }

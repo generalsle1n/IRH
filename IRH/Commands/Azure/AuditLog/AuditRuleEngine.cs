@@ -58,7 +58,7 @@ namespace IRH.Commands.Azure.AuditLog
 
                 SearchResult = await IsMatchingRecordInfoLevel(Record, SingleRule);
 
-                if(!SearchResult)
+                if (!SearchResult)
                 {
                     SearchResult = await IsMatchingRecordAuditLevel(Record, SingleRule);
 

@@ -1,4 +1,4 @@
-﻿using IRH.Commands.Azure.MFA;
+﻿//using IRH.Commands.Azure.MFA;
 using IRH.Commands.Azure.AuditLog;
 using IRH.Commands.LDAPMonitor;
 using Serilog;
@@ -17,15 +17,16 @@ Logger Logger = new LoggerConfiguration()
 RootCommand RootCommand = new RootCommand(_commandDescription);
 
 LDAPMonitor LM = new LDAPMonitor(Logger);
-RemoteExecution RM = new RemoteExecution(Logger);
+//RemoteExecution RM = new RemoteExecution(Logger);
 AzureFunctions AF = new AzureFunctions(Logger);
 
 Command LdapMonitor = LM.CreateCommand(RootCommand);
-Command RemoteExecution = RM.CreateCommand(RootCommand);
+//Command RemoteExecution = RM.CreateCommand(RootCommand);
 Command AzureFunctions = AF.CreateCommand(RootCommand);
 
-RootCommand.AddCommand(LdapMonitor);
-RootCommand.AddCommand(RemoteExecution);
-RootCommand.AddCommand(AzureFunctions);
+RootCommand.Subcommands.Add(LdapMonitor);
+//RootCommand.Subcommands.Add(RemoteExecution);
+RootCommand.Subcommands.Add(AzureFunctions);
 
-await RootCommand.InvokeAsync(args);
+ParseResult result = RootCommand.Parse(args);
+await result.InvokeAsync();

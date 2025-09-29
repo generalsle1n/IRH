@@ -264,4 +264,94 @@
   <data name="AzureMFA_MFAHeader_Label" xml:space="preserve">
     <value>Multifaktor</value>
   </data>
+  <data name="Azure_Mail_Subject_DataGridHeader" xml:space="preserve">
+    <value>Betreff</value>
+  </data>
+  <data name="Azure_Mail_From_DataGridHeader" xml:space="preserve">
+    <value>Ursprungs-Mail</value>
+  </data>
+  <data name="Azure_Mail_Deleted_DataGridHeader" xml:space="preserve">
+    <value>Mail gelöscht</value>
+  </data>
+  <data name="Azure_Mail_Received_DataGridHeader" xml:space="preserve">
+    <value>Erhalten an</value>
+  </data>
+  <data name="Azure_Action_Label" xml:space="preserve">
+    <value>Aktion</value>
+  </data>
+  <data name="Azure_Mail_Action_Preview_Text" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>
+  <data name="Azure_Mail_Action_Delete_Text" xml:space="preserve">
+    <value>Anschauen Und Löschen</value>
+  </data>
+  <data name="Azure_SubjectFilter_Label" xml:space="preserve">
+    <value>Betreff Filter</value>
+  </data>
+  <data name="Azure_SubjectFilter_Placeholder" xml:space="preserve">
+    <value>Betreff</value>
+  </data>
+  <data name="Azure_DeleteItem_On_Label" xml:space="preserve">
+    <value>Items werden gelöscht</value>
+  </data>
+  <data name="Azure_DeleteItem_Off_Label" xml:space="preserve">
+    <value>Es werden keine Items gelöscht</value>
+  </data>
+  <data name="Azure_DeleteItem_Label" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Azure_GroupFilter_Button_Add_ToolTip" xml:space="preserve">
+    <value>Hinzufügen eines weiteren Gruppen Filter (Entra Gruppen Guid)</value>
+  </data>
+  <data name="Azure_GroupFilter_Button_Remove_ToolTip" xml:space="preserve">
+    <value>Löschen des ausgewählten Gruppen Filter</value>
+  </data>
+  <data name="Azure_DateFilter_Date_Start_ToolTip" xml:space="preserve">
+    <value>Konfiguriere das Start Datum wo die Suche starten soll</value>
+  </data>
+  <data name="Azure_DateFilter_Date_End_ToolTip" xml:space="preserve">
+    <value>Konfiguriere das End Datum wo die Suche enden soll</value>
+  </data>
+  <data name="Azure_DateFilter_Time_End_ToolTip" xml:space="preserve">
+    <value>Konfiguriere die Uhrzeit bei welcher die Suche enden soll</value>
+  </data>
+  <data name="Azure_DateFilter_Time_Start_ToolTip" xml:space="preserve">
+    <value>Konfiguriere die Uhrzeit bei welcher die Suche starten soll</value>
+  </data>
+  <data name="Azure_Scope_Add_ToolTip" xml:space="preserve">
+    <value>Füge einen neuen Scope hinzu (Berechtigung welcher IRH.Ui verwenden soll)</value>
+  </data>
+  <data name="Azure_Scope_Remove_ToolTip" xml:space="preserve">
+    <value>Entferne den aktuellen Scope (Berechtigung)</value>
+  </data>
+  <data name="Azure_SubjectFilter_Add_ToolTip" xml:space="preserve">
+    <value>Füge eine Betreff Filter hinzu welcher verwendet wird um die Mails zu durchsuchen (Der Filter ist ein: Contains KEIN Equals)</value>
+  </data>
+  <data name="Azure_SubjectFilter_Remove_ToolTip" xml:space="preserve">
+    <value>Entferne den aktuellen Betreff Filter</value>
+  </data>
+  <data name="Azure_ActionBar_Start_ToolTip" xml:space="preserve">
+    <value>Startet den aktuellen Azure Prozess um die Daten auszuwerten</value>
+  </data>
+  <data name="Azure_ActionBar_CopyDeviceCode_ToolTip" xml:space="preserve">
+    <value>Kopiere den Geräte Code welcher angezeigt wird in die Zwischenablage</value>
+  </data>
+  <data name="Azure_ActionBar_OpenDeviceCodePage_ToolTip" xml:space="preserve">
+    <value>Öffne die Microsoft Geräte Code Anmledung Seite in dem Standart Browser</value>
+  </data>
+  <data name="Azure_ActionBar_ThreeDotsMenu_ToolTip" xml:space="preserve">
+    <value>Weitere Einstellungen</value>
+  </data>
+  <data name="Azure_Mail_OpenMail_ToolTip" xml:space="preserve">
+    <value>Öffne die aktuelle Mail im Browser</value>
+  </data>
+  <data name="Setting_AppLanguage_Main" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="Setting_AppLanguage_Description" xml:space="preserve">
+    <value>Ändern sie die aktuelle Sprache</value>
+  </data>
+  <data name="Setting_Name_AppLanguage" xml:space="preserve">
+    <value>Setting_Name_AppLanguage</value>
+  </data>
 </root>

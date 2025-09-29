@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="IRH.Ui.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/IRH-icon.ico"
         Title="IRH.Ui">
 
     <Design.DataContext>
@@ -31,6 +31,11 @@
                 <ui:NavigationViewItem Content="Azure Audit Access" Tag="IRH.Ui.Views.AzureLoginAuditView;IRH.Ui.ViewModels.AzureLoginAuditViewModel">
                     <ui:NavigationViewItem.IconSource>
                         <icons:SymbolIconSource Symbol="CloudCheckmark" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Azure Mail Processing" Tag="IRH.Ui.Views.AzureMailView;IRH.Ui.ViewModels.AzureMailViewModel">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="MailDismiss" />
                     </ui:NavigationViewItem.IconSource>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>

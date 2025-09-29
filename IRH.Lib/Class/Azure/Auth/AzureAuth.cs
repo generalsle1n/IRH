@@ -1,16 +1,17 @@
 ﻿using Azure.Identity;
 using IRH.Lib.Model.Azure.Auth;
 using Microsoft.Graph;
-using Microsoft.Graph.Beta.Models;
-using Microsoft.Graph.Beta.Models.ManagedTenants;
 using Serilog;
-using System.Runtime.CompilerServices;
+using Azure.Core;
+using Microsoft.Graph.Applications.Item.AddPassword;
+using Microsoft.Graph.Models;
 using BGraphServiceClient = Microsoft.Graph.Beta.GraphServiceClient;
 
 namespace IRH.Lib.Class.Azure.Auth
 {
     public class AzureAuth
     {
+        //ToDo Dispose App
         public AzureAuth(ILogger logger)
         {
             _logger = logger;
@@ -18,7 +19,7 @@ namespace IRH.Lib.Class.Azure.Auth
 
         private readonly ILogger _logger;
 
-        public GraphServiceClient GetClient(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null)
+        public async Task<GraphServiceClient> GetClientAsync(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null, bool ElevateToAppAccess = false, string[] ElevatePermission = null)
         {
             GraphServiceClient Client = null;
             switch (Type)
@@ -35,17 +36,32 @@ namespace IRH.Lib.Class.Azure.Auth
                     {
                         Client = new GraphServiceClient(CodeCredential, ScopesValue);
                     }
+
                     break;
                 case AuthType.Interactive:
                     _logger.Verbose("Create Client with Interactive authentication");
                     InteractiveBrowserCredential InteractiveCredentials = CreateInteractiveBrowserCredential(AppIDValue, TenantIDValue);
                     Client = new GraphServiceClient(InteractiveCredentials, ScopesValue);
+
                     break;
             }
 
+            if (ElevateToAppAccess && ElevatePermission is not null)
+            {
+                _logger.Information("Start evalating access with an operator app");
+                
+                ApplicationLogin AppLogin = await CreateAppRegistrationAsync(Client, ElevatePermission);
+                ClientSecretCredential ClientSecret = CreateClientSecretCredential(AppLogin);
+                
+                await WaitForSecretAsync(ClientSecret);
+                
+                Client = new GraphServiceClient(ClientSecret, DefaultValue.AzureDefaultPermission);
+
+                await WaitForGraphServiceClientAsync(Client);
+            }
+            
             return Client;
         }
-
         public BGraphServiceClient GetClientBeta(string AppIDValue, string TenantIDValue, string[] ScopesValue, AuthType Type, DeviceCodeCredential CodeCredential = null)
         {
             BGraphServiceClient Client = null;
@@ -71,15 +87,14 @@ namespace IRH.Lib.Class.Azure.Auth
                     Client = new BGraphServiceClient(InteractiveCredentials, ScopesValue);
                     break;
             }
+        
             return Client;
         }
-
         public DeviceCodeCredential CreateDeviceCodeCredential(DeviceCodeCredentialOptions Options)
         {
             _logger.Verbose($"Create DeviceCodeCredential with AppID: {Options.ClientId} and TenantID: {Options.TenantId}");
             return new DeviceCodeCredential(Options);
         }
-
         public DeviceCodeCredentialOptions CreateDeviceCodeCredentialOptions(string AppID, string TenantID, bool CreateCallBack = true)
         {
             DeviceCodeCredentialOptions Options = new DeviceCodeCredentialOptions
@@ -100,7 +115,6 @@ namespace IRH.Lib.Class.Azure.Auth
 
             return Options;
         }
-
         private InteractiveBrowserCredential CreateInteractiveBrowserCredential(string AppID, string TenantID)
         {
             _logger.Verbose($"Create InteractiveBrowserCredentialOptions with AppID: {AppID} and TenantID: {TenantID}");
@@ -116,6 +130,212 @@ namespace IRH.Lib.Class.Azure.Auth
 
             // https://learn.microsoft.com/dotnet/api/azure.identity.interactivebrowsercredential
             return new InteractiveBrowserCredential(Options);
+        }
+        private ClientSecretCredential CreateClientSecretCredential(ApplicationLogin AppLogin)
+        {
+            ClientSecretCredentialOptions Options = new ClientSecretCredentialOptions
+            {
+                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
+            };
+
+            // https://learn.microsoft.com/dotnet/api/azure.identity.clientsecretcredential
+            ClientSecretCredential ClientSecretCredential = new ClientSecretCredential(AppLogin.TenantId, AppLogin.Id, AppLogin.Credential.SecretText, Options);
+            
+            return ClientSecretCredential;
+        }
+        public async Task<ApplicationLogin> CreateAppRegistrationAsync(GraphServiceClient Client, string[] Permissions)
+        {
+            ApplicationLogin Result = new ApplicationLogin();
+            Application OperatorApp = await GetOperatorApplicationAsync(Client);
+            
+            if (OperatorApp is null)
+            {
+                _logger.Information("Operator Not Found so its need to be created");
+
+                OperatorApp = new Application()
+                {
+                    DisplayName = DefaultValue.OperatorDisplayName,
+                };
+
+                OperatorApp = await Client.Applications.PostAsync(OperatorApp);
+                
+                _logger.Information($"Operator Created with Name: {OperatorApp.DisplayName} and  Id: {OperatorApp.AppId}");
+            }
+
+            ServicePrincipal Principal = await AssignApplicationPermissionAsync(Client, OperatorApp, Permissions);
+            
+            PasswordCredential Credential = await CreateApplicationSecretAsync(Client, OperatorApp, Principal);
+            
+            Result.Id = OperatorApp.AppId;
+            Result.Credential = Credential;
+            Result.RawApplication = OperatorApp;
+            Result.TenantId = await GetTenantIdAsync(Client);
+            
+            return Result;
+        }
+        private async Task<Application> GetOperatorApplicationAsync(GraphServiceClient Client)
+        {
+            Application Result = null;
+
+            ApplicationCollectionResponse AppCollection = await Client.Applications.GetAsync(filter =>
+            {
+                filter.QueryParameters.Filter = $"DisplayName eq '{DefaultValue.OperatorDisplayName}'";
+            });
+
+            if (AppCollection.Value.Count == 1)
+            {
+                Result = AppCollection.Value.First();
+            }
+
+            return Result;
+        }
+        private async Task<PasswordCredential> CreateApplicationSecretAsync(GraphServiceClient Client, Application OperatorApp, ServicePrincipal ServicePrincipal)
+        {
+            AddPasswordPostRequestBody AddPassword = new AddPasswordPostRequestBody
+            {
+                PasswordCredential = new PasswordCredential
+                {
+                    DisplayName = DateTime.Now.ToString(),
+                    StartDateTime = DateTimeOffset.Now.AddMinutes(-DefaultValue.DefaultSecretPeriod),
+                    EndDateTime = DateTimeOffset.Now.AddMinutes(DefaultValue.DefaultSecretPeriod)
+                },
+            };
+
+            PasswordCredential Result = await Client.Applications[OperatorApp.Id].AddPassword.PostAsync(AddPassword);
+            _logger.Information($"Created App Login for {OperatorApp.DisplayName}");
+            
+            return Result;
+        }
+        private async Task WaitForSecretAsync(ClientSecretCredential ClientSecret)
+        {
+            TokenRequestContext Context = new  TokenRequestContext(DefaultValue.AzureDefaultPermission.ToArray());
+            AccessToken Token = new AccessToken();
+            
+            while (Token.Token is null)
+            {
+                try
+                {
+                    Token = await ClientSecret.GetTokenAsync(Context);
+                }
+                catch (AuthenticationFailedException exception)
+                {
+                    await Task.Delay(DefaultValue.DefaultWaitTime);
+                    _logger.Information($"Secret not active waiting for 1 sec");
+                }
+            }
+        }
+        private async Task WaitForGraphServiceClientAsync(GraphServiceClient Client)
+        {
+            OrganizationCollectionResponse Response = null;
+            
+            while (Response is null)
+            {
+                try
+                {
+                    Response = await Client.Organization.GetAsync();
+                }
+                catch (AuthenticationFailedException exception)
+                {
+                    _logger.Information("Secret is active but not published waiting");
+                    await Task.Delay(DefaultValue.DefaultWaitTime);
+                }
+            }
+        }
+        private async Task<ServicePrincipal> AssignApplicationPermissionAsync(GraphServiceClient Client, Application OperatorApp, string[] Permissions)
+        {
+            ServicePrincipal ServicePrincipal = await GetOrCreateServicePrincipalAsnc(Client, OperatorApp);
+            
+            AppRoleAssignmentCollectionResponse CurrentRoles = await Client.ServicePrincipals[ServicePrincipal.Id].AppRoleAssignments.GetAsync();
+            
+            List<string> PermissionIDs = await ResolvePermissionIDsAsync(Client, Permissions);
+            ServicePrincipal GraphPrincipal = await GetGraphPrincipalAsync(Client);
+            
+            foreach (string singlePermission in PermissionIDs)
+            {
+                bool Contains = CurrentRoles.Value.Any(role => role.AppRoleId.ToString().Equals(singlePermission));
+
+                if (Contains == false)
+                {
+                    AppRoleAssignment AppRoleAssignment = new AppRoleAssignment()
+                    {
+                        PrincipalId = Guid.Parse(ServicePrincipal.Id),
+                        ResourceId = Guid.Parse(GraphPrincipal.Id), // Microsoft Graph App ID
+                        AppRoleId = Guid.Parse(singlePermission) //Permission ID
+                    };
+                    await Client.ServicePrincipals[ServicePrincipal.Id].AppRoleAssignedTo.PostAsync(AppRoleAssignment);
+                    
+                    _logger.Information($"Assigned App Role {singlePermission} for {ServicePrincipal.DisplayName}");
+                }
+            }
+
+            return ServicePrincipal;
+        }
+        private async Task<ServicePrincipal> GetOrCreateServicePrincipalAsnc(GraphServiceClient Client, Application OperatorApp)
+        {
+            ServicePrincipal Result = null;
+            
+            ServicePrincipalCollectionResponse ServicePrincipal = await Client.ServicePrincipals.GetAsync(filter =>
+            {
+                filter.QueryParameters.Filter = $"AppId eq '{OperatorApp.AppId}'";
+                filter.QueryParameters.Expand = new string[] {"AppRoleAssignedTo"};
+                filter.QueryParameters.Select = new string[]{"AppRoleAssignedTo"};
+            });
+
+            if (ServicePrincipal.Value.Count == 0)
+            {
+                _logger.Information($"No ServicePrincipal found for {OperatorApp.DisplayName}");
+                ServicePrincipal serviceBody = new ServicePrincipal
+                {
+                    AppId = OperatorApp.AppId,
+                };
+                
+                Result = await Client.ServicePrincipals.PostAsync(serviceBody);
+                _logger.Information($"Created ServicePrincipal for {OperatorApp.DisplayName}");
+            }
+            else
+            {
+                _logger.Information($"ServicePrincipal found for {OperatorApp.DisplayName}");
+                Result = ServicePrincipal.Value.First();
+            }
+            
+            return Result;
+        }
+        private async Task<ServicePrincipal> GetGraphPrincipalAsync(GraphServiceClient Client)
+        {
+            ServicePrincipalCollectionResponse GraphPrincipalCollection = await Client.ServicePrincipals.GetAsync(filter =>
+            {
+                filter.QueryParameters.Filter = $"displayName eq 'Microsoft Graph'";
+            });
+            ServicePrincipal GraphPrincipal = GraphPrincipalCollection.Value.First();
+
+            return GraphPrincipal;
+        }
+        private async Task<List<string>> ResolvePermissionIDsAsync(GraphServiceClient Client, string[] Permissions)
+        {
+            List<string> Result = new List<string>();
+            
+            ServicePrincipal GraphPrincipal = await GetGraphPrincipalAsync(Client);
+
+            foreach (string SinglePermission in Permissions)
+            {
+                string ResolvedId = GraphPrincipal.AppRoles.Where(singleAppRole => singleAppRole.Value.Equals(SinglePermission)).First().Id.ToString();
+                Result.Add(ResolvedId);
+                _logger.Information($"Resolved Permission {SinglePermission} to {ResolvedId}");
+            }
+            
+            return Result;
+        }
+        private async Task<string> GetTenantIdAsync(GraphServiceClient Client)
+        {
+            string Result = string.Empty;
+            _logger.Information("Gathering Tenant ID");
+
+            OrganizationCollectionResponse Organization = await Client.Organization.GetAsync();
+            Result = Organization.Value.First().Id;
+            
+            _logger.Information($"Found Tenant ID: {Organization.Value.First().Id}");
+            
+            return Result;
         }
     }
 }

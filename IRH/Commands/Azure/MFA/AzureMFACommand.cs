@@ -1,8 +1,4 @@
-﻿using Azure.Identity;
-using IRH.Commands.Azure.Helper;
-using IRH.Commands.Azure.Reporting;
-//using IRH.Commands.Azure.Reporting.Model;
-using IRH.Lib.Model.Azure.Auth;
+﻿using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Lib.Class.Azure.MFA;
 using Microsoft.Graph;
@@ -43,9 +39,9 @@ namespace IRH.Commands.Azure.MFA
         private const string _printLevelAlias = "--PrintLevel";
         private const ReportPrintLevel _printLevelDefaultValue = ReportPrintLevel.Brief;
 
-        private const string _globalAppIDName = "A";
-        private const string _globalTenantIDName = "T";
-        private const string _globalAuthClientProviderName = "AU";
+        //private const string _globalAppIDName = "A";
+        //private const string _globalTenantIDName = "T";
+        //private const string _globalAuthClientProviderName = "AU";
 
         private readonly Logger _logger;
 
@@ -57,62 +53,66 @@ namespace IRH.Commands.Azure.MFA
         internal Command CreateCommand(RootCommand RootCommand)
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
-            Option<string[]> Group = new Option<string[]>(name: _filterOnGroup, description: _filterOnGroupDescription);
-            Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, description: _permissionScopesDescription);
-            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, description: _reportTypeDescription);
-            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, description: _printLevelDescription);
-
-            Group.AllowMultipleArgumentsPerToken = true;
-            Scopes.AllowMultipleArgumentsPerToken = true;
-
-            Group.AddAlias(_filterOnGroupAlias);
-            Scopes.AddAlias(_permissionScopesAlias);
-            ReportTypeOption.AddAlias(_reportTypeAlias);
-            PrintLevel.AddAlias(_printLevelAlias);
-
-            Scopes.SetDefaultValue(_permissionScopesDefaultValue);
-            ReportTypeOption.SetDefaultValue(_reportTypeDefaultValue);
-            PrintLevel.SetDefaultValue(_printLevelDefaultValue);
-
-            Command.AddOption(Group);
-            Command.AddOption(Scopes);
-            Command.AddOption(ReportTypeOption);
-            Command.AddOption(PrintLevel);
-
-            Command.SetHandler(async (Context) =>
+            
+            Option<string[]> Group = new Option<string[]>(name: _filterOnGroup, aliases: _filterOnGroupAlias)
             {
-                ParseResult Parser = Context.ParseResult;
-                CommandResult AzureCommandResult = Parser.CommandResult.Parent as CommandResult;
-                Option<string> AppID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAppIDName)).First() as Option<string>;
-                Option<string> TenantID = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalTenantIDName)).First() as Option<string>;
-                Option<AuthType> AuthProviderType = AzureCommandResult.Command.Options.Where(id => id.Name.Equals(_globalAuthClientProviderName)).First() as Option<AuthType>;
+                Description = _filterOnGroupDescription,
+                AllowMultipleArgumentsPerToken = true,
+                DefaultValueFactory = (result) => new string[] {}
+            };
 
+            Option<string[]> Scopes = new Option<string[]>(name: _permissionScopes, aliases: _permissionScopesAlias)
+            {
+                Description = _permissionScopesDescription,
+                AllowMultipleArgumentsPerToken = true,
+                DefaultValueFactory = (result) => _permissionScopesDefaultValue
+            };
+
+            Option<ReportType> ReportTypeOption = new Option<ReportType>(name: _reportType, aliases: _reportTypeAlias)
+            {
+                Description = _reportTypeDescription,
+                DefaultValueFactory = (result) => _reportTypeDefaultValue
+            };
+
+            Option<ReportPrintLevel> PrintLevel = new Option<ReportPrintLevel>(name: _printLevel, aliases: _printLevelAlias) 
+            {
+                Description = _printLevelDescription,
+                DefaultValueFactory = (result) => _printLevelDefaultValue
+            };
+
+            Command.Options.Add(Group);
+            Command.Options.Add(Scopes);
+            Command.Options.Add(ReportTypeOption);
+            Command.Options.Add(PrintLevel);
+
+            Command.SetAction(async parseResult =>
+            {
                 AzureAuth Auth = new AzureAuth(_logger);
-
-                GraphServiceClient Client = Auth.GetClient(
-                    Parser.GetValueForOption(AppID),
-                    Parser.GetValueForOption(TenantID),
-                    Parser.GetValueForOption(Scopes),
-                    Parser.GetValueForOption(AuthProviderType)
+                
+                GraphServiceClient Client = await Auth.GetClientAsync(
+                    parseResult.GetRequiredValue<string>(AzureFunctions._publicAppID),
+                    parseResult.GetRequiredValue<string>(AzureFunctions._publicTenantID),
+                    parseResult.GetRequiredValue(Scopes),
+                    parseResult.GetRequiredValue<AuthType>(AzureFunctions._authClientProvider)
                     );
 
                 AzureUser AzureUser = new AzureUser(_logger);
-                UserCollectionResponse Users = await AzureUser.GetUsersAsync(Client, Parser.GetValueForOption(Group));
+                UserCollectionResponse Users = await AzureUser.GetUsersAsync(Client, parseResult.GetRequiredValue(Group));
 
                 AzureMFA AzureMFA = new AzureMFA(_logger);
 
                 List<UserMFA> AllUsers = await AzureMFA.GetAllUsersMFA(Client, Users);
 
-                switch (Parser.GetValueForOption(ReportTypeOption))
+                switch (parseResult.GetRequiredValue(ReportTypeOption))
                 {
                     case ReportType.CLI:
-                        await PrintResult(AllUsers, Parser.GetValueForOption(PrintLevel));
+                        await PrintResult(AllUsers, parseResult.GetRequiredValue(PrintLevel));
                         break;
                     case ReportType.Json:
                         await ExportToJson(AllUsers);
                         break;
                     case ReportType.CLIAndJson:
-                        await PrintResult(AllUsers, Parser.GetValueForOption(PrintLevel));
+                        await PrintResult(AllUsers, parseResult.GetRequiredValue(PrintLevel));
                         await ExportToJson(AllUsers);
                         break;
                 }

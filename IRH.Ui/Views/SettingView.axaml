@@ -9,7 +9,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:SettingViewModel"
              x:Class="IRH.Ui.Views.SettingView">
-    
     <ScrollViewer Margin="{StaticResource DefaultMargin}">
         <StackPanel Spacing="10">
             <Grid ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
@@ -31,7 +30,14 @@
                     <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAppThemes}" SelectedItem="{Binding SelectedAppTheme}"/>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
-            
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AppLanguage_Main}" Description="{x:Static lang:Strings.Setting_AppLanguage_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="LocalLanguage" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAppLanguages}" SelectedItem="{Binding SelectedAppLanguage}"/>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
             <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AuthType_Main}" Description="{x:Static lang:Strings.Setting_AuthType_Description}">
                 <ui:SettingsExpander.IconSource>
                     <icons:SymbolIconSource Symbol="PersonAccounts" />
@@ -40,7 +46,6 @@
                     <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAuthTypes}" SelectedItem="{Binding SelectedAuthType}"/>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
-            
             <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_TenantID_Main}" Description="{x:Static lang:Strings.Setting_TenantID_Description}">
                 <ui:SettingsExpander.IconSource>
                     <icons:SymbolIconSource Symbol="Building" />
@@ -55,7 +60,6 @@
                     </StackPanel>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
-            
             <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AppID_Main}" Description="{x:Static lang:Strings.Setting_AppID_Description}">
                 <ui:SettingsExpander.IconSource>
                     <icons:SymbolIconSource Symbol="Apps" />
@@ -70,7 +74,6 @@
                     </StackPanel>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
-            
             <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_Reset_Main}" Description="{x:Static lang:Strings.Setting_Reset_Description}">
                 <ui:SettingsExpander.IconSource>
                     <icons:SymbolIconSource Symbol="ArrowReset" />
@@ -84,5 +87,6 @@
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
         </StackPanel>
+        <!-- Mache test option für logging + set language switch -->
     </ScrollViewer>
 </UserControl>
