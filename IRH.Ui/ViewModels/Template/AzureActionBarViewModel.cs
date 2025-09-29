@@ -96,7 +96,60 @@ public partial class AzureActionBarViewModel : ViewModelBase
         GraphServiceClient Client = null;
         AzureAuth AzureAuth = new AzureAuth(Log.Logger);
         
-        ObservableCollection<AzureItemControlTemplate> AllScopes  = WeakReferenceMessenger.Default.Send<AzureScopeRequestMessage>().Response;
+        ObservableCollection<AzureItemControlTemplate> AllScopesCollection = WeakReferenceMessenger.Default.Send<AzureScopeRequestMessage>().Response;
+        string[] RawScopes = _uiHelper.GetContentFromObservableCollection(AllScopesCollection);
+        
+        if (ShouldElevateToAppAccess == true)
+        {
+            RawScopes = DefaultValue.AzureAppRegistrationPermissions.ToArray();
+        }
+        
+        switch (Flow)
+        {
+            case AuthType.DeviceCode:
+                DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
+                    CreateCallBack: false);
+        
+                DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
+                {
+                    UserCode = DeviceCode.UserCode;
+                    CopyUserCodeEnabled = true;
+                    OpenBrowserEnabled = true;
+        
+                    return Task.CompletedTask;
+                };
+        
+                DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
+                
+                Client = await AzureAuth.GetClientAsync(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
+                    RawScopes,
+                    Flow,
+                    CodeCredential: DeviceCodeCredential,
+                    ElevateToAppAccess: ShouldElevateToAppAccess,
+                    ElevatePermission:_uiHelper.GetContentFromObservableCollection(AllScopesCollection));
+                break;
+            case AuthType.Interactive:
+                Client = await AzureAuth.GetClientAsync(
+                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
+                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
+                    RawScopes,
+                    Flow,
+                    ElevateToAppAccess: ShouldElevateToAppAccess,
+                    ElevatePermission:_uiHelper.GetContentFromObservableCollection(AllScopesCollection));
+                break;
+        }
+        
+        await Client.Domains.GetAsync(cancellationToken:token);
+        
+        WeakReferenceMessenger.Default.Send(new AzureGraphViewModelMessageBase()
+        {
+            Client = Client,
+            Requester = ParentViewModel
+        });
     }
 
     [RelayCommand]
