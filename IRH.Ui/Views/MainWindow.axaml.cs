@@ -7,6 +7,7 @@ using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using IRH.Ui.Lib;
+using IRH.Ui.Models.Generel;
 using Serilog;
 
 namespace IRH.Ui.Views
@@ -22,6 +23,7 @@ namespace IRH.Ui.Views
         {
             InitializeComponent();
             SetupLogger();
+            SplashScreen = new SplashScreen();
         }
 
         private void SetupLogger()
