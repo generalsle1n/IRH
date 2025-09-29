@@ -100,9 +100,9 @@ public partial class AzureActionBarViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task SetUserCodeToClipboardCommand()
+    private async Task SetUserCodeToClipboard()
     {
-        throw new NotImplementedException();
+        await _uiHelper.SetTextToClipboard(UserCode);
     }
     
     [RelayCommand]
