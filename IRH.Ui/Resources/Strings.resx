@@ -316,10 +316,10 @@
     <value>Configure the end Date where Search should end</value>
   </data>
   <data name="Azure_DateFilter_Time_End_ToolTip" xml:space="preserve">
-    <value>Conmfigure the end Time where the Search should end</value>
+    <value>Configure the end Time where the Search should end</value>
   </data>
   <data name="Azure_DateFilter_Time_Start_ToolTip" xml:space="preserve">
-    <value>Conmfigure the start Time where the Search should start</value>
+    <value>Configure the start Time where the Search should start</value>
   </data>
   <data name="Azure_Scope_Add_ToolTip" xml:space="preserve">
     <value>Add an new Scope (Permission which IRH.Ui should use)</value>

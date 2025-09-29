@@ -195,7 +195,7 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conmfigure the end Time where the Search should end.
+        ///   Looks up a localized string similar to Configure the end Time where the Search should end.
         /// </summary>
         public static string Azure_DateFilter_Time_End_ToolTip {
             get {
@@ -204,7 +204,7 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conmfigure the start Time where the Search should start.
+        ///   Looks up a localized string similar to Configure the start Time where the Search should start.
         /// </summary>
         public static string Azure_DateFilter_Time_Start_ToolTip {
             get {
