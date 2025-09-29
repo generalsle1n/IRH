@@ -9,11 +9,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModel:AzureActionBarViewModel"
              x:Class="IRH.Ui.Views.Template.AzureActionBarView">
-    
+
     <ui:CommandBar DefaultLabelPosition="Right">
         <ui:CommandBar.PrimaryCommands>
             <ui:CommandBarButton VerticalAlignment="Center" Label="{x:Static lang:Strings.Azure_StartProcess_Label}"
-                                 Command="{Binding StartAzureGatheringCommand}">
+                                 Command="{Binding StartAzureGatheringCommand}"
+                                 ToolTip.Tip="{x:Static lang:Strings.Azure_ActionBar_Start_ToolTip}">
                 <ui:CommandBarButton.IconSource>
                     <icons:SymbolIconSource Symbol="Play" />
                 </ui:CommandBarButton.IconSource>
@@ -30,10 +31,11 @@
             <ui:CommandBarElementContainer>
                 <StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
                     <TextBox Text="{Binding UserCode}" IsReadOnly="True" MinWidth="100" />
-                    <Button IsEnabled="{Binding CopyUserCodeEnabled}" Command="{Binding SetUserCodeToClipboardCommand}">
+                    <Button IsEnabled="{Binding CopyUserCodeEnabled}" Command="{Binding SetUserCodeToClipboardCommand}"
+                            ToolTip.Tip="{x:Static lang:Strings.Azure_ActionBar_CopyDeviceCode_ToolTip}">
                         <icons:SymbolIcon Symbol="ClipboardPaste" />
                     </Button>
-                    <Button ToolTip.Tip="{x:Static lang:Strings.Azure_OpenBrowser_ButtonToolTip}"
+                    <Button ToolTip.Tip="{x:Static lang:Strings.Azure_ActionBar_OpenDeviceCodePage_ToolTip}"
                             IsEnabled="{Binding OpenBrowserEnabled}" Command="{Binding OpenBrowserCommand}">
                         <icons:SymbolIcon Symbol="Globe" />
                     </Button>
