@@ -286,6 +286,21 @@
     <value>Preview</value>
   </data>
   <data name="Azure_Mail_Action_Delete_Text" xml:space="preserve">
-    <value>ViewAndDelete</value>
+    <value>View And Delete</value>
+  </data>
+  <data name="Azure_SubjectFilter_Label" xml:space="preserve">
+    <value>Subject Filter</value>
+  </data>
+  <data name="Azure_SubjectFilter_Placeholder" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="Azure_DeleteItem_Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Azure_DeleteItem_On_Label" xml:space="preserve">
+    <value>Items getting deleted</value>
+  </data>
+  <data name="Azure_DeleteItem_Off_Label" xml:space="preserve">
+    <value>No Items will be deleted</value>
   </data>
 </root>

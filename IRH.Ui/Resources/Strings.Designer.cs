@@ -141,6 +141,33 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Azure_DeleteItem_Label {
+            get {
+                return ResourceManager.GetString("Azure_DeleteItem_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Items will be deleted.
+        /// </summary>
+        public static string Azure_DeleteItem_Off_Label {
+            get {
+                return ResourceManager.GetString("Azure_DeleteItem_Off_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items getting deleted.
+        /// </summary>
+        public static string Azure_DeleteItem_On_Label {
+            get {
+                return ResourceManager.GetString("Azure_DeleteItem_On_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Data.
         /// </summary>
         public static string Azure_ExportData_Label {
@@ -186,7 +213,7 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ViewAndDelete.
+        ///   Looks up a localized string similar to View And Delete.
         /// </summary>
         public static string Azure_Mail_Action_Delete_Text {
             get {
@@ -290,6 +317,24 @@ namespace IRH.Ui.Resources {
         public static string Azure_StartProcess_Label {
             get {
                 return ResourceManager.GetString("Azure_StartProcess_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subject Filter.
+        /// </summary>
+        public static string Azure_SubjectFilter_Label {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subject.
+        /// </summary>
+        public static string Azure_SubjectFilter_Placeholder {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Placeholder", resourceCulture);
             }
         }
         
