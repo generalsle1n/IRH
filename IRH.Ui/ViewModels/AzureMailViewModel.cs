@@ -63,6 +63,15 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     };
     
     private UiHelper _uiHelper = new UiHelper();
+    public void Receive(List<UserMailCollection> message)
+    {
+        AllMails.Clear();
+        foreach (UserMailCollection SingleMail in message)
+        {
+            AllMails.Add(SingleMail);
+        }
+    }
+    
     public void Receive(AzureDataRequestMessage<List<UserMailCollection>> message)
     {
         message.Reply(AllMails.ToList());
