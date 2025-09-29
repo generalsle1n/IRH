@@ -60,9 +60,21 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
             Resources.Strings.Azure_Mail_Action_Preview_Text,
             Resources.Strings.Azure_Mail_Action_Delete_Text
         }
-    };
-    
-    private UiHelper _uiHelper = new UiHelper();
+
+        if (AzureDeleteItemViewModel.ItemDeleteActive)
+        {
+            foreach (UserMailCollection SingleMail in AllMails)
+            {
+                await AzureMail.DeleteMails(message.Client, SingleMail);
+                SingleMail.Deleted = true;
+            }
+        }
+        
+        AzureActionBarViewModel.LoadingRingEnabled = false;
+        AzureActionBarViewModel.UserCode = String.Empty;
+        AzureActionBarViewModel.ExportEnabled = true;
+    }
+
     public void Receive(List<UserMailCollection> message)
     {
         AllMails.Clear();
@@ -92,20 +104,5 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
         }
 
         await _uiHelper.OpenUrlInBrowserAsync(new Uri(HtmlTempFile));
-    }
-    
-    public void Receive(List<UserMailCollection> message)
-    {
-        AllMails.Clear();
-        foreach (UserMailCollection SingleMail in message)
-        {
-            AllMails.Add(SingleMail);
-        }
-    }
-
-    public void Receive(AzureGraphViewModelMessageGeneric<AzureMailViewModel> message)
-    {
-        Console.WriteLine();
-        throw new NotImplementedException();
     }
 }
