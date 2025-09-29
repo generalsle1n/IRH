@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -120,7 +121,7 @@ public class UiHelper
         };
     }
     
-    internal string[] GetContentFromObservableCollection(ObservableCollection<AzureItemControlTemplate> collection)
+    internal string[] GetContentFromObservableCollection(ObservableCollection<AzureItemControlTemplate> collection, bool removeEmpty = false)
     {
         List<string> Groups = new List<string>();
 
@@ -129,6 +130,24 @@ public class UiHelper
             Groups.Add(SingleEntry.Label);
         }
 
+        List<string> FilterGroup = new List<string>();
+        
+        if (removeEmpty)
+        {
+            foreach (string SingleGroup in Groups)
+            {
+                if (SingleGroup is not null)
+                {
+                    if (!SingleGroup.Equals(string.Empty))
+                    {
+                        FilterGroup.Add(SingleGroup);
+                    }
+                }
+            }
+            
+            Groups = FilterGroup;
+        }
+        
         return Groups.ToArray();
     }
 }
