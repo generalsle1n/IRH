@@ -60,6 +60,33 @@ public partial class AzureActionBarViewModel : ViewModelBase
     private const string PropertyResponseName = "Response";
     private readonly UiHelper _uiHelper = new UiHelper();
     
+    private object GetDataFromAzureRequestMessage(object AzureDataRequestMessage)
+    {
+        Type RequestType = AzureDataRequestMessage.GetType();
+        PropertyInfo ResponseProperty = RequestType.GetProperty(PropertyResponseName);
+        
+        object Response = ResponseProperty.GetValue(AzureDataRequestMessage);
+        
+        return Response;
+    }
+
+    private object GetAzureDataRequestMessage()
+    {
+        Type ExtensionType = typeof(IMessengerExtensions);
+        MethodInfo[] AllMethods = ExtensionType.GetMethods();
+        MethodInfo SendMethod = AllMethods.Where(method => method.Name.Equals(nameof(IMessengerExtensions.Send)) && method.GetParameters().Length == 1).First();
+        MethodInfo TypedSendMethod = SendMethod.MakeGenericMethod(RequestDataType);
+        
+        object[] Parameters = new object[]
+        {
+            WeakReferenceMessenger.Default
+        };
+        
+        object Result = TypedSendMethod.Invoke(null, Parameters);
+
+        return Result;
+    }
+    
     [RelayCommand]
     private async Task StartAzureGathering(CancellationToken token)
     {
