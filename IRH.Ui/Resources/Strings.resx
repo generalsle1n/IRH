@@ -345,4 +345,7 @@
   <data name="Azure_ActionBar_ThreeDotsMenu_ToolTip" xml:space="preserve">
     <value>More Options</value>
   </data>
+  <data name="Azure_Mail_OpenMail_ToolTip" xml:space="preserve">
+    <value>Open the current Mail in the browser</value>
+  </data>
 </root>

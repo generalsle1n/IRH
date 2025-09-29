@@ -38,7 +38,8 @@
                                 <DataTemplate>
                                     <Button Content="Open"
                                             Command="{Binding $parent[DataGrid].((viewModel:AzureMailViewModel)DataContext).OpenMailCommand}"
-                                            CommandParameter="{Binding MailStatus}" />
+                                            CommandParameter="{Binding MailStatus}" 
+                                            ToolTip.Tip="{x:Static lang:Strings.Azure_Mail_OpenMail_ToolTip}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

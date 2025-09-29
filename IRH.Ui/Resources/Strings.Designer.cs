@@ -339,6 +339,15 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open the current Mail in the browser.
+        /// </summary>
+        public static string Azure_Mail_OpenMail_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_Mail_OpenMail_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Received.
         /// </summary>
         public static string Azure_Mail_Received_DataGridHeader {
