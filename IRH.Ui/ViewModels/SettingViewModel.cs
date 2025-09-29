@@ -26,6 +26,8 @@ internal partial class SettingViewModel : ViewModelBase
     [ObservableProperty]
     private AppTheme _selectedAppTheme = Preferences.Get<AppTheme>(Strings.Setting_Name_AppTheme, AppTheme.System);
     [ObservableProperty]
+    private AppLanguage _selectedAppLanguage = Preferences.Get<AppLanguage>(Strings.Setting_Name_AppLanguage, AppLanguage.System);
+    [ObservableProperty]
     private AuthType _selectedAuthType = Preferences.Get<AuthType>(Strings.Setting_Name_AuthType, DefaultValue.AuthType);
     [ObservableProperty]
     private string _currentTenantID = Preferences.Get<string>(Strings.Setting_Name_TenantID, DefaultValue.TenantId);
@@ -35,9 +37,11 @@ internal partial class SettingViewModel : ViewModelBase
     private bool _tenantIDEditEnabled = Preferences.Get<bool>(Strings.Setting_Name_TenantIDEditEnabled, false);
     [ObservableProperty]
     private bool _appIDEditEnabled = Preferences.Get<bool>(Strings.Setting_Name_AppIDEditEnabled, false);
+    
     internal List<AppTheme> AllAppThemes { get; } = Enum.GetValues<AppTheme>().Cast<AppTheme>().ToList();
-    public List<AuthType> AllAuthTypes { get; } = Enum.GetValues<AuthType>().Cast<AuthType>().ToList();
-
+    internal List<AuthType> AllAuthTypes { get; } = Enum.GetValues<AuthType>().Cast<AuthType>().ToList();
+    internal List<AppLanguage> AllAppLanguages{ get; } = Enum.GetValues<AppLanguage>().Cast<AppLanguage>().ToList();
+    
     [RelayCommand]
     private async Task ResetTenantID()
     {
@@ -108,5 +112,29 @@ internal partial class SettingViewModel : ViewModelBase
         SelectedAppTheme = value;
         
         SetAppTheme();
+    }
+
+    partial void OnSelectedAppLanguageChanged(AppLanguage value)
+    {
+        Preferences.Set<AppLanguage>(Strings.Setting_Name_AppLanguage, value);
+        SelectedAppLanguage = value;
+        
+        SetAppLanguage();
+    }
+    
+    private void SetAppLanguage()
+    {
+        switch (SelectedAppLanguage)
+        {
+            case AppLanguage.German:
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("de");
+                break;
+            case AppLanguage.English:
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                break;
+            case AppLanguage.System:
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.CurrentCulture;
+                break;
+        }
     }
 }
