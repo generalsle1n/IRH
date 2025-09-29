@@ -50,10 +50,14 @@ public partial class AzureActionBarViewModel : ViewModelBase
     [ObservableProperty] 
     private bool _exportEnabled = false;
 
-    public required Type DataType;
-
-    public required Type ParentViewModel;
+    [ObservableProperty] 
+    private bool _shouldElevateToAppAccess = false;
     
+    public required Type DataType;
+    public required Type ParentViewModel;
+    public required Type RequestDataType;
+
+    private const string PropertyResponseName = "Response";
     private readonly UiHelper _uiHelper = new UiHelper();
     
     [RelayCommand]
