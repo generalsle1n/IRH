@@ -600,6 +600,24 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ändern sie die aktuelle Sprache.
+        /// </summary>
+        public static string Setting_AppLanguage_Description {
+            get {
+                return ResourceManager.GetString("Setting_AppLanguage_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprache.
+        /// </summary>
+        public static string Setting_AppLanguage_Main {
+            get {
+                return ResourceManager.GetString("Setting_AppLanguage_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ändern des aktuellen Theme.
         /// </summary>
         public static string Setting_AppTheme_Description {
@@ -650,6 +668,15 @@ namespace IRH.Ui.Resources {
         public static string Setting_Name_AppIDEditEnabled {
             get {
                 return ResourceManager.GetString("Setting_Name_AppIDEditEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_Name_AppLanguage.
+        /// </summary>
+        public static string Setting_Name_AppLanguage {
+            get {
+                return ResourceManager.GetString("Setting_Name_AppLanguage", resourceCulture);
             }
         }
         

@@ -348,4 +348,13 @@
   <data name="Azure_Mail_OpenMail_ToolTip" xml:space="preserve">
     <value>Open the current Mail in the browser</value>
   </data>
+  <data name="Setting_AppLanguage_Main" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Setting_AppLanguage_Description" xml:space="preserve">
+    <value>Change the current language</value>
+  </data>
+  <data name="Setting_Name_AppLanguage" xml:space="preserve">
+    <value>Setting_Name_AppLanguage</value>
+  </data>
 </root>
