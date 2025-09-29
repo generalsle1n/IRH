@@ -22,12 +22,14 @@
                             <ui:CommandBarSeparator />
                             <StackPanel Orientation="Horizontal" Spacing="3">
                                 <Button
-                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureGroupViewModel)DataContext).AddNewGroupFilterCommand}">
+                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureGroupViewModel)DataContext).AddNewGroupFilterCommand}"
+                                    ToolTip.Tip="{x:Static lang:Strings.Azure_GroupFilter_Button_Add_ToolTip}">
                                     <icons:SymbolIcon Symbol="PeopleTeamAdd" />
                                 </Button>
                                 <Button IsVisible="{Binding ShowDelete}"
                                         Command="{Binding $parent[ItemsControl].((viewModel:AzureGroupViewModel)DataContext).DeleteGroupFilterCommand}"
-                                        CommandParameter="{Binding $self}">
+                                        CommandParameter="{Binding $self}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_GroupFilter_Button_Remove_ToolTip}">
                                     <icons:SymbolIcon Symbol="Delete" />
                                 </Button>
                             </StackPanel>

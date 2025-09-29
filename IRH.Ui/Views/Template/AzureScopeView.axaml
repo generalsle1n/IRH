@@ -22,12 +22,14 @@
                             <ui:CommandBarSeparator />
                             <StackPanel Orientation="Horizontal" Spacing="3">
                                 <Button
-                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureScopeViewModel)DataContext).AddNewScopeCommand}">
+                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureScopeViewModel)DataContext).AddNewScopeCommand}"
+                                    ToolTip.Tip="{x:Static lang:Strings.Azure_Scope_Add_ToolTip}">
                                     <icons:SymbolIcon Symbol="GlobeAdd" />
                                 </Button>
                                 <Button IsVisible="{Binding ShowDelete}"
                                         Command="{Binding $parent[ItemsControl].((viewModel:AzureScopeViewModel)DataContext).DeleteScopeCommand}"
-                                        CommandParameter="{Binding $self}">
+                                        CommandParameter="{Binding $self}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_Scope_Remove_ToolTip}">
                                     <icons:SymbolIcon Symbol="Delete" />
                                 </Button>
                             </StackPanel>

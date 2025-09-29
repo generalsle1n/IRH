@@ -16,9 +16,11 @@
             <StackPanel Spacing="5">
                 <TextBlock MinWidth="75" Text="{x:Static lang:Strings.AzureLoginAudit_StartDate_Label}" />
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <CalendarDatePicker SelectedDate="{Binding SelectedStartDate}" />
+                    <CalendarDatePicker SelectedDate="{Binding SelectedStartDate}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Date_Start_ToolTip}" />
                     <ui:CommandBarSeparator />
-                    <TimePicker SelectedTime="{Binding SelectedStartTime}" />
+                    <TimePicker SelectedTime="{Binding SelectedStartTime}"
+                                ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Time_Start_ToolTip}" />
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -26,9 +28,11 @@
             <StackPanel Spacing="5">
                 <TextBlock MinWidth="75" Text="{x:Static lang:Strings.AzureLoginAudit_EndDate_Label}" />
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <CalendarDatePicker SelectedDate="{Binding SelectedEndDate}" />
+                    <CalendarDatePicker SelectedDate="{Binding SelectedEndDate}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Date_End_ToolTip}" />
                     <ui:CommandBarSeparator />
-                    <TimePicker SelectedTime="{Binding SelectedEndTime}" />
+                    <TimePicker SelectedTime="{Binding SelectedEndTime}"
+                                ToolTip.Tip="{x:Static lang:Strings.Azure_DateFilter_Time_End_ToolTip}" />
                 </StackPanel>
             </StackPanel>
         </Border>

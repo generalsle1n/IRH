@@ -22,12 +22,14 @@
                             <ui:CommandBarSeparator />
                             <StackPanel Orientation="Horizontal" Spacing="3">
                                 <Button
-                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureSubjectViewModel)DataContext).AddNewSubjectFilterCommand}">
+                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureSubjectViewModel)DataContext).AddNewSubjectFilterCommand}"
+                                    ToolTip.Tip="{x:Static lang:Strings.Azure_SubjectFilter_Add_ToolTip}">
                                     <icons:SymbolIcon Symbol="MailInboxAdd" />
                                 </Button>
                                 <Button IsVisible="{Binding ShowDelete}"
                                         Command="{Binding $parent[ItemsControl].((viewModel:AzureSubjectViewModel)DataContext).DeleteSubjectFilterCommand}"
-                                        CommandParameter="{Binding $self}">
+                                        CommandParameter="{Binding $self}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_SubjectFilter_Remove_ToolTip}">
                                     <icons:SymbolIcon Symbol="MailInboxDismiss" />
                                 </Button>
                             </StackPanel>

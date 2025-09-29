@@ -69,6 +69,42 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy the Device Code that is displayed to the Clipboard.
+        /// </summary>
+        public static string Azure_ActionBar_CopyDeviceCode_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_CopyDeviceCode_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the Microsoft Device Login Page in the default Browser.
+        /// </summary>
+        public static string Azure_ActionBar_OpenDeviceCodePage_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_OpenDeviceCodePage_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start the selected Azure Process to evaluate the data.
+        /// </summary>
+        public static string Azure_ActionBar_Start_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_Start_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More Options.
+        /// </summary>
+        public static string Azure_ActionBar_ThreeDotsMenu_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_ActionBar_ThreeDotsMenu_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activity.
         /// </summary>
         public static string Azure_Activity_Placeholder {
@@ -141,6 +177,42 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure the end Date where Search should end.
+        /// </summary>
+        public static string Azure_DateFilter_Date_End_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Date_End_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure the start Date where Search should begin.
+        /// </summary>
+        public static string Azure_DateFilter_Date_Start_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Date_Start_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conmfigure the end Time where the Search should end.
+        /// </summary>
+        public static string Azure_DateFilter_Time_End_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Time_End_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conmfigure the start Time where the Search should start.
+        /// </summary>
+        public static string Azure_DateFilter_Time_Start_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_DateFilter_Time_Start_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Azure_DeleteItem_Label {
@@ -173,6 +245,24 @@ namespace IRH.Ui.Resources {
         public static string Azure_ExportData_Label {
             get {
                 return ResourceManager.GetString("Azure_ExportData_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new Group Filter (Entra ID Group Guid).
+        /// </summary>
+        public static string Azure_GroupFilter_Button_Add_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_GroupFilter_Button_Add_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete current Group Filter.
+        /// </summary>
+        public static string Azure_GroupFilter_Button_Remove_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_GroupFilter_Button_Remove_ToolTip", resourceCulture);
             }
         }
         
@@ -294,6 +384,15 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add an new Scope (Permission which IRH.Ui should use).
+        /// </summary>
+        public static string Azure_Scope_Add_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_Scope_Add_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Permissions.
         /// </summary>
         public static string Azure_Scope_Label {
@@ -312,11 +411,29 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove the current Scope (Permission).
+        /// </summary>
+        public static string Azure_Scope_Remove_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_Scope_Remove_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         public static string Azure_StartProcess_Label {
             get {
                 return ResourceManager.GetString("Azure_StartProcess_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add an new Subject Text where should be used to filter for Mails (The filter is an contains NOT Equals).
+        /// </summary>
+        public static string Azure_SubjectFilter_Add_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Add_ToolTip", resourceCulture);
             }
         }
         
@@ -335,6 +452,15 @@ namespace IRH.Ui.Resources {
         public static string Azure_SubjectFilter_Placeholder {
             get {
                 return ResourceManager.GetString("Azure_SubjectFilter_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the current Subject Filter.
+        /// </summary>
+        public static string Azure_SubjectFilter_Remove_ToolTip {
+            get {
+                return ResourceManager.GetString("Azure_SubjectFilter_Remove_ToolTip", resourceCulture);
             }
         }
         

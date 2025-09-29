@@ -14,10 +14,11 @@
         <!-- <Separator /> -->
         <Border Padding="5">
             <StackPanel Spacing="5">
-                <ToggleSwitch IsChecked="{Binding ItemDeleteActive}" OnContent="{x:Static lang:Strings.Azure_DeleteItem_On_Label}" OffContent="{x:Static lang:Strings.Azure_DeleteItem_Off_Label}"/>
+                <ToggleSwitch IsChecked="{Binding ItemDeleteActive}"
+                              OnContent="{x:Static lang:Strings.Azure_DeleteItem_On_Label}"
+                              OffContent="{x:Static lang:Strings.Azure_DeleteItem_Off_Label}" />
             </StackPanel>
         </Border>
-        
         <Separator />
     </StackPanel>
 </UserControl>
