@@ -21,10 +21,11 @@ using Serilog;
 
 namespace IRH.Ui.ViewModels;
 
-public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMailCollection>>, IRecipient<AzureGraphViewModelMessageGeneric<AzureMailViewModel>>
+public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMailCollection>>, IRecipient<AzureDataRequestMessage<List<UserMailCollection>>>
 {
     public AzureMailViewModel()
     {
+        WeakReferenceMessenger.Default.Register<AzureDataRequestMessage<List<UserMailCollection>>>(this);
         WeakReferenceMessenger.Default.Register<List<UserMailCollection>>(this);
         WeakReferenceMessenger.Default.Register<AzureGraphViewModelMessageGeneric<AzureMailViewModel>>(this);
     }
@@ -62,6 +63,10 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     };
     
     private UiHelper _uiHelper = new UiHelper();
+    public void Receive(AzureDataRequestMessage<List<UserMailCollection>> message)
+    {
+        message.Reply(AllMails.ToList());
+    }
     
     [RelayCommand]
     private async Task OpenMailAsync(MailStatus mailStatus, CancellationToken token)
