@@ -7,6 +7,6 @@ public class AzureItemControlTemplate
         Label = label;
         ShowDelete = showDelete;
     }
-    public string Label { get; }
-    public bool ShowDelete { get; }
+    public string Label { get; set; }
+    public bool ShowDelete { get; set; }
 }
