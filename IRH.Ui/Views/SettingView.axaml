@@ -30,6 +30,14 @@
                     <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAppThemes}" SelectedItem="{Binding SelectedAppTheme}"/>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AppLanguage_Main}" Description="{x:Static lang:Strings.Setting_AppLanguage_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="LocalLanguage" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAppLanguages}" SelectedItem="{Binding SelectedAppLanguage}"/>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
             <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_AuthType_Main}" Description="{x:Static lang:Strings.Setting_AuthType_Description}">
                 <ui:SettingsExpander.IconSource>
                     <icons:SymbolIconSource Symbol="PersonAccounts" />
