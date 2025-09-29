@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
 using IRH.Lib;
+using IRH.Lib.Class.Azure.Generel;
+using IRH.Lib.Class.Azure.Mail;
 using IRH.Lib.Model.Azure.Mail;
 using IRH.Ui.Lib;
-using IRH.Ui.Models.Azure;
+using IRH.Ui.Models.Message.Request;
 using IRH.Ui.Models.Message.Send;
 using IRH.Ui.ViewModels.Template;
+using Microsoft.Graph.Models;
+using Serilog;
 
 namespace IRH.Ui.ViewModels;
 
