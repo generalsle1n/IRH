@@ -55,10 +55,22 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     [ObservableProperty]
     private AzureActionViewModel _azureActionViewModel = new AzureActionViewModel()
     {
-        AllActions = new ObservableCollection<string>()
+        string[] AllGroups = _uiHelper.GetContentFromObservableCollection(AzureGroupViewModel.AllGroupFilter, removeEmpty: true);
+        string[] SubjectFilter = _uiHelper.GetContentFromObservableCollection(AzureSubjectViewModel.AllSubjectFilter, removeEmpty: true);
+
+        DateTime StartDateFilter = await AzureDateViewModel.CalculateStartDateAsync();
+        DateTime EndDateFilter = await AzureDateViewModel.CalculateEndDateAsync();
+        
+        AzureUser AzureUser = new AzureUser(Log.Logger);
+        UserCollectionResponse Users = await AzureUser.GetUsersAsync(message.Client, AllGroups);
+        
+        AzureMail AzureMail = new AzureMail(Log.Logger);
+        List<UserMailCollection> UserMailCollection = await AzureMail.GetMails(message.Client, Users,SubjectFilter, StartDateFilter, EndDateFilter);
+        
+        AllMails.Clear();
+        foreach (UserMailCollection SingleMail in UserMailCollection)
         {
-            Resources.Strings.Azure_Mail_Action_Preview_Text,
-            Resources.Strings.Azure_Mail_Action_Delete_Text
+            AllMails.Add(SingleMail);
         }
 
         if (AzureDeleteItemViewModel.ItemDeleteActive)
