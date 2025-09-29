@@ -114,7 +114,19 @@ public partial class AzureActionBarViewModel : ViewModelBase
     [RelayCommand]
     private async Task SaveDataToFile(CancellationToken token)
     {
-        throw new NotImplementedException();
+        object Result = GetAzureDataRequestMessage();
+        object Response = GetDataFromAzureRequestMessage(Result);
+        
+        IStorageFile SaveFile = await _uiHelper.GetIStorageFileListForCreateFile();
+        
+        if (SaveFile is not null)
+        {
+            Uri SinglePath = SaveFile.Path;
+            using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                await JsonSerializer.SerializeAsync(Stream, Response, cancellationToken: token);
+            }
+        }
     }
 
     [RelayCommand]
