@@ -56,7 +56,14 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     };
     
     [ObservableProperty]
-    private AzureActionViewModel _azureActionViewModel = new AzureActionViewModel()
+    private AzureSubjectViewModel _azureSubjectViewModel = new AzureSubjectViewModel();
+    
+    [ObservableProperty]
+    private AzureDeleteItemViewModel _azureDeleteItemViewModel = new AzureDeleteItemViewModel();
+    
+    private readonly UiHelper _uiHelper = new UiHelper();
+    
+    private async Task StartAzureProcess(AzureGraphViewModelMessageGeneric<AzureMailViewModel> message)
     {
         string[] AllGroups = _uiHelper.GetContentFromObservableCollection(AzureGroupViewModel.AllGroupFilter, removeEmpty: true);
         string[] SubjectFilter = _uiHelper.GetContentFromObservableCollection(AzureSubjectViewModel.AllSubjectFilter, removeEmpty: true);
