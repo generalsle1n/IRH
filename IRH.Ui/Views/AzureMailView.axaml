@@ -15,7 +15,8 @@
                     <template:AzureGroupView DataContext="{Binding AzureGroupViewModel}" />
                     <template:AzureDateView DataContext="{Binding AzureDateViewModel}" />
                     <template:AzureScopeView DataContext="{Binding AzureScopeViewModel}" />
-                    <template:AzureActionView DataContext="{Binding AzureActionViewModel}" /> 
+                    <template:AzureSubjectView DataContext="{Binding AzureSubjectViewModel}" />
+                    <template:AzureDeleteItemView DataContext="{Binding AzureDeleteItemViewModel}" /> 
                 </StackPanel>
             </ScrollViewer>
             <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
