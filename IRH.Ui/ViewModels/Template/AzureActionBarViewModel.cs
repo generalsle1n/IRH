@@ -108,7 +108,7 @@ public partial class AzureActionBarViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenBrowserAsync()
     {
-        throw new NotImplementedException();
+        await _uiHelper.OpenUrlInBrowserAsync(DefaultValue.DeviceLoginUrl);
     }
     
     [RelayCommand]
