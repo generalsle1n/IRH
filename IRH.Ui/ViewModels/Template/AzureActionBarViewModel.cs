@@ -29,8 +29,8 @@ namespace IRH.Ui.ViewModels.Template;
 
 public partial class AzureActionBarViewModel : ViewModelBase
 {
-    //Just used for Displaying Enum
-    internal List<ReportPrintLevel> AllReportLevel { get; } = Enum.GetValues<ReportPrintLevel>().ToList();
+    [ObservableProperty]
+    private List<ReportPrintLevel> _allReportLevel = Enum.GetValues<ReportPrintLevel>().ToList();
     
     [ObservableProperty] 
     private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
