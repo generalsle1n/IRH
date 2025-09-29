@@ -27,7 +27,10 @@ public partial class AzureMailViewModel : ViewModelBase, IRecipient<List<UserMai
     {
         WeakReferenceMessenger.Default.Register<AzureDataRequestMessage<List<UserMailCollection>>>(this);
         WeakReferenceMessenger.Default.Register<List<UserMailCollection>>(this);
-        WeakReferenceMessenger.Default.Register<AzureGraphViewModelMessageGeneric<AzureMailViewModel>>(this);
+        WeakReferenceMessenger.Default.Register<AzureGraphViewModelMessageGeneric<AzureMailViewModel>>(this, async (sender, data) =>
+            {
+                await StartAzureProcess(data);
+            });
     }
     
     [ObservableProperty]
