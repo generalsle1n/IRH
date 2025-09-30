@@ -11,7 +11,7 @@ using IRH.Ui.Models.Message.Send;
 
 namespace IRH.Ui.ViewModels.Template;
 
-internal abstract partial class AzureViewModelBase<TResultData, TClassType> : ViewModelBase, IRecipient<List<TResultData>>, IRecipient<AzureDataRequestMessage<List<TResultData>>>, IDisposable
+public abstract partial class AzureViewModelBase<TResultData, TClassType> : ViewModelBase, IRecipient<List<TResultData>>, IRecipient<AzureDataRequestMessage<List<TResultData>>>, IDisposable
 {
     protected AzureViewModelBase()
     {
