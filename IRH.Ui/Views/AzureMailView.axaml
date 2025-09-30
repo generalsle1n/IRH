@@ -20,7 +20,7 @@
                 </StackPanel>
             </ScrollViewer>
             <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
-                <DataGrid ItemsSource="{Binding AllMails}" GridLinesVisibility="All">
+                <DataGrid ItemsSource="{Binding AllItems}" GridLinesVisibility="All">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="{x:Static lang:Strings.Azure_UPN_DataGridHeader}"
                                             Binding="{Binding User.UserPrincipalName}" IsReadOnly="True" />
