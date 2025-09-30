@@ -42,7 +42,6 @@ internal class DataMessageRouter : IRecipient<AzureGraphViewModelMessageBase>
         
         if (message.Requester == typeof(AzureMailViewModel))
         {
-            Console.WriteLine();
             Type GenericType = GenericType = BaseType.MakeGenericType(message.Requester);
             AzureGraphViewModelMessageGeneric<AzureMailViewModel> SendMessage = Activator.CreateInstance(GenericType) as AzureGraphViewModelMessageGeneric<AzureMailViewModel>;
             
