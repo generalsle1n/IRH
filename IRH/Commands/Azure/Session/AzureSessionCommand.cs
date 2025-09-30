@@ -25,7 +25,7 @@ namespace IRH.Commands.Azure.Session
         private const string _permissionScopes = "-P";
         private const string _permissionScopesDescription = "Enter the custom permission to access the api, serpated by whitespace";
         private const string _permissionScopesAlias = "--PermissionScope";
-        private string[] _permissionScopesDefaultValue = DefaultValue.AzureSessionPermissions.ToArray();
+        private string[] _permissionScopesDefaultValue = DefaultValue.AzureSessionRevokePermissions.ToArray();
 
         private const string _reportType = "-R";
         private const string _reportTypeDescription = "How to Report the Data";
