@@ -11,6 +11,7 @@ using IRH.Lib.Class.Azure.Mail;
 using IRH.Lib.Model.Azure.Mail;
 using IRH.Ui.Lib;
 using IRH.Ui.Models.Message.Send;
+using IRH.Ui.ViewModels.Base;
 using IRH.Ui.ViewModels.Template;
 using Microsoft.Graph.Models;
 using Serilog;

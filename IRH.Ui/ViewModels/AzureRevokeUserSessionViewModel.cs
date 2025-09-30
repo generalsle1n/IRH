@@ -6,6 +6,7 @@ using IRH.Lib.Class.Azure.Session;
 using IRH.Lib.Model.Azure.Session;
 using IRH.Ui.Lib;
 using IRH.Ui.Models.Message.Send;
+using IRH.Ui.ViewModels.Base;
 using IRH.Ui.ViewModels.Template;
 using Microsoft.Graph.Models;
 using Serilog;

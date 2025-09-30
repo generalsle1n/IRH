@@ -8,8 +8,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using IRH.Ui.Lib;
 using IRH.Ui.Models.Message.Request;
 using IRH.Ui.Models.Message.Send;
+using IRH.Ui.ViewModels.Template;
 
-namespace IRH.Ui.ViewModels.Template;
+namespace IRH.Ui.ViewModels.Base;
 
 public abstract partial class AzureViewModelBase<TResultData, TClassType> : ViewModelBase, IRecipient<List<TResultData>>, IRecipient<AzureDataRequestMessage<List<TResultData>>>, IDisposable
 {
