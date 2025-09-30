@@ -42,15 +42,31 @@ internal class DataMessageRouter : IRecipient<AzureGraphViewModelMessageBase>
         Type GenericType = GenericType = BaseType.MakeGenericType(message.Requester);
         AzureGraphViewModelMessageGeneric<T> SendMessage = Activator.CreateInstance(GenericType) as AzureGraphViewModelMessageGeneric<T>;
             
-            SendMessage.Client = message.Client;
-            SendMessage.Requester = message.Requester;
-            
         SendMessage.Client = message.Client;
         SendMessage.Requester = message.Requester;
         
         return SendMessage;
     }
+    
+    public void Receive(AzureGraphViewModelMessageBase message)
+    {
+        if (message.Requester == typeof(AzureMailViewModel))
+        {
+            AzureGraphViewModelMessageGeneric<AzureMailViewModel> SendMessage = CreateAzureGraphViewModelMessageGeneric<AzureMailViewModel>(message);
             WeakReferenceMessenger.Default.Send(SendMessage);
+        }else if (message.Requester == typeof(AzureRevokeUserSessionViewModel))
+        {
+            AzureGraphViewModelMessageGeneric<AzureRevokeUserSessionViewModel> SendMessage =
+                CreateAzureGraphViewModelMessageGeneric<AzureRevokeUserSessionViewModel>(message);
+            WeakReferenceMessenger.Default.Send(SendMessage);
+        }else if (message.Requester == typeof(AzureMFAViewModel))
+        {
+            AzureGraphViewModelMessageGeneric<AzureMFAViewModel> SendMessage = CreateAzureGraphViewModelMessageGeneric<AzureMFAViewModel>(message);
+            WeakReferenceMessenger.Default.Send(SendMessage);
+        }
+        else
+        {
+            throw new Exception($"DataMessageRouter: Unknown Requester ({message.Requester.Name}) for AzureGraphViewModelMessageGeneric");
         }
     }
 }
