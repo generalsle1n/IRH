@@ -23,6 +23,9 @@ using IRH.Lib.Model.Azure.Reporting;
 using IRH.Lib.Model.Azure.Result;
 using IRH.Ui.Lib;
 using IRH.Ui.Models.Azure;
+using IRH.Ui.Models.Message.Send;
+using IRH.Ui.ViewModels.Base;
+using IRH.Ui.ViewModels.Template;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Serilog;
@@ -30,174 +33,34 @@ using Application = Avalonia.Application;
 using Strings = IRH.Ui.Resources.Strings;
 
 namespace IRH.Ui.ViewModels;
-public partial class AzureMFAViewModel : ViewModelBase
+public partial class AzureMFAViewModel : AzureViewModelBase<UserMFA, AzureMFAViewModel>
 {
-    private UiHelper _uiHelper = new UiHelper();
-    
-    [ObservableProperty] 
-    private ReportPrintLevel _selectedReportLevel = DefaultValue.PrintLevel;
-    [ObservableProperty] 
-    private bool _openBrowserEnabled = false;
-    [ObservableProperty] 
-    private string _userCode;
-    [ObservableProperty] 
-    private bool _copyUserCodeEnabled = false;
-    [ObservableProperty] 
-    private bool _loadingRingEnabled = false;
-    [ObservableProperty] 
-    private bool _exportEnabled = false;
+    [ObservableProperty]
+    private AzureGroupViewModel _azureGroupViewModel = new AzureGroupViewModel();
 
-    public ObservableCollection<AzureItemControlTemplate> AllGroupFilter { get; } = new ObservableCollection<AzureItemControlTemplate>()
-        {
-            new AzureItemControlTemplate(null, showDelete: false)
-        };
-
-    public ObservableCollection<UserMFA> AllUserMFAData { get; } = new ObservableCollection<UserMFA>();
-
-    public ObservableCollection<AzureItemControlTemplate> AllScopes { get; } = new ObservableCollection<AzureItemControlTemplate>(
-            DefaultValue.AzureMfaPermissions.Select((singleString, index) =>
-                new AzureItemControlTemplate(singleString, showDelete: index != 0))
-        );
-
-    internal List<ReportPrintLevel> AllReportLevel { get; } = Enum.GetValues<ReportPrintLevel>().Cast<ReportPrintLevel>().ToList();
-
-    [RelayCommand]
-    private async Task AddNewGroupFilter()
+    [ObservableProperty]
+    private AzureScopeViewModel _azureScopeViewModel = new AzureScopeViewModel()
     {
-        AllGroupFilter.Add(new AzureItemControlTemplate(null));
-    }
+        AllScopes = UiHelper.CreateObservableItemControlTemplateFromList(DefaultValue.AzureMfaPermissions)
+    };
 
-    [RelayCommand]
-    private async Task DeleteGroupFilter(object Sender)
+    protected override async Task StartAzureProcessAsync(AzureGraphViewModelMessageGeneric<AzureMFAViewModel> message)
     {
-        Button SingleButton = Sender as Button;
-        AzureItemControlTemplate Item = SingleButton.DataContext as AzureItemControlTemplate;
-        AllGroupFilter.Remove(Item);
-    }
-
-    [RelayCommand]
-    private async Task AddNewScope()
-    {
-        AllScopes.Add(new AzureItemControlTemplate(null));
-    }
-
-    [RelayCommand]
-    private async Task DeleteScope(object Sender)
-    {
-        Button SingleButton = Sender as Button;
-        AzureItemControlTemplate Item = SingleButton.DataContext as AzureItemControlTemplate;
-        AllScopes.Remove(Item);
-    }
-
-    [RelayCommand]
-    private async Task OpenBrowserAsync()
-    {
-        await _uiHelper.OpenUrlInBrowserAsync(DefaultValue.DeviceLoginUrl);
-    }
-
-    [RelayCommand]
-    private async Task SetUserCodeToClipboard()
-    {
-        await _uiHelper.SetTextToClipboard(UserCode);
-    }
-
-    [RelayCommand]
-    private async Task SaveDataToFile(CancellationToken token)
-    {
-        IStorageFile SaveFile = await _uiHelper.GetIStorageFileListForCreateFile();
-
-        if (SaveFile is not null)
-        {
-            Uri SinglePath = SaveFile.Path;
-            using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            {
-                await JsonSerializer.SerializeAsync<List<UserMFA>>(Stream, AllUserMFAData.ToList(), cancellationToken: token);
-            }
-        }
-    }
-
-    [RelayCommand]
-    private async Task LoadDataFile(CancellationToken token)
-    {
-        IReadOnlyList<IStorageFile> OpenFile = await _uiHelper.GetIStorageFileListForOpenFile();
-
-        if (OpenFile.Any())
-        {
-            Uri SinglePath = OpenFile[0].Path;
-            using (FileStream Stream = new FileStream(SinglePath.AbsolutePath, FileMode.Open, FileAccess.Read))
-            {
-                List<UserMFA> Result = await JsonSerializer.DeserializeAsync<List<UserMFA>>(Stream, cancellationToken: token);
-                AllUserMFAData.Clear();
-                foreach (UserMFA SingleUser in Result)
-                {
-                    AllUserMFAData.Add(SingleUser);
-                }
-            }
-        }
-    }
-
-    [RelayCommand]
-    private async Task StartAzureGathering(CancellationToken token)
-    {
-        LoadingRingEnabled = true;
-
-        AuthType Flow = Preferences.Get<AuthType>(Strings.Setting_Name_AuthType, AuthType.DeviceCode);
-        GraphServiceClient Client = null;
-        AzureAuth AzureAuth = new AzureAuth(Log.Logger);
-
-        switch (Flow)
-        {
-            case AuthType.DeviceCode:
-                DeviceCodeCredentialOptions DeviceCodeCredentialOptions = AzureAuth.CreateDeviceCodeCredentialOptions(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
-                    CreateCallBack: false);
-
-                DeviceCodeCredentialOptions.DeviceCodeCallback += (DeviceCode, sender) =>
-                {
-                    UserCode = DeviceCode.UserCode;
-                    CopyUserCodeEnabled = true;
-                    OpenBrowserEnabled = true;
-
-                    return Task.CompletedTask;
-                };
-
-                DeviceCodeCredential DeviceCodeCredential = AzureAuth.CreateDeviceCodeCredential(DeviceCodeCredentialOptions);
-
-                Client = await AzureAuth.GetClientAsync(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
-                    _uiHelper.GetContentFromObservableCollection(AllScopes),
-                    Flow,
-                    CodeCredential: DeviceCodeCredential);
-                break;
-            case AuthType.Interactive:
-                Client = Client = await AzureAuth.GetClientAsync(
-                    Preferences.Get<String>(Strings.Setting_Name_AppID, DefaultValue.AppId),
-                    Preferences.Get<String>(Strings.Setting_Name_TenantID, DefaultValue.TenantId),
-                    _uiHelper.GetContentFromObservableCollection(AllScopes),
-                    Flow);
-                break;
-        }
-
-        string[] AllGroups = _uiHelper.GetContentFromObservableCollection(AllGroupFilter);
+        string[] AllGroups = UiHelper.GetContentFromObservableCollection(AzureGroupViewModel.AllGroupFilter, removeEmpty: true);
 
         AzureUser AzureUser = new AzureUser(Log.Logger);
-        UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups, token);
+        UserCollectionResponse Users = await AzureUser.GetUsersAsync(message.Client, AllGroups);
 
         AzureMFA AzureMFA = new AzureMFA(Log.Logger);
-        List<UserMFA> AllMFAUserResult = await AzureMFA.GetAllUsersMFA(Client, AllUser, token);
 
+        List<UserMFA> AllMFAUserResult = await AzureMFA.GetAllUsersMFA(message.Client, Users);
+
+        AllItems.Clear();
         foreach (UserMFA SingleUser in AllMFAUserResult)
         {
-            AllUserMFAData.Add(SingleUser);
+            AllItems.Add(SingleUser);
         }
 
-        LoadingRingEnabled = false;
-        ExportEnabled = true;
-        CopyUserCodeEnabled = true;
-        OpenBrowserEnabled = true;
-
-        UserCode = null;
+        AzureActionBarViewModel.SetUiToProcessFinishMode();
     }
 }
