@@ -17,9 +17,9 @@ using Serilog;
 
 namespace IRH.Ui.ViewModels;
 
-internal partial class AzureMailViewModel : AzureViewModelBase<UserMailCollection, AzureMailViewModel>
+public partial class AzureMailViewModel : AzureViewModelBase<UserMailCollection, AzureMailViewModel>
 {
-    internal AzureMailViewModel()
+    public AzureMailViewModel()
     {
         AzureActionBarViewModel.ShouldElevateToAppAccess = true;
     }
