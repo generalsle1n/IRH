@@ -36,18 +36,20 @@ internal class DataMessageRouter : IRecipient<AzureGraphViewModelMessageBase>
         });
     }
 
-    public void Receive(AzureGraphViewModelMessageBase message)
+    private AzureGraphViewModelMessageGeneric<T> CreateAzureGraphViewModelMessageGeneric<T>(AzureGraphViewModelMessageBase message)
     {
         Type BaseType = typeof(AzureGraphViewModelMessageGeneric<>);
-        
-        if (message.Requester == typeof(AzureMailViewModel))
-        {
-            Type GenericType = GenericType = BaseType.MakeGenericType(message.Requester);
-            AzureGraphViewModelMessageGeneric<AzureMailViewModel> SendMessage = Activator.CreateInstance(GenericType) as AzureGraphViewModelMessageGeneric<AzureMailViewModel>;
+        Type GenericType = GenericType = BaseType.MakeGenericType(message.Requester);
+        AzureGraphViewModelMessageGeneric<T> SendMessage = Activator.CreateInstance(GenericType) as AzureGraphViewModelMessageGeneric<T>;
             
             SendMessage.Client = message.Client;
             SendMessage.Requester = message.Requester;
             
+        SendMessage.Client = message.Client;
+        SendMessage.Requester = message.Requester;
+        
+        return SendMessage;
+    }
             WeakReferenceMessenger.Default.Send(SendMessage);
         }
     }
