@@ -8,6 +8,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModel:AzureMailViewModel"
              x:Class="IRH.Ui.Views.AzureMailView">
+    
+    <Design.DataContext>
+        <viewModel:AzureMailViewModel/>
+    </Design.DataContext>
+    
     <Grid RowDefinitions="*, Auto">
         <Grid ColumnDefinitions="Auto,*">
             <ScrollViewer Grid.Column="0">
