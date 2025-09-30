@@ -181,7 +181,7 @@ public partial class AzureRevokeUserSessionViewModel : ViewModelBase
                 break;
         }
 
-        string[] AllGroups = _uiHelper.GetContentFromObservableCollection(AllGroupFilter);
+        string[] AllGroups = _uiHelper.GetContentFromObservableCollection(AllGroupFilter, removeEmpty: true);
 
         AzureUser AzureUser = new AzureUser(Log.Logger);
         UserCollectionResponse AllUser = await AzureUser.GetUsersAsync(Client, AllGroups, token);
