@@ -87,8 +87,6 @@ public partial class AzureMailViewModel : AzureViewModelBase<UserMailCollection,
             }
         }
         
-        AzureActionBarViewModel.LoadingRingEnabled = false;
-        AzureActionBarViewModel.UserCode = String.Empty;
-        AzureActionBarViewModel.ExportEnabled = true;
+        AzureActionBarViewModel.SetUiToProcessFinishMode();
     }
 }

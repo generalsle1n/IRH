@@ -86,6 +86,13 @@ public partial class AzureActionBarViewModel : ViewModelBase
 
         return Result;
     }
+
+    internal void SetUiToProcessFinishMode()
+    {
+        LoadingRingEnabled = false;
+        UserCode = String.Empty;
+        ExportEnabled = true;
+    }
     
     [RelayCommand]
     private async Task StartAzureGathering(CancellationToken token)

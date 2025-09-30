@@ -203,8 +203,7 @@ public partial class AzureRevokeUserSessionViewModel : ViewModelBase
             SingleUserSession.ResetToken = Result.ResetToken;
             SingleUserSession.Response = Result.Response;
         }
-
-        ExportEnabled = true;
-        LoadingRingEnabled = false;
+        
+        AzureActionBarViewModel.SetUiToProcessFinishMode();
     }
 }
