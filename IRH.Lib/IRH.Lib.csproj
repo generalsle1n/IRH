@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.Graph" Version="5.93.0" />
     <PackageReference Include="Microsoft.Graph.Beta" Version="5.111.0-preview" />
     <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="SMBLibrary" Version="1.5.4.1" />
   </ItemGroup>
 
 </Project>
