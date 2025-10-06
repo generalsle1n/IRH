@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRH.Lib.Model.Remote.CopyFile;
 
 namespace IRH.Lib
 {
@@ -17,6 +18,7 @@ namespace IRH.Lib
         public const int DefaultSecretPeriod = 30;
         public const int DefaultWaitTime = 1000;
         public static readonly AuthType AuthType = AuthType.DeviceCode;
+        public static readonly CopyType CopyType = CopyType.Smb;
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
         public static readonly List<string> AzureSessionRevokePermissions = new List<string>() { "Directory.Read.All", "User.RevokeSessions.All"};
         public static readonly List<string> AzureLoginAuditPermissions = new List<string>() { "Directory.Read.All", "AuditLogsQuery.Read.All"};
