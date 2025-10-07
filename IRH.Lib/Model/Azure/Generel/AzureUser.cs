@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Serilog;
-using Serilog.Core;
 
 namespace IRH.Lib.Class.Azure.Generel
 {
@@ -26,6 +25,18 @@ namespace IRH.Lib.Class.Azure.Generel
             {
                 search.QueryParameters.Expand = new string[] { "memberOf" };
             }, cancellationToken: singleCancellationToken);
+
+            PageIterator<User, UserCollectionResponse> Iterator = PageIterator<User, UserCollectionResponse>.CreatePageIterator(Client, AllUsers, (singleUser) =>
+            {
+                if (!AllUsers.Value.Contains(singleUser))
+                {
+                    AllUsers.Value.Add(singleUser);
+                }
+                   
+                return true;
+            });
+
+            await Iterator.IterateAsync();
             
             if (GroupIDs.Length > 0)
             {
