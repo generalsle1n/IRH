@@ -81,35 +81,29 @@ internal class CopyFileToRemoteCommand
             
             Command.SetAction(async parseResult =>
             {
-                FileInfo SourceFile = parseResult.GetRequiredValue<FileInfo>(SourceFileOption);
-
-                byte[] FileData = await File.ReadAllBytesAsync(SourceFile.FullName);
-                
                 CopyFileToRemote CopyFileToRemoteCommand = new CopyFileToRemote(_logger);
-                
                 string[] AllServers = parseResult.GetRequiredValue<string[]>(RemoteFunctions.RemoteServerName);
-                
+
                 _logger.Information($"Found Remote Devices: {AllServers.Length}");
 
                 List<Task> AllCopyTasks = new List<Task>();
                 
                 foreach (string SingleServer in AllServers)
                 {
-                    Task SingleCopyTask = CopyFileToRemoteCommand.CopySingleFileAsync(
+                    Task SingleTask = CopyFileToRemoteCommand.CopySingleFileAsync(
                         parseResult.GetRequiredValue<CopyType>(CopyTypeOption),
                         parseResult.GetRequiredValue<string>(RemoteFunctions.UserNameName),
                         parseResult.GetRequiredValue<string>(RemoteFunctions.PasswordName),
                         parseResult.GetRequiredValue<string>(RemoteFunctions.DomainName),
-                        FileData,
+                        parseResult.GetRequiredValue<FileInfo>(SourceFileOption),
                         SingleServer,
                         parseResult.GetRequiredValue<string>(ShareNameOption),
                         parseResult.GetRequiredValue<string>(DestinationFileOption));
                     
-                    AllCopyTasks.Add(SingleCopyTask);
+                    AllCopyTasks.Add(SingleTask);
                 }
                 
                 await Task.WhenAll(AllCopyTasks);
-                
             });
 
             return Command;
