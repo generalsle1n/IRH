@@ -1,5 +1,8 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using EzSmb;
+using EzSmb.Params;
 using IRH.Lib.Model.Remote.CopyFile;
 using Serilog;
 using SMBLibrary;
