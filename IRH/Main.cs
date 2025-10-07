@@ -6,7 +6,6 @@ using Serilog.Core;
 using System.CommandLine;
 using IRH.Commands.Azure;
 using IRH.Commands.Remote;
-using IRH.Remote;
 
 const string _commandDescription = "suite of some little helper tools within incident response when dealing with security breaches. These tools provide essential features for IT security professionals, making it easier to manage and respond to incidents effectively.";
 
