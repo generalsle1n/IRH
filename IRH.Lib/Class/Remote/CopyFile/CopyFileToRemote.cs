@@ -18,33 +18,59 @@ public class CopyFileToRemote
     }
     
     private readonly ILogger _logger;
-    public async Task CopySingleFileAsync(CopyType copyType, string username, string password, string domain, byte[] sourceContent, string destinationServer, string shareName, string destinationPath)
+    public async Task CopySingleFileAsync(CopyType copyType, string username, string password, string domain, FileInfo sourceFile, string destinationServer, string shareName, string destinationPath)
     {
         switch (copyType)
         {
             case CopyType.Smb:
                 _logger.Information("Selected as Copy Type SMB");
-                await CopyFileUsingSmb2Async(username, password, domain, sourceContent, destinationServer, shareName, destinationPath);
+                await CopyFileUsingSmb2Async(username, password, domain, sourceFile, destinationServer, shareName, destinationPath);
                 break;
         }
     }
-    private async Task CopyFileUsingSmb2Async(string username, string password, string domain, byte[] sourceContent, string destinationServer, string shareName, string destinationPath)
+    private async Task CopyFileUsingSmb2Async(string username, string password, string domain, FileInfo sourceFile, string destinationServer, string shareName, string destinationPath)
     {
-        SMB2Client Client = new SMB2Client();
-        ISMBFileStore FileStore = CreateSmbFileStore(Client, username, password, domain, destinationServer, shareName);
-
-        if (FileStore is not null)
+        using (Node Node = await CreateNodeAsync(username, password, domain, destinationServer, shareName))
         {
-            if (!CheckIfFileExists(FileStore, destinationPath, destinationServer))
+            if (Node is not null)
             {
-                CopyFileFromLocal(FileStore, sourceContent, destinationPath, destinationServer);
-                DisposeManual(FileStore, Client);
-            }
-            else
-            {
-                _logger.Error($@"File \\{destinationServer}\{shareName}\{destinationPath} already exists");
+                await CreateFolderPathAsyncWhenNotExists(Node, destinationPath);
+                bool FileExists = await CheckIfFileExistsAsync(Node, destinationPath);
+            
+                if (FileExists == false)
+                {
+                    using (FileStream FileStream = new FileStream(sourceFile.FullName, FileMode.Open, FileAccess.Read))
+                    {
+                        _logger.Information($"Start to write File {sourceFile.FullName} to {destinationPath} on {Node.FullPath}");
+                        bool Result = await Node.Write(FileStream, destinationPath);
+
+                        if (Result)
+                        {
+                            _logger.Information($"File {sourceFile.FullName} was written successfully to {destinationPath} on {Node.FullPath}");                        
+                        }
+                        else
+                        {
+                            _logger.Error($"Unable to write File {sourceFile.FullName} to {destinationPath} on {Node.FullPath}");   
+                        }
+                    }
+                }
             }
         }
+        // SMB2Client Client = new SMB2Client();
+        // ISMBFileStore FileStore = await Task.Run(() => CreateSmbFileStore(Client, username, password, domain, destinationServer, shareName));
+        //
+        // if (FileStore is not null)
+        // {
+        //     if (!CheckIfFileExists(FileStore, destinationPath, destinationServer))
+        //     {
+        //         await Task.Run(() => CopyFileFromLocal(FileStore, sourceContent, destinationPath, destinationServer));
+        //         DisposeManual(FileStore, Client);
+        //     }
+        //     else
+        //     {
+        //         _logger.Error($@"File \\{destinationServer}\{shareName}\{destinationPath} already exists");
+        //     }
+        // }
     }
     private ISMBFileStore CreateSmbFileStore(SMB2Client client, string username, string password, string domain, string destinationServer, string shareName)
     {
