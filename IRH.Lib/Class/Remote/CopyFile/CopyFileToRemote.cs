@@ -186,4 +186,62 @@ public class CopyFileToRemote
         client.Logoff();
         client.Disconnect();
     }
+    private async Task CreateFolderPathAsyncWhenNotExists(Node node, string destinationPath)
+    {
+        List<string> Folders = destinationPath.Split(@"\").ToList();
+        Folders.RemoveAt(Folders.Count - 1);
+        
+        StringBuilder PathBuilder = new StringBuilder();
+
+        foreach (string singleItem in Folders)
+        {
+            PathBuilder.Append($@"{singleItem}\");
+            Node? Folder = await node.CreateFolder(PathBuilder.ToString());
+
+            if (Folder is not null)
+            {
+                _logger.Information($"Created folder {PathBuilder.ToString()} on {node.FullPath}");
+            }
+        }
+    }
+    
+    private async Task<bool> CheckIfFileExistsAsync(Node node, string filePath)
+    {
+        bool Result = false;
+
+        using (MemoryStream fileStream = await node.Read(filePath))
+        {
+            if (fileStream is not null)
+            {
+                Result = true;
+                _logger.Warning($"File ({filePath}) already exists on {node.FullPath}");
+            }
+        }
+        
+        return Result;
+    }
+    
+    private async Task<Node> CreateNodeAsync(string username, string password, string domain, string destinationServer, string shareName)
+    {
+        _logger.Information($"Try to connect to {destinationServer} with {username}@{domain}");
+        
+        Node Result = null;
+        try
+        {
+            Result = await Node.GetNode($@"{destinationServer}\{shareName}", new ParamSet()
+            {
+                UserName = username,
+                Password = password,
+                DomainName = domain
+            }, true);
+            
+            _logger.Information($"Connected to {destinationServer} with {username}@{domain} successfully");
+        }
+        catch (IOException Exception)
+        {
+            _logger.Error($@"| {destinationServer}\{shareName} --> {Exception.Message}");
+        }
+        
+        return Result;
+    }
 }
