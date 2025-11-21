@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRH.Lib", "IRH.Lib\IRH.Lib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRH.Ui", "IRH.Ui\IRH.Ui.csproj", "{80F91A5A-9557-4C36-88B1-F4F6B209AF32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRH.Lib.VMWare", "IRH.Lib.VMWare\IRH.Lib.VMWare.csproj", "{10AF3592-DCD0-4ECD-AC4A-6D067685A950}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{80F91A5A-9557-4C36-88B1-F4F6B209AF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80F91A5A-9557-4C36-88B1-F4F6B209AF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80F91A5A-9557-4C36-88B1-F4F6B209AF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10AF3592-DCD0-4ECD-AC4A-6D067685A950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10AF3592-DCD0-4ECD-AC4A-6D067685A950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10AF3592-DCD0-4ECD-AC4A-6D067685A950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10AF3592-DCD0-4ECD-AC4A-6D067685A950}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
