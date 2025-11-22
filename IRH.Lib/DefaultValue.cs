@@ -1,11 +1,12 @@
 ﻿using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
+using IRH.Lib.Model.Deployment.Esxi;
+using IRH.Lib.Model.Remote.CopyFile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRH.Lib.Model.Remote.CopyFile;
 
 namespace IRH.Lib
 {
@@ -29,5 +30,6 @@ namespace IRH.Lib
         public static readonly Uri DeviceLoginUrl = new Uri("https://microsoft.com/devicelogin");
         public static readonly ReportType ReportType = ReportType.CLI;
         public static readonly ReportPrintLevel PrintLevel = ReportPrintLevel.Brief;
+        public static readonly DeploymentType EsxiDeploymentType = DeploymentType.MSIExec;
     }
 }
