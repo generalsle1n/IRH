@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Serilog.Core;
+using IRH.Lib.Class.Deployment.VMWare;
+using IRH.Lib.Model.General;
 
 namespace IRH.Commands.Deployment.Esxi
 {
@@ -23,9 +25,19 @@ namespace IRH.Commands.Deployment.Esxi
         private readonly DeploymentType DeploymentTypeDefaultValue = DefaultValue.EsxiDeploymentType;
 
         private const string EsxiAdressName = "-A";
-        private const string EsxiAdressDescription = "Emter the address (just Hostname or IP without http/s or path)";
+        private const string EsxiAdressDescription = "Enter the address (just Hostname or IP without http/s or path)";
         private const string EsxiAdressAlias = "--Address";
         private const bool EsxiAdressIsRequired = true;
+
+        private const string EsxiPortName = "-P";
+        private const string EsxiPortDescription = "Enter the port (TCP)";
+        private const string EsxiPortAlias = "--Port";
+        private const int EsxiPortDefaultValue = DefaultValue.DefaultEsxiPort;
+
+        private const string EsxiSchemeName = "-S";
+        private const string EsxiSchemeDescription = "Enter the Scheme (http/https)";
+        private const string EsxiSchemeAlias = "--Scheme";
+        private const WebScheme EsxiSchemeDefaultValue = WebScheme.Https;
 
         private const string EsxiUserName = "-UE";
         private const string EsxiUserDescription = @"Enter the user for the esxi";
@@ -81,6 +93,18 @@ namespace IRH.Commands.Deployment.Esxi
                 Required = EsxiAdressIsRequired
             };
 
+            Option<int> EsxiPortOption = new Option<int>(name: EsxiPortName, aliases: EsxiPortAlias)
+            {
+                Description = EsxiPortDescription,
+                DefaultValueFactory = (result) => EsxiPortDefaultValue
+            };
+
+            Option<WebScheme> EsxiSchemeOption = new Option<WebScheme>(name: EsxiSchemeName, aliases: EsxiSchemeAlias)
+            {
+                Description = EsxiSchemeDescription,
+                DefaultValueFactory = (result) => EsxiSchemeDefaultValue
+            };
+
             Option<string> EsxiUserOption = new Option<string>(name: EsxiUserName, aliases: EsxiUserAlias)
             {
                 Description = EsxiUserDescription,
@@ -113,11 +137,30 @@ namespace IRH.Commands.Deployment.Esxi
 
             Command.Options.Add(DeploymentTypeOption);
             Command.Options.Add(EsxiAdressOption);
+            Command.Options.Add(EsxiPortOption);
+            Command.Options.Add(EsxiSchemeOption);
             Command.Options.Add(EsxiUserOption);
             Command.Options.Add(EsxiPasswordOption);
             Command.Options.Add(GuestUserOption);
             Command.Options.Add(GuestPasswordOption);
             Command.Options.Add(DeploymentFileOption);
+
+            Command.SetAction(async parseResult =>
+            {
+                EsxiDeployment EsxiDeployment = new EsxiDeployment(_logger);
+
+                HypervisorLoginInfo HypervisorLoginInfo = new HypervisorLoginInfo
+                {
+                    Address = parseResult.GetRequiredValue<string>(EsxiAdressOption),
+                    Port = parseResult.GetRequiredValue<int>(EsxiPortOption),
+                    Scheme = parseResult.GetRequiredValue<WebScheme>(EsxiSchemeOption),
+                    User = parseResult.GetRequiredValue<string>(EsxiUserOption),
+                    Password = parseResult.GetRequiredValue<string>(EsxiPasswordOption)
+                };
+
+                await EsxiDeployment.DeploySetupToSingleMachineAsync(HypervisorLoginInfo);
+                Console.WriteLine();
+            });
 
             return Command;
         }
