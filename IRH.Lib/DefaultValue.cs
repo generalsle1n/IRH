@@ -1,6 +1,7 @@
 ﻿using IRH.Lib.Model.Azure.Auth;
 using IRH.Lib.Model.Azure.Reporting;
 using IRH.Lib.Model.Deployment.Esxi;
+using IRH.Lib.Model.General;
 using IRH.Lib.Model.Remote.CopyFile;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace IRH.Lib
         public const string DefaultDateFormat = "yyyy-MM-dd";
         public const int DefaultSecretPeriod = 30;
         public const int DefaultWaitTime = 1000;
+        public const int DefaultEsxiPort = 443;
         public static readonly AuthType AuthType = AuthType.DeviceCode;
         public static readonly CopyType CopyType = CopyType.Smb;
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
@@ -31,5 +33,6 @@ namespace IRH.Lib
         public static readonly ReportType ReportType = ReportType.CLI;
         public static readonly ReportPrintLevel PrintLevel = ReportPrintLevel.Brief;
         public static readonly DeploymentType EsxiDeploymentType = DeploymentType.MSIExec;
+        public static readonly WebScheme EsxiDefaultScheme = WebScheme.Http;
     }
 }

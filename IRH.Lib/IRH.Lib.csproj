@@ -16,4 +16,8 @@
     <PackageReference Include="SMBLibrary" Version="1.5.4.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IRH.Lib.VMWare\IRH.Lib.VMWare.csproj" />
+  </ItemGroup>
+
 </Project>
