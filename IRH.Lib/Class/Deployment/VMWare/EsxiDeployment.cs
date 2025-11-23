@@ -196,5 +196,90 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             return Result;
         }
+
+        //Overwork
+        public async Task CopyFileToAllVMsAsync(EsxiNavigation navigation, GuestOsLoginInfo loginInfo, List<VirtualMachine> vms, FileInfo deploymentFile)
+        {
+            Console.WriteLine();
+            var a = navigation.ServiceContent.guestOperationsManager;
+            NamePasswordAuthentication auth = new NamePasswordAuthentication()
+            {
+                username = loginInfo.User,
+                password = loginInfo.Password
+            };
+            
+            Console.WriteLine();
+            //await _esxiFactory.GetFileManager(navigation);
+            ManagedObjectReference guestOpMgrRef = navigation.ServiceContent.guestOperationsManager;
+            var propSpec = new PropertySpec
+            {
+                type = "GuestOperationsManager",
+                pathSet = new string[] { "fileManager" }
+            };
+            var objSpec = new ObjectSpec
+            {
+                obj = guestOpMgrRef
+            };
+            var filterSpec = new PropertyFilterSpec
+            {
+                propSet = new PropertySpec[] { propSpec },
+                objectSet = new ObjectSpec[] { objSpec }
+            };
+            // PropertyCollector-Ref aus ServiceContent holen:
+            ManagedObjectReference propCollectorRef = navigation.ServiceContent.propertyCollector;
+
+            // PropertyCollector aufrufen
+            var result = await navigation.Client.RetrievePropertiesAsync(propCollectorRef, new PropertyFilterSpec[] { filterSpec });
+
+            // fileManager MoRef extrahieren
+            ManagedObjectReference fileMgrMor = null;
+            
+            if (result.returnval.Length > 0 && result.returnval[0].propSet.Length > 0)
+            {
+                fileMgrMor = (ManagedObjectReference)result.returnval[0].propSet[0].val;
+            }
+
+            string uploadUrl = await navigation.Client.InitiateFileTransferToGuestAsync(fileMgrMor, vms.First().VM.obj, auth, @"C:\lol.dll", new GuestFileAttributes(), deploymentFile.Length, true);
+
+            uploadUrl = uploadUrl.Replace("*", "192.168.64.128");
+
+            Console.WriteLine();
+            byte[] fileBytes = File.ReadAllBytes(deploymentFile.FullName);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uploadUrl);
+            request.Method = "PUT";
+            request.ContentLength = fileBytes.Length;
+            request.ContentType = "application/octet-stream";
+
+            // Optional, falls selbstsigniertes Zertifikat auf vCenter/ESXi:
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+
+            // Datei schreiben
+            using (Stream stream = request.GetRequestStream())
+            {
+                stream.Write(fileBytes, 0, fileBytes.Length);
+            }
+
+            // Antwort abrufen und prüfen
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
+                {
+                    Console.WriteLine("Datei erfolgreich hochgeladen!");
+                }
+                else
+                {
+                    Console.WriteLine($"Fehler beim Upload: {response.StatusCode} {response.StatusDescription}");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+
+
+        }
     }
 }
