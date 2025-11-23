@@ -175,7 +175,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                         if (guestToolsRunningState.Equals(DefaultValue.EsxiPropertyGuestToolsRunningRunStatus))
                         {
                             Result.Add(singleVirtualMachine);
-        }
+                        }
                         else
                         {
                             _logger.Information($"{singleVirtualMachine.Name} skipped due to Guest Tools not running. Detected Guest Tools Running State: {guestToolsRunningState}");
