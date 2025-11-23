@@ -64,6 +64,11 @@ namespace IRH.Commands.Deployment.Esxi
         private const string DeploymentFileAlias = "--File";
         private const bool DeploymentFileIsRequired = true;
 
+        private const string GuestOsSelectionName = "-G";
+        private const string GuestOsSelectionDescription = @"Enter the Guest os to deploy the setup";
+        private const string GuestOsSelectionAlias = "--Guest";
+        private const GuestOs GuestOsSelectionDefaultValue = GuestOs.Windows;
+
         private readonly Logger _logger;
 
         internal EsxiDeploymentCommand(Logger Logger)
@@ -135,6 +140,12 @@ namespace IRH.Commands.Deployment.Esxi
                 Required = DeploymentFileIsRequired
             };
 
+            Option<GuestOs> GuestOsSelectionOption = new Option<GuestOs>(name: GuestOsSelectionName, aliases: GuestOsSelectionAlias)
+            {
+                Description = GuestOsSelectionDescription,
+                DefaultValueFactory = (result) => GuestOsSelectionDefaultValue
+            };
+
             Command.Options.Add(DeploymentTypeOption);
             Command.Options.Add(EsxiAdressOption);
             Command.Options.Add(EsxiPortOption);
@@ -144,6 +155,7 @@ namespace IRH.Commands.Deployment.Esxi
             Command.Options.Add(GuestUserOption);
             Command.Options.Add(GuestPasswordOption);
             Command.Options.Add(DeploymentFileOption);
+            Command.Options.Add(GuestOsSelectionOption);
 
             Command.SetAction(async parseResult =>
             {
