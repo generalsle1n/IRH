@@ -158,8 +158,8 @@ namespace IRH.Commands.Deployment.Esxi
                     Password = parseResult.GetRequiredValue<string>(EsxiPasswordOption)
                 };
 
-                var lol = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
-                await EsxiDeployment.GetAllVMs(lol);
+                EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
+                await EsxiDeployment.GetAllVMs(navigation);
             });
 
             return Command;
