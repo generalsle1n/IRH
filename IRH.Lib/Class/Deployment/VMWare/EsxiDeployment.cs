@@ -30,6 +30,16 @@ namespace IRH.Lib.Class.Deployment.VMWare
         private readonly ILogger _logger;
         private readonly EsxiFactory _esxiFactory;
 
+        private readonly string[] virtualMachinePorperties = new string[] {
+            "name",
+            "config.uuid",
+            "config.guestFullName",
+            "config.guestId",
+            "runtime.powerState",
+            "guest.toolsRunningStatus",
+            "guest.guestFullName",
+        };
+
         public async Task DeploySetupToSingleMachineAsync(HypervisorLoginInfo hypervisorLoginInfo)
         {
             
@@ -75,39 +85,19 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return Result;
         }
 
-        public async Task GetAllVMs(EsxiNavigation navigation)
+        public async Task<List<ObjectContent>> GetAllVMs(EsxiNavigation navigation)
         {
-            var createViewReq = new CreateContainerViewRequestType
-            {
-                _this = navigation.ServiceContent.viewManager,
-                container = navigation.ServiceContent.rootFolder,
-                type = new[] { "VirtualMachine" },
-                recursive = true
-            };
+            CreateContainerViewResponse viewReference = await navigation.Client.CreateContainerViewAsync(navigation.ServiceContent.viewManager, navigation.ServiceContent.rootFolder, new[] { "VirtualMachine" }, true);
 
-            var viewRef = await navigation.Client.CreateContainerViewAsync(navigation.ServiceContent.viewManager,navigation.ServiceContent.rootFolder, new[] { "VirtualMachine" }, true);
-
-
-            Console.WriteLine();
-            var vmProps = new[] {
-                "name",
-                "runtime.powerState",
-                "config.uuid",
-                "guest.guestFullName",
-                "summary.config.numCpu",
-                "summary.config.memorySizeMB"
-            };
-
-            var propSpec = new PropertySpec
+            PropertySpec propertySpec = new PropertySpec
             {
                 type = "VirtualMachine",
-                pathSet = vmProps,
-                all = false
+                pathSet = virtualMachinePorperties
             };
 
-            var objSpec = new ObjectSpec
+            ObjectSpec objectSpecification = new ObjectSpec
             {
-                obj = viewRef.returnval,
+                obj = viewReference.returnval,
                 skip = false,
                 selectSet = new SelectionSpec[] { new TraversalSpec
                     {
@@ -119,41 +109,28 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 }
             };
 
-            var filterSpec = new PropertyFilterSpec
+            PropertyFilterSpec propertyFilterSpec = new PropertyFilterSpec
             {
-                propSet = new[] { propSpec },
-                objectSet = new[] { objSpec }
+                propSet = new PropertySpec[]
+                {
+                    propertySpec
+                },
+                objectSet = new ObjectSpec[]
+                {
+                    objectSpecification
+                }
             };
 
-            var retrieveRes = await navigation.Client.RetrievePropertiesExAsync(navigation.ServiceContent.propertyCollector, new[] { filterSpec }, new RetrieveOptions
+            RetrievePropertiesExResponse retrieveResponse = await navigation.Client.RetrievePropertiesExAsync(navigation.ServiceContent.propertyCollector, new PropertyFilterSpec[]
             {
-                maxObjects = 1000
-            });
+                propertyFilterSpec
+            }, new RetrieveOptions());
 
+            List<ObjectContent> Result = new List<ObjectContent>();
 
-            var objects = new List<ObjectContent>();
+            Result.AddRange(retrieveResponse.returnval.objects);
 
-            if (retrieveRes.returnval != null)
-            {
-                if (retrieveRes.returnval.objects != null)
-                    objects.AddRange(retrieveRes.returnval.objects);
-
-                var token = retrieveRes.returnval.token;
-                while (!string.IsNullOrEmpty(token))
-                {
-                    var cont = await navigation.Client.ContinueRetrievePropertiesExAsync(navigation.ServiceContent.propertyCollector, token);
-                    Console.WriteLine();
-                }
-            }
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-
+            return Result;
         }
     }
 }
