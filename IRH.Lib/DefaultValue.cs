@@ -20,6 +20,14 @@ namespace IRH.Lib
         public const int DefaultSecretPeriod = 30;
         public const int DefaultWaitTime = 1000;
         public const int DefaultEsxiPort = 443;
+        public const string EsxiPropertyNameValue = "name";
+        public const string EsxiPropertyConfigUuidValue = "config.uuid";
+        public const string EsxiPropertyConfigGuestFullName = "config.guestFullName";
+        public const string EsxiPropertyConfigGuestIdValue = "config.guestId";
+        public const string EsxiPropertyRuntimePowerStateValue = "runtime.powerState";
+        public const string EsxiPropertyGuestToolsRunningStatusValue = "guest.toolsRunningStatus";
+        public const string EsxiPropertyGuestGuestFullNameValue = "guest.guestFullName";
+        public const string EsxiPropertyGuestToolsRunningRunStatus = "guestToolsRunning";
         public static readonly AuthType AuthType = AuthType.DeviceCode;
         public static readonly CopyType CopyType = CopyType.Smb;
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
