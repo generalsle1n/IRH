@@ -12,10 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Serilog;
 using IRH.Lib.Model.Deployment.Esxi;
-using IRH.Lib.Model.Azure.Session;
 using IRH.Lib.VMWare.Eight;
-using Microsoft.Graph.Beta.Groups.Item.Team.Schedule.TimeCards.Item.EndBreak;
-using UserSession = IRH.Lib.VMWare.Eight.UserSession;
+using FileInfo = System.IO.FileInfo;
 
 namespace IRH.Lib.Class.Deployment.VMWare
 {
@@ -31,13 +29,13 @@ namespace IRH.Lib.Class.Deployment.VMWare
         private readonly EsxiFactory _esxiFactory;
 
         private readonly string[] virtualMachinePorperties = new string[] {
-            "name",
-            "config.uuid",
-            "config.guestFullName",
-            "config.guestId",
-            "runtime.powerState",
-            "guest.toolsRunningStatus",
-            "guest.guestFullName",
+            DefaultValue.EsxiPropertyNameValue,
+            DefaultValue.EsxiPropertyConfigUuidValue,
+            DefaultValue.EsxiPropertyConfigGuestFullName,
+            DefaultValue.EsxiPropertyConfigGuestIdValue,
+            DefaultValue.EsxiPropertyRuntimePowerStateValue,
+            DefaultValue.EsxiPropertyGuestToolsRunningStatusValue,
+            DefaultValue.EsxiPropertyGuestGuestFullNameValue,
         };
 
         public async Task DeploySetupToSingleMachineAsync(HypervisorLoginInfo hypervisorLoginInfo)
