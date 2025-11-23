@@ -150,8 +150,49 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return Result;
         }
 
-            Result.AddRange(retrieveResponse.returnval.objects);
+        /// <summary>
+        /// This method filter all VMs if there are on and vmware tools are running and match the guest OS filter.
+        /// </summary>
+        public async Task<List<VirtualMachine>> FilterVMsAsync(EsxiNavigation navigation, List<VirtualMachine> allVMs, GuestOs guestOsFilter)
+        {
+            _logger.Information($"Filtering VMs ({allVMs.Count}) based on Guest OS: {guestOsFilter}");
+            
+            List<VirtualMachine> Result = new List<VirtualMachine>();
+            
+            foreach(VirtualMachine singleVirtualMachine in allVMs)
+            {
+                string guestOsId = (string)singleVirtualMachine.VM.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyConfigGuestIdValue)).First().val;
+                
+                if (guestOsId.Contains(guestOsFilter.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                {
+
+                    VirtualMachinePowerState runtimePowerState = (VirtualMachinePowerState)singleVirtualMachine.VM.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyRuntimePowerStateValue)).First().val;
+
+                    if(runtimePowerState == VirtualMachinePowerState.poweredOn)
+                    {
+                        string guestToolsRunningState = (string)singleVirtualMachine.VM.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyGuestToolsRunningStatusValue)).First().val;
+                        
+                        if (guestToolsRunningState.Equals(DefaultValue.EsxiPropertyGuestToolsRunningRunStatus))
+                        {
+                            Result.Add(singleVirtualMachine);
         }
+                        else
+                        {
+                            _logger.Information($"{singleVirtualMachine.Name} skipped due to Guest Tools not running. Detected Guest Tools Running State: {guestToolsRunningState}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.Information($"{singleVirtualMachine.Name} skipped due to Power State filter. Detected Power State: {runtimePowerState}");
+                    }
+                }
+                else
+                {
+                    _logger.Information($"{singleVirtualMachine.Name} (GuestID: {singleVirtualMachine.Id}) skipped due to Guest OS filter. Detected Guest OS ID: {guestOsId}");
+                }
+            }
+
+            _logger.Information($"Found {Result.Count} processable vms");
 
             return Result;
         }
