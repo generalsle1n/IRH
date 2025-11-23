@@ -85,8 +85,11 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return Result;
         }
 
-        public async Task<List<ObjectContent>> GetAllVMs(EsxiNavigation navigation)
+        public async Task<List<VirtualMachine>> GetAllVMsAsync(EsxiNavigation navigation)
         {
+            _logger.Information($"Start gathering data from esxi (Version: {navigation.ServiceContent.about.fullName})");
+            _logger.Information($"Retrieving all VMs from ESXi");
+
             CreateContainerViewResponse viewReference = await navigation.Client.CreateContainerViewAsync(navigation.ServiceContent.viewManager, navigation.ServiceContent.rootFolder, new[] { "VirtualMachine" }, true);
 
             PropertySpec propertySpec = new PropertySpec
@@ -121,14 +124,36 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 }
             };
 
+            _logger.Information($"Retrieving VM properties from ESXi host at {navigation.ServiceContent.about.instanceUuid}");
+
             RetrievePropertiesExResponse retrieveResponse = await navigation.Client.RetrievePropertiesExAsync(navigation.ServiceContent.propertyCollector, new PropertyFilterSpec[]
             {
                 propertyFilterSpec
             }, new RetrieveOptions());
 
-            List<ObjectContent> Result = new List<ObjectContent>();
+            _logger.Information($"Retrieved {retrieveResponse.returnval.objects.Length} raw VMs data from ESXi");
+            _logger.Information($"Processing VM properties and enrich data");
+            
+            List<VirtualMachine> Result = new List<VirtualMachine>();
+
+            foreach(ObjectContent singleVirtualMachine in retrieveResponse.returnval.objects)
+            {
+                Result.Add(new VirtualMachine()
+                {
+                    Name = (string)singleVirtualMachine.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyNameValue)).First().val,
+                    Id = (string)singleVirtualMachine.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyConfigUuidValue)).First().val,
+                    VM = singleVirtualMachine,
+                });
+
+            }
+
+            _logger.Information($"All vms ({Result.Count}) gathered and enriched");
+
+            return Result;
+        }
 
             Result.AddRange(retrieveResponse.returnval.objects);
+        }
 
             return Result;
         }
