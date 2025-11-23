@@ -171,7 +171,26 @@ namespace IRH.Commands.Deployment.Esxi
                 };
 
                 EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
-                await EsxiDeployment.GetAllVMs(navigation);
+                
+                List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
+                List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
+
+                GuestOsLoginInfo loginInfo = new GuestOsLoginInfo
+                {
+                    User = parseResult.GetRequiredValue<string>(GuestUserOption),
+                    Password = parseResult.GetRequiredValue<string>(GuestPasswordOption),
+                    Domain = string.Empty
+                };
+
+                await EsxiDeployment.CopyFileToAllVMsAsync(navigation, loginInfo, FilteredData, parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption));
+                Console.WriteLine();
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+
+                Console.WriteLine();
             });
 
             return Command;
