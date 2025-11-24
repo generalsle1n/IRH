@@ -29,7 +29,15 @@ namespace IRH.Lib
         public const string EsxiPropertyGuestGuestFullNameValue = "guest.guestFullName";
         public const string EsxiPropertyGuestToolsRunningRunStatus = "guestToolsRunning";
         public const string EsxiPropertyFileManagerNameValue = "fileManager";
+        public const string EsxiPropertyProcessManagerNameValue = "processManager";
+        public const string EsxiPropertyAuthManagerNameValue = "authManager";
         public const string DefaultWindowsTempPath = @"C:\Windows\Temp";
+        public const string DefaultWindowsMsiExecPath = @"C:\Windows\System32\msiexec.exe";
+        public const string DefaultWindowsCmdPath = @"C:\Windows\System32\cmd.exe";
+        public const string DefaultWindowsMsiExecPrefixArguments = "/I";
+        public const string DefaultWindowsMsiExecSuffixArguments = "/qn";
+        public const string DefaultWindowsCmdPrefixArguments = "/C";
+        public const string DefaultWindowsExeSuffixArguments = "";
         public static readonly AuthType AuthType = AuthType.DeviceCode;
         public static readonly CopyType CopyType = CopyType.Smb;
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
