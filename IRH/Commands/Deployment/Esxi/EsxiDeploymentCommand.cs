@@ -166,33 +166,37 @@ namespace IRH.Commands.Deployment.Esxi
 
                 if(userNameList.Count == passwordList.Count)
                 {
-                EsxiDeployment EsxiDeployment = new EsxiDeployment(_logger);
+                    EsxiDeployment EsxiDeployment = new EsxiDeployment(_logger);
 
-                HypervisorLoginInfo HypervisorLoginInfo = new HypervisorLoginInfo
-                {
-                    Address = parseResult.GetRequiredValue<string>(EsxiAdressOption),
-                    Port = parseResult.GetRequiredValue<int>(EsxiPortOption),
-                    Scheme = parseResult.GetRequiredValue<WebScheme>(EsxiSchemeOption),
-                    User = parseResult.GetRequiredValue<string>(EsxiUserOption),
-                    Password = parseResult.GetRequiredValue<string>(EsxiPasswordOption)
-                };
+                    HypervisorLoginInfo HypervisorLoginInfo = new HypervisorLoginInfo
+                    {
+                        Address = parseResult.GetRequiredValue<string>(EsxiAdressOption),
+                        Port = parseResult.GetRequiredValue<int>(EsxiPortOption),
+                        Scheme = parseResult.GetRequiredValue<WebScheme>(EsxiSchemeOption),
+                        User = parseResult.GetRequiredValue<string>(EsxiUserOption),
+                        Password = parseResult.GetRequiredValue<string>(EsxiPasswordOption)
+                    };
 
                 EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
                 
                 List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
                 List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
+                    EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
+
+                    List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
+                    List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
 
                     List<GuestOsLoginInfo> loginData = new List<GuestOsLoginInfo>();
 
                     int count = 0;
 
                     foreach(string userName in userNameList)
-                {
+                    {
                         loginData.Add(new GuestOsLoginInfo
                         {
                             User = userName,
                             Password = passwordList[count],
-                    Domain = string.Empty
+                            Domain = string.Empty
                         });
                         
                         count++;
@@ -201,7 +205,7 @@ namespace IRH.Commands.Deployment.Esxi
                     HttpClientHandler handler = new HttpClientHandler
                     {
                         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                };
+                    };
 
                     using (HttpClient httpClient = new HttpClient(handler))
                     {
