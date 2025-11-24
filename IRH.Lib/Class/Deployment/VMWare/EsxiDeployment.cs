@@ -296,7 +296,10 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 fileManagerfilterSpec
             });
 
-            ManagedObjectReference fileManager = (ManagedObjectReference)fileManagerPropertyResponse.returnval.First().propSet.First().val;
+            ManagedObjectReference manager = (ManagedObjectReference)fileManagerPropertyResponse.returnval.First().propSet.First().val;
+            return manager;
+        }
+
         public async Task<VirtualMachine> CreateFileUploadUriAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, FileInfo file, GuestOs guestOs)
         {
             ManagedObjectReference fileManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyFileManagerNameValue);
@@ -304,7 +307,6 @@ namespace IRH.Lib.Class.Deployment.VMWare
             vm.GuestFileTransfer.GuestFilePath = await CreateTempPathAsync(guestOs, file);
             string uploadUri = null;
 
-            foreach (GuestOsLoginInfo singleLoginInfo in loginInfo)
             vm = await ValidateLoginAsync(navigation, vm, loginInfo);
 
             _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
@@ -333,6 +335,13 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return vm;
         }
 
+        public async Task<VirtualMachine> ValidateLoginAsync(EsxiNavigation navigation, VirtualMachine vm, List<GuestOsLoginInfo> loginInfo)
+        {
+            ManagedObjectReference authManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyAuthManagerNameValue);
+            
+            _logger.Information($"Start searching valid credentials for vm {vm.Name}");
+
+            foreach(GuestOsLoginInfo singleLoginInfo in loginInfo)
             {
                 NamePasswordAuthentication auth = new NamePasswordAuthentication
                 {
