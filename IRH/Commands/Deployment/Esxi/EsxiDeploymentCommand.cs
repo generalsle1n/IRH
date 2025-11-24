@@ -60,7 +60,7 @@ namespace IRH.Commands.Deployment.Esxi
         private const bool GuestPasswordIsRequired = true;
 
         private const string DeploymentFileName = "-F";
-        private const string DeploymentFileDescription = @"Enter the FilePath to deploy in the guest os";
+        private const string DeploymentFileDescription = @"Enter the FilePath to deploy in the guest os (When set Deployment Type to -T RawCmd you still need to set this option (its not copied to the guest :D its needed for the command line libary to be parsed))";
         private const string DeploymentFileAlias = "--File";
         private const bool DeploymentFileIsRequired = true;
 
@@ -69,10 +69,23 @@ namespace IRH.Commands.Deployment.Esxi
         private const string GuestOsSelectionAlias = "--Guest";
         private const GuestOs GuestOsSelectionDefaultValue = GuestOs.Windows;
 
-        private const string GuestOsDeploymentTypeName = "-T";
-        private const string GuestOsDeploymentTypeDescription = @"Enter the deployment Type which type should be used to deploy the setup";
-        private const string GuestOsDeploymentTypeAlias = "--Type";
-        private const DeploymentType GuestOsDeploymentTypeDefaultValue = DeploymentType.MSIExec;
+        private const string GuestOsMsiExecArgumentName = "-AM";
+        private const string GuestOsMsiExecArgumentDescription = @"Enter the custom argument which is appended at the end like this (msiexec /I setup.msi YOURE ARGUMENT)";
+        private const string GuestOsMsiExecArgumentAlias = "--ArgumentMsi";
+        private const string GuestOsMsiExecArgumentDefaultValue = DefaultValue.DefaultWindowsMsiExecSuffixArguments;
+
+        private const string GuestOsExeArgumentName = "-AE";
+        private const string GuestOsExeArgumentDescription = @"Enter the custom argument which is appended at the end like this (setup.exe YOURE ARGUMENT)";
+        private const string GuestOsExeArgumentAlias = "--ArgumentExe";
+        private const string GuestOsExeArgumentDefaultValue = DefaultValue.DefaultWindowsExeSuffixArguments;
+
+        private const string GuestOsRawCmdArgumentName = "-AC";
+        private const string GuestOsRawCmdArgumentDescription = @"Enter the custom argument which is executed on the guest directly (cmd.exe /C)";
+        private const string GuestOsRawCmdArgumentAlias = "--ArgumentCmd";
+
+        private const string ExcludeVMsByNameName = "-FE";
+        private const string ExcludeVMsByNameDescription = @"Enter names from the vms which should be excluded by the deployment process (You can enter multiple serpated by whitespace)";
+        private const string ExcludeVMsByNameAlias = "--FilterExclude";
 
         private readonly Logger _logger;
 
@@ -144,8 +157,23 @@ namespace IRH.Commands.Deployment.Esxi
             Option<FileInfo> DeploymentFileOption = new Option<FileInfo>(name: DeploymentFileName, aliases: DeploymentFileAlias)
             {
                 Description = DeploymentFileDescription,
-                Required = DeploymentFileIsRequired
+                Required = false,
+                DefaultValueFactory = (result) => null
             };
+
+            DeploymentFileOption.Validators.Add(result =>
+            {
+                DeploymentType selectedDeployment = result.GetRequiredValue<DeploymentType>(DeploymentTypeOption);
+                FileInfo file = result.GetRequiredValue<FileInfo>(DeploymentFileOption);
+
+                if(selectedDeployment != DeploymentType.RawCmd)
+                {
+                    if(file is null)
+                    {
+                        result.AddError($"-F is empty please set to an file which should be deployed");
+                    }
+                }
+            });
 
             Option<GuestOs> GuestOsSelectionOption = new Option<GuestOs>(name: GuestOsSelectionName, aliases: GuestOsSelectionAlias)
             {
@@ -153,10 +181,43 @@ namespace IRH.Commands.Deployment.Esxi
                 DefaultValueFactory = (result) => GuestOsSelectionDefaultValue
             };
 
-            Option<DeploymentType> GuestOsDeploymentTypeOption = new Option<DeploymentType>(name: GuestOsDeploymentTypeName, aliases: GuestOsDeploymentTypeAlias)
+            Option<string> GuestOsMsiExecArgumentOption = new Option<string>(name: GuestOsMsiExecArgumentName, aliases: GuestOsMsiExecArgumentAlias)
             {
-                Description = GuestOsDeploymentTypeDescription,
-                DefaultValueFactory = (result) => GuestOsDeploymentTypeDefaultValue
+                Description = GuestOsMsiExecArgumentDescription,
+                DefaultValueFactory = (result) => GuestOsMsiExecArgumentDefaultValue
+            };
+
+            Option<string> GuestOsExeArgumentOption = new Option<string>(name: GuestOsExeArgumentName, aliases: GuestOsExeArgumentAlias)
+            {
+                Description = GuestOsExeArgumentDescription,
+                DefaultValueFactory = (result) => GuestOsExeArgumentDefaultValue
+            };
+
+            Option<string> GuestOsRawCmdArgumentOption = new Option<string>(name: GuestOsRawCmdArgumentName, aliases: GuestOsRawCmdArgumentAlias)
+            {
+                Description = GuestOsRawCmdArgumentDescription,
+                DefaultValueFactory = (result) => string.Empty
+            };
+
+            GuestOsRawCmdArgumentOption.Validators.Add(result =>
+            {
+                DeploymentType selectedDeployment = result.GetRequiredValue<DeploymentType>(DeploymentTypeOption);
+                string rawCmdArgument = result.GetRequiredValue<string>(GuestOsRawCmdArgumentOption);
+
+                if(selectedDeployment == DeploymentType.RawCmd)
+                {
+                    if(string.IsNullOrEmpty(rawCmdArgument))
+                    {
+                        result.AddError($"When deployment type is set to RawCmd you need to specify an argument {GuestOsRawCmdArgumentName} which is executed on the guest os directly");
+                    }
+                }
+            });
+
+            Option<List<string>> ExcludeVMsByNameOption = new Option<List<string>>(name: ExcludeVMsByNameName, aliases: ExcludeVMsByNameAlias)
+            {
+                Description = ExcludeVMsByNameDescription,
+                AllowMultipleArgumentsPerToken = true,
+                DefaultValueFactory = (result) => new List<string>()
             };
 
             Command.Options.Add(DeploymentTypeOption);
@@ -169,7 +230,10 @@ namespace IRH.Commands.Deployment.Esxi
             Command.Options.Add(GuestPasswordOption);
             Command.Options.Add(DeploymentFileOption);
             Command.Options.Add(GuestOsSelectionOption);
-            Command.Options.Add(GuestOsDeploymentTypeOption);
+            Command.Options.Add(GuestOsMsiExecArgumentOption);
+            Command.Options.Add(GuestOsExeArgumentOption);
+            Command.Options.Add(GuestOsRawCmdArgumentOption);
+            Command.Options.Add(ExcludeVMsByNameOption);
 
             Command.SetAction(async parseResult =>
             {
@@ -192,7 +256,7 @@ namespace IRH.Commands.Deployment.Esxi
                 EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
                 
                 List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
-                List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
+                    List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<List<string>>(ExcludeVMsByNameOption));
 
                     List<GuestOsLoginInfo> loginData = new List<GuestOsLoginInfo>();
 
