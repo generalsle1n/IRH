@@ -150,7 +150,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
         /// <summary>
         /// This method filter all VMs if there are on and vmware tools are running and match the guest OS filter.
         /// </summary>
-        public async Task<List<VirtualMachine>> FilterVMsAsync(EsxiNavigation navigation, List<VirtualMachine> allVMs, GuestOs guestOsFilter)
+        public async Task<List<VirtualMachine>> FilterVMsAsync(EsxiNavigation navigation, List<VirtualMachine> allVMs, GuestOs guestOsFilter, List<string> excludeVmsByName)
         {
             _logger.Information($"Filtering VMs ({allVMs.Count}) based on Guest OS: {guestOsFilter}");
             
@@ -159,7 +159,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             foreach(VirtualMachine singleVirtualMachine in allVMs)
             {
                 string guestOsId = (string)singleVirtualMachine.VM.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyConfigGuestIdValue)).First().val;
-                
+
                 if (guestOsId.Contains(guestOsFilter.ToString(), StringComparison.InvariantCultureIgnoreCase))
                 {
 
@@ -168,7 +168,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     if(runtimePowerState == VirtualMachinePowerState.poweredOn)
                     {
                         string guestToolsRunningState = (string)singleVirtualMachine.VM.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyGuestToolsRunningStatusValue)).First().val;
-                        
+
                         if (guestToolsRunningState.Equals(DefaultValue.EsxiPropertyGuestToolsRunningRunStatus))
                         {
                             Result.Add(singleVirtualMachine);
@@ -189,6 +189,15 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 }
             }
 
+            foreach (string singleVmToExclude in excludeVmsByName)
+            {
+                int removedCount = Result.RemoveAll(singleVm => singleVm.Name.Equals(singleVmToExclude));
+                if(removedCount > 0)
+                {
+                    _logger.Information($"Removed {removedCount} VM with name {singleVmToExclude} because of configured exclude filter");
+                }
+            }
+          
             _logger.Information($"Found {Result.Count} processable vms");
 
             return Result;
