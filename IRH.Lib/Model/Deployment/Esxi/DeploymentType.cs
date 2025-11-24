@@ -8,6 +8,8 @@ namespace IRH.Lib.Model.Deployment.Esxi
 {
     public enum DeploymentType
     {
-        MSIExec
+        MSIExec,
+        Exe,
+        RawCmd
     }
 }
