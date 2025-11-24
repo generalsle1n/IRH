@@ -204,7 +204,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
         }
 
         //Overwork
-        public async Task CopyFileToVMAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
+        public async Task<VirtualMachine> CopyFileToVMAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
         {
             vm = await CreateFileUploadUriAsync(navigation,loginInfo,vm,deploymentFile,guestOs);
             
@@ -241,6 +241,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
             {
                 _logger.Error($"Cannot upload file to vm {vm.Name} because no upload uri could be created. (Check Username/Password)");
             }
+
+            return vm;
         }
 
         public async Task<string> CreateTempPathAsync(GuestOs guestOs, FileInfo file)
