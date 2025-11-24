@@ -283,7 +283,29 @@ namespace IRH.Commands.Deployment.Esxi
                     {
                         foreach (VirtualMachine singleVm in FilteredData)
                         {
-                            await EsxiDeployment.CopyFileToVMAsync(navigation, loginData, singleVm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption), httpClient);
+                            DeploymentType selectedDeployment = parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption);
+                            VirtualMachine vm = null;
+                            
+                            if (DeploymentType.RawCmd != selectedDeployment)
+                            {
+                                vm = await EsxiDeployment.CopyFileToVMAsync(navigation, loginData, singleVm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption), httpClient);
+                            }
+                            
+                            switch (parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption))
+                            {
+                                case DeploymentType.MSIExec:
+                                    await EsxiDeployment.InstalMsiOnVMAsync(navigation, vm, parseResult.GetRequiredValue<string>(GuestOsMsiExecArgumentOption));
+                                    break;
+                                case DeploymentType.Exe:
+                                    await EsxiDeployment.InstallExeOnVMAsync(navigation, vm, parseResult.GetRequiredValue<string>(GuestOsExeArgumentOption));
+                                    break;
+                                case DeploymentType.RawCmd:
+                                    await EsxiDeployment.ExecuteCmdOnVMAsync(navigation, singleVm, loginData, parseResult.GetRequiredValue<string>(GuestOsRawCmdArgumentOption));
+                                    break;
+                                default:
+                                    _logger.Error($"Deployment type {parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption)} not supported");
+                                    break;
+                            }
                         }
                     }
                 }
