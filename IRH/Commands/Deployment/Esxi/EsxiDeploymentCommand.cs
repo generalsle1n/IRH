@@ -161,6 +161,11 @@ namespace IRH.Commands.Deployment.Esxi
 
             Command.SetAction(async parseResult =>
             {
+                List<string> userNameList = parseResult.GetRequiredValue<List<string>>(GuestUserOption);
+                List<string> passwordList = parseResult.GetRequiredValue<List<string>>(GuestPasswordOption);
+
+                if(userNameList.Count == passwordList.Count)
+                {
                 EsxiDeployment EsxiDeployment = new EsxiDeployment(_logger);
 
                 HypervisorLoginInfo HypervisorLoginInfo = new HypervisorLoginInfo
@@ -177,14 +182,59 @@ namespace IRH.Commands.Deployment.Esxi
                 List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
                 List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
 
-                GuestOsLoginInfo loginInfo = new GuestOsLoginInfo
+                    List<GuestOsLoginInfo> loginData = new List<GuestOsLoginInfo>();
+
+                    int count = 0;
+
+                    foreach(string userName in userNameList)
                 {
-                    User = parseResult.GetRequiredValue<string>(GuestUserOption),
-                    Password = parseResult.GetRequiredValue<string>(GuestPasswordOption),
+                        loginData.Add(new GuestOsLoginInfo
+                        {
+                            User = userName,
+                            Password = passwordList[count],
                     Domain = string.Empty
+                        });
+                        
+                        count++;
+                    }
+
+                    HttpClientHandler handler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 };
 
-                await EsxiDeployment.CopyFileToAllVMsAsync(navigation, loginInfo, FilteredData, parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption));
+                    using (HttpClient httpClient = new HttpClient(handler))
+                    {
+                        foreach (VirtualMachine singleVm in FilteredData)
+                        {
+                            await EsxiDeployment.CopyFileToVMAsync(navigation, loginData, singleVm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption), httpClient);
+                        }
+                    }
+                }
+                else
+                {
+                    _logger.Error($"Found not matching amount username {userNameList.Count} and password {passwordList.Count}");
+                }
+
+                //EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
+                
+                //List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
+                //List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
+
+                //GuestOsLoginInfo loginInfo = new GuestOsLoginInfo
+                //{
+                //    User = parseResult.GetRequiredValue<string>(GuestUserOption),
+                //    Password = parseResult.GetRequiredValue<string>(GuestPasswordOption),
+                //    Domain = string.Empty
+                //};
+
+                //var result = new List<GuestOsLoginInfo> { loginInfo };
+
+                //foreach(VirtualMachine singleVm in FilteredData)
+                //{
+                //    await EsxiDeployment.CopyFileToVMAsync(navigation, result, singleVm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption));
+                //}
+
                 Console.WriteLine();
 
                 Console.WriteLine();
