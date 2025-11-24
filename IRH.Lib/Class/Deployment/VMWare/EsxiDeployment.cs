@@ -343,24 +343,30 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             foreach(GuestOsLoginInfo singleLoginInfo in loginInfo)
             {
-                NamePasswordAuthentication auth = new NamePasswordAuthentication
+                NamePasswordAuthentication login = new NamePasswordAuthentication()
                 {
                     username = singleLoginInfo.User,
                     password = singleLoginInfo.Password
                 };
 
-                _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {auth.username}");
-
                 try
                 {
-                    uploadUri = await navigation.Client.InitiateFileTransferToGuestAsync(fileManager, vm.VM.obj, auth, vm.GuestFileTransfer.GuestFilePath, new GuestFileAttributes(), file.Length, false);
-                    _logger.Information($"Successfully created file upload uri for vm {vm.Name} with user {auth.username}");
+                    await navigation.Client.ValidateCredentialsInGuestAsync(authManager, vm.VM.obj, login);
+                    vm.LoginInfo = singleLoginInfo;
+
+                    _logger.Information($"Found working Credential {login.username} on {vm.Name}");
+                    
                     break;
-                }catch(FaultException exception)
+                }catch(FaultException e)
                 {
-                    _logger.Error($"Unable to login with user {auth.username} to vm {vm.Name}, try next credential when more are submitted", exception);
+                    _logger.Warning($"{login.username} doenst worked for {vm.Name}");
                 }
             }
+                
+            }
+
+            return vm;
+        }
 
             if(uploadUri is not null)
             {
