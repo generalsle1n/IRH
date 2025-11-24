@@ -297,11 +297,42 @@ namespace IRH.Lib.Class.Deployment.VMWare
             });
 
             ManagedObjectReference fileManager = (ManagedObjectReference)fileManagerPropertyResponse.returnval.First().propSet.First().val;
+        public async Task<VirtualMachine> CreateFileUploadUriAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, FileInfo file, GuestOs guestOs)
+        {
+            ManagedObjectReference fileManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyFileManagerNameValue);
 
             vm.GuestFileTransfer.GuestFilePath = await CreateTempPathAsync(guestOs, file);
             string uploadUri = null;
 
             foreach (GuestOsLoginInfo singleLoginInfo in loginInfo)
+            vm = await ValidateLoginAsync(navigation, vm, loginInfo);
+
+            _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
+
+            NamePasswordAuthentication auth = new NamePasswordAuthentication()
+            {
+                username = vm.LoginInfo.User,
+                password = vm.LoginInfo.Password
+            };
+
+            try
+            {
+                uploadUri = await navigation.Client.InitiateFileTransferToGuestAsync(fileManager, vm.VM.obj, auth, vm.GuestFileTransfer.GuestFilePath, new GuestFileAttributes(), file.Length, false);
+                _logger.Information($"Successfully created file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
+            }
+            catch (FaultException exception)
+            {
+                _logger.Error($"Unable to login with user {auth.username} to vm {vm.Name}, try next credential when more are submitted", exception);
+            }
+
+            if (uploadUri is not null)
+            {
+                vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
+            }
+
+            return vm;
+        }
+
             {
                 NamePasswordAuthentication auth = new NamePasswordAuthentication
                 {
