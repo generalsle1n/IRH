@@ -224,20 +224,20 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     HttpResponseMessage Response = await client.SendAsync(uploadMessage);
 
                     if (Response.IsSuccessStatusCode)
-            {
+                    {
                         _logger.Information($"Fileupload to {vm.Name} on {vm.GuestFileTransfer.GuestFilePath} was succesfull");
-            }
+                    }
                     else
-            {
+                    {
                         _logger.Error($"Upload failed with {Response.StatusCode} to {Response.RequestMessage.RequestUri} for {vm.Name} (Is the vm running with working vmware tools?)");
                     }
                 }
-                }
-                else
-                {
-                _logger.Error($"Cannot upload file to vm {vm.Name} because no upload uri could be created. (Check Username/Password)");
-                }
             }
+            else
+            {
+                _logger.Error($"Cannot upload file to vm {vm.Name} because no upload uri could be created. (Check Username/Password)");
+            }
+        }
 
         public async Task<string> CreateTempPathAsync(GuestOs guestOs, FileInfo file)
         {
@@ -291,14 +291,14 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             vm.GuestFileTransfer.GuestFilePath = await CreateTempPathAsync(guestOs, file);
             string uploadUri = null;
-            
+
             foreach (GuestOsLoginInfo singleLoginInfo in loginInfo)
             {
-            NamePasswordAuthentication auth = new NamePasswordAuthentication
-            {
+                NamePasswordAuthentication auth = new NamePasswordAuthentication
+                {
                     username = singleLoginInfo.User,
                     password = singleLoginInfo.Password
-            };
+                };
 
                 _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {auth.username}");
 
