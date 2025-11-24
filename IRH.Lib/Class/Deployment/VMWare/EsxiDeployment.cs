@@ -39,11 +39,6 @@ namespace IRH.Lib.Class.Deployment.VMWare
             DefaultValue.EsxiPropertyGuestGuestFullNameValue,
         };
 
-        public async Task DeploySetupToSingleMachineAsync(HypervisorLoginInfo hypervisorLoginInfo)
-        {
-            
-        }
-
         public async Task<EsxiNavigation> LoginAsync(HypervisorLoginInfo loginInfo)
         {
             _logger.Information($"Try to connect to {loginInfo.Scheme}://{loginInfo.Address}:{loginInfo.Port} with user {loginInfo.User}");
