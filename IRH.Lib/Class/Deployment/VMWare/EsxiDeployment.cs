@@ -50,7 +50,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             EsxiNavigation Result = new EsxiNavigation()
             {
-                Client = client,
+                Client = client
             };
 
             try
