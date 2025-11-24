@@ -14,6 +14,7 @@ using Serilog;
 using IRH.Lib.Model.Deployment.Esxi;
 using IRH.Lib.VMWare.Eight;
 using FileInfo = System.IO.FileInfo;
+using System.Net.Http.Headers;
 
 namespace IRH.Lib.Class.Deployment.VMWare
 {
