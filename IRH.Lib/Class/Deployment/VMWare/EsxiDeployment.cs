@@ -141,6 +141,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     Name = (string)singleVirtualMachine.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyNameValue)).First().val,
                     Id = (string)singleVirtualMachine.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyConfigUuidValue)).First().val,
                     VM = singleVirtualMachine,
+                    GuestFileTransfer = new VirtualMachineGuestFileTransfer()
                 });
 
             }
