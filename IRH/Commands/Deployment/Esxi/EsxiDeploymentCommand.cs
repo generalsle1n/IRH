@@ -50,7 +50,7 @@ namespace IRH.Commands.Deployment.Esxi
         private const bool EsxiPasswordIsRequired = true;
 
         private const string GuestUserName = "-UG";
-        private const string GuestUserDescription = @"Enter the user for the guest os";
+        private const string GuestUserDescription = @"Enter the user for the guest os (You can specify more usernames seperated by whitespace, when you enter multiple the first username is tested when it not work the next one is tried, when more usernames are specified you need the same amount of password to set)";
         private const string GuestUserAlias = "--UserGuest";
         private const bool GuestUserIsRequired = true;
 
@@ -122,16 +122,18 @@ namespace IRH.Commands.Deployment.Esxi
                 Required = EsxiPasswordIsRequired
             };
 
-            Option<string> GuestUserOption = new Option<string>(name: GuestUserName, aliases: GuestUserAlias)
+            Option<List<string>> GuestUserOption = new Option<List<string>>(name: GuestUserName, aliases: GuestUserAlias)
             {
                 Description = GuestUserDescription,
-                Required = GuestUserIsRequired
+                Required = GuestUserIsRequired,
+                AllowMultipleArgumentsPerToken = true
             };
 
-            Option<string> GuestPasswordOption = new Option<string>(name: GuestPasswordName, aliases: GuestPasswordAlias)
+            Option<List<string>> GuestPasswordOption = new Option<List<string>>(name: GuestPasswordName, aliases: GuestPasswordAlias)
             {
                 Description = GuestPasswordDescription,
-                Required = GuestPasswordIsRequired
+                Required = GuestPasswordIsRequired,
+                AllowMultipleArgumentsPerToken = true
             };
 
             Option<FileInfo> DeploymentFileOption = new Option<FileInfo>(name: DeploymentFileName, aliases: DeploymentFileAlias)
