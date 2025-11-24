@@ -253,9 +253,9 @@ namespace IRH.Commands.Deployment.Esxi
                         Password = parseResult.GetRequiredValue<string>(EsxiPasswordOption)
                     };
 
-                EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
+                    EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
                 
-                List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
+                    List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
                     List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<List<string>>(ExcludeVMsByNameOption));
 
                     List<GuestOsLoginInfo> loginData = new List<GuestOsLoginInfo>();
