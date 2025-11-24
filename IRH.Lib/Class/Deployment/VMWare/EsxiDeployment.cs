@@ -289,18 +289,35 @@ namespace IRH.Lib.Class.Deployment.VMWare
             ManagedObjectReference fileManager = (ManagedObjectReference)fileManagerPropertyResponse.returnval.First().propSet.First().val;
 
             vm.GuestFileTransfer.GuestFilePath = await CreateTempPathAsync(guestOs, file);
+            string uploadUri = null;
             
+            foreach (GuestOsLoginInfo singleLoginInfo in loginInfo)
+            {
             NamePasswordAuthentication auth = new NamePasswordAuthentication
             {
-                username = loginInfo.User,
-                password = loginInfo.Password
+                    username = singleLoginInfo.User,
+                    password = singleLoginInfo.Password
             };
 
+                _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {auth.username}");
 
+                try
+                {
+                    uploadUri = await navigation.Client.InitiateFileTransferToGuestAsync(fileManager, vm.VM.obj, auth, vm.GuestFileTransfer.GuestFilePath, new GuestFileAttributes(), file.Length, false);
+                    _logger.Information($"Successfully created file upload uri for vm {vm.Name} with user {auth.username}");
+                    break;
+                }catch(FaultException exception)
+                {
+                    _logger.Error($"Unable to login with user {auth.username} to vm {vm.Name}, try next credential when more are submitted", exception);
+                }
+            }
 
-            await navigation.Client.InitiateFileTransferToGuestAsync(fileManager, vm.VM.obj, auth, vm.GuestFileTransfer.GuestFilePath, new GuestFileAttributes(), file.Length, true);
+            if(uploadUri is not null)
+            {
+                vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
+            }
 
-            return "";
+            return vm;
         }
     }
 }
