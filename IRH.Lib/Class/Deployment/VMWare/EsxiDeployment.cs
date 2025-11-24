@@ -200,47 +200,11 @@ namespace IRH.Lib.Class.Deployment.VMWare
         //Overwork
         public async Task CopyFileToAllVMsAsync(EsxiNavigation navigation, GuestOsLoginInfo loginInfo, List<VirtualMachine> vms, FileInfo deploymentFile)
         {
-            Console.WriteLine();
-            var a = navigation.ServiceContent.guestOperationsManager;
-            NamePasswordAuthentication auth = new NamePasswordAuthentication()
-            {
-                username = loginInfo.User,
-                password = loginInfo.Password
-            };
+            await CreateFileUploadUri(navigation, loginInfo, vms.First());
             
-            Console.WriteLine();
-            //await _esxiFactory.GetFileManager(navigation);
-            ManagedObjectReference guestOpMgrRef = navigation.ServiceContent.guestOperationsManager;
-            var propSpec = new PropertySpec
-            {
-                type = "GuestOperationsManager",
-                pathSet = new string[] { "fileManager" }
-            };
-            var objSpec = new ObjectSpec
-            {
-                obj = guestOpMgrRef
-            };
-            var filterSpec = new PropertyFilterSpec
-            {
-                propSet = new PropertySpec[] { propSpec },
-                objectSet = new ObjectSpec[] { objSpec }
-            };
-            // PropertyCollector-Ref aus ServiceContent holen:
-            ManagedObjectReference propCollectorRef = navigation.ServiceContent.propertyCollector;
 
-            // PropertyCollector aufrufen
-            var result = await navigation.Client.RetrievePropertiesAsync(propCollectorRef, new PropertyFilterSpec[] { filterSpec });
-
-            // fileManager MoRef extrahieren
-            ManagedObjectReference fileMgrMor = null;
-            
-            if (result.returnval.Length > 0 && result.returnval[0].propSet.Length > 0)
-            {
-                fileMgrMor = (ManagedObjectReference)result.returnval[0].propSet[0].val;
-            }
-
-            string uploadUrl = await navigation.Client.InitiateFileTransferToGuestAsync(fileMgrMor, vms.First().VM.obj, auth, @"C:\lol.dll", new GuestFileAttributes(), deploymentFile.Length, true);
-
+            //string uploadUrl = await navigation.Client.InitiateFileTransferToGuestAsync(fileMgrMor, vms.First().VM.obj, auth, @"C:\lol.dll", new GuestFileAttributes(), deploymentFile.Length, true);
+            string uploadUrl = "https://*/folder/lol.dll?dcPath=ha-datacenter&dsName=datastore1&vmPathName=lol.dll";
             uploadUrl = uploadUrl.Replace("*", "192.168.64.128");
 
             Console.WriteLine();
@@ -280,6 +244,58 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
 
 
+        }
+
+        public async Task<VirtualMachine> CreateFileUploadUri(EsxiNavigation navigation, GuestOsLoginInfo loginInfo, VirtualMachine vm, FileInfo file)
+        {
+            PropertySpec fileManagerPropSpec = new PropertySpec
+            {
+                type = navigation.ServiceContent.guestOperationsManager.type,
+                pathSet = new string[]
+                {
+                    DefaultValue.EsxiPropertyFileManagerNameValue
+                }
+            };
+
+            ObjectSpec fileManagerObjSpec = new ObjectSpec
+            {
+                obj = navigation.ServiceContent.guestOperationsManager,
+            };
+
+            PropertyFilterSpec fileManagerfilterSpec = new PropertyFilterSpec
+            {
+                propSet = new PropertySpec[]
+                {
+                    fileManagerPropSpec
+                },
+                objectSet = new ObjectSpec[]
+                {
+                    fileManagerObjSpec
+                }
+            };
+
+            ManagedObjectReference propCollectorRef = navigation.ServiceContent.propertyCollector;
+
+            RetrievePropertiesResponse fileManagerPropertyResponse = await navigation.Client.RetrievePropertiesAsync(propCollectorRef, new PropertyFilterSpec[]
+            {
+                fileManagerfilterSpec
+            });
+
+            ManagedObjectReference fileManager = (ManagedObjectReference)fileManagerPropertyResponse.returnval.First().propSet.First().val;
+
+            switch(gues)
+            
+            NamePasswordAuthentication auth = new NamePasswordAuthentication
+            {
+                username = loginInfo.User,
+                password = loginInfo.Password
+            };
+
+
+
+            await navigation.Client.InitiateFileTransferToGuestAsync(fileManager, vm.VM.obj, auth, vm.GuestFileTransfer.GuestFilePath, new GuestFileAttributes(), file.Length, true);
+
+            return "";
         }
     }
 }
