@@ -28,6 +28,7 @@ namespace IRH.Lib
         public const string EsxiPropertyGuestToolsRunningStatusValue = "guest.toolsRunningStatus";
         public const string EsxiPropertyGuestGuestFullNameValue = "guest.guestFullName";
         public const string EsxiPropertyGuestToolsRunningRunStatus = "guestToolsRunning";
+        public const string EsxiPropertyFileManagerNameValue = "fileManager";
         public static readonly AuthType AuthType = AuthType.DeviceCode;
         public static readonly CopyType CopyType = CopyType.Smb;
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
