@@ -1,7 +1,13 @@
-﻿using System;
+﻿using IRH.Lib.Model.Deployment.Esxi;
+using IRH.Lib.VMWare.Eight;
+using Serilog;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
@@ -10,11 +16,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Text;
 using System.Threading.Tasks;
-using Serilog;
-using IRH.Lib.Model.Deployment.Esxi;
-using IRH.Lib.VMWare.Eight;
 using FileInfo = System.IO.FileInfo;
-using System.Net.Http.Headers;
 
 namespace IRH.Lib.Class.Deployment.VMWare
 {
