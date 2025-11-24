@@ -238,13 +238,17 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 }
             }
 
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-
-
-
+        public async Task<string> CreateTempPathAsync(GuestOs guestOs, FileInfo file)
+        {
+            switch(guestOs)
+            {
+                case GuestOs.Windows:
+                    string RawPath = Path.Combine(DefaultValue.DefaultWindowsTempPath, Path.GetRandomFileName());
+                    RawPath = Path.ChangeExtension(RawPath, file.Extension);
+                    return RawPath;
+                default:
+                    throw new NotImplementedException($"Guest OS {guestOs} not implemented for temp path creation.");
+            }
         }
 
         public async Task<VirtualMachine> CreateFileUploadUriAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, FileInfo file, GuestOs guestOs)
@@ -284,7 +288,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             ManagedObjectReference fileManager = (ManagedObjectReference)fileManagerPropertyResponse.returnval.First().propSet.First().val;
 
-            switch(gues)
+            vm.GuestFileTransfer.GuestFilePath = await CreateTempPathAsync(guestOs, file);
             
             NamePasswordAuthentication auth = new NamePasswordAuthentication
             {
