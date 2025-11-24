@@ -181,10 +181,6 @@ namespace IRH.Commands.Deployment.Esxi
                 
                 List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
                 List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
-                    EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
-
-                    List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
-                    List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
 
                     List<GuestOsLoginInfo> loginData = new List<GuestOsLoginInfo>();
 
