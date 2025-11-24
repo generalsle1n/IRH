@@ -247,7 +247,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
         }
 
-        public async Task<VirtualMachine> CreateFileUploadUri(EsxiNavigation navigation, GuestOsLoginInfo loginInfo, VirtualMachine vm, FileInfo file)
+        public async Task<VirtualMachine> CreateFileUploadUriAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, FileInfo file, GuestOs guestOs)
         {
             PropertySpec fileManagerPropSpec = new PropertySpec
             {
