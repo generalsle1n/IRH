@@ -393,9 +393,37 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return vm;
         }
 
+        public async Task WaitForProcessToFinishAsync(EsxiNavigation navigation, VirtualMachine vm, ManagedObjectReference processManager,NamePasswordAuthentication loginInfo, long processId)
+        {
+            bool ProcIsRunning = true;
+            
+            long[] SearchPid = new long[]
+            {
+                processId
+            };
+
+            ListProcessesInGuestResponse ProcessResponse;
+
+            _logger.Information($"Start waiting for Process with ID {processId} on {vm.Name}");
+
+            while (ProcIsRunning)
             {
                 vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
             }
+                ProcessResponse = await navigation.Client.ListProcessesInGuestAsync(processManager, vm.VM.obj, loginInfo, SearchPid);
+
+                if (ProcessResponse.returnval[0].endTimeSpecified == true)
+                {
+                    ProcIsRunning = false;
+                    break;
+                }
+                else{
+                    await Task.Delay(DefaultValue.DefaultWaitTime);
+                }
+            }
+
+            _logger.Information($"Process finished {processId} on {vm.Name}");
+        }
 
             return vm;
         }
