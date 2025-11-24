@@ -8,7 +8,7 @@ namespace IRH.Lib.Model.Deployment.Esxi
 {
     public class VirtualMachineGuestFileTransfer
     {
-        public required Uri ApiFileUpload { get; set; }
-        public required string GuestFilePath { get; set; }
+        public Uri ApiFileUpload { get; set; }
+        public string GuestFilePath { get; set; }
     }
 }
