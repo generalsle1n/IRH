@@ -258,14 +258,15 @@ namespace IRH.Lib.Class.Deployment.VMWare
             }
         }
 
-        public async Task<VirtualMachine> CreateFileUploadUriAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, FileInfo file, GuestOs guestOs)
+        public async Task<ManagedObjectReference> GetOperationManagerByNameAsync(EsxiNavigation navigation, string managerName)
         {
+            _logger.Debug($"Try to get OperationManager with name {managerName}");
             PropertySpec fileManagerPropSpec = new PropertySpec
             {
                 type = navigation.ServiceContent.guestOperationsManager.type,
                 pathSet = new string[]
                 {
-                    DefaultValue.EsxiPropertyFileManagerNameValue
+                    managerName
                 }
             };
 
