@@ -367,7 +367,6 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return vm;
         }
 
-            if(uploadUri is not null)
         public async Task<VirtualMachine>InstalMsiOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, string installArguments)
         {
             ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
@@ -408,8 +407,6 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             while (ProcIsRunning)
             {
-                vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
-            }
                 ProcessResponse = await navigation.Client.ListProcessesInGuestAsync(processManager, vm.VM.obj, loginInfo, SearchPid);
 
                 if (ProcessResponse.returnval[0].endTimeSpecified == true)
@@ -424,6 +421,59 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             _logger.Information($"Process finished {processId} on {vm.Name}");
         }
+
+        public async Task<VirtualMachine> InstallExeOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, string installArgument)
+        {
+            ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
+
+            NamePasswordAuthentication loginInfo = new NamePasswordAuthentication()
+            {
+                username = vm.LoginInfo.User,
+                password = vm.LoginInfo.Password
+            };
+
+            GuestProgramSpec startUpInfo = new GuestProgramSpec()
+            {
+                programPath = DefaultValue.DefaultWindowsCmdPath,
+                arguments = $"{DefaultValue.DefaultWindowsCmdPrefixArguments} \"{vm.GuestFileTransfer.GuestFilePath}\""
+            };
+
+            if (!installArgument.Equals(string.Empty))
+            {
+                startUpInfo.arguments += $" {installArgument}";
+            }
+            
+            _logger.Information($"Start {startUpInfo.programPath} {startUpInfo.arguments} on {vm.Name}");
+
+            long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
+
+            await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
+
+            return vm;
+        }
+
+        public async Task<VirtualMachine> ExecuteCmdOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, List<GuestOsLoginInfo> guestLoginInfo,  string Argument)
+        {
+            ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
+            vm = await ValidateLoginAsync(navigation, vm, guestLoginInfo);
+            
+            NamePasswordAuthentication loginInfo = new NamePasswordAuthentication()
+            {
+                username = vm.LoginInfo.User,
+                password = vm.LoginInfo.Password
+            };
+
+            GuestProgramSpec startUpInfo = new GuestProgramSpec()
+            {
+                programPath = DefaultValue.DefaultWindowsCmdPath,
+                arguments = $"{DefaultValue.DefaultWindowsCmdPrefixArguments} \"{Argument}\""
+            };
+
+            _logger.Information($"Start {startUpInfo.programPath} {startUpInfo.arguments} on {vm.Name}");
+
+            long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
+
+            await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
 
             return vm;
         }
