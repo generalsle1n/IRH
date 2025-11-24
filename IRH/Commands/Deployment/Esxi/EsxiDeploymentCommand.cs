@@ -215,34 +215,6 @@ namespace IRH.Commands.Deployment.Esxi
                 {
                     _logger.Error($"Found not matching amount username {userNameList.Count} and password {passwordList.Count}");
                 }
-
-                //EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
-                
-                //List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
-                //List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption));
-
-                //GuestOsLoginInfo loginInfo = new GuestOsLoginInfo
-                //{
-                //    User = parseResult.GetRequiredValue<string>(GuestUserOption),
-                //    Password = parseResult.GetRequiredValue<string>(GuestPasswordOption),
-                //    Domain = string.Empty
-                //};
-
-                //var result = new List<GuestOsLoginInfo> { loginInfo };
-
-                //foreach(VirtualMachine singleVm in FilteredData)
-                //{
-                //    await EsxiDeployment.CopyFileToVMAsync(navigation, result, singleVm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption));
-                //}
-
-                Console.WriteLine();
-
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-
-                Console.WriteLine();
             });
 
             return Command;
