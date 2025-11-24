@@ -199,42 +199,42 @@ namespace IRH.Lib.Class.Deployment.VMWare
         }
 
         //Overwork
-        public async Task CopyFileToAllVMsAsync(EsxiNavigation navigation, GuestOsLoginInfo loginInfo, List<VirtualMachine> vms, FileInfo deploymentFile)
+        public async Task CopyFileToVMAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
         {
-            await CreateFileUploadUri(navigation, loginInfo, vms.First());
+            vm = await CreateFileUploadUriAsync(navigation,loginInfo,vm,deploymentFile,guestOs);
             
-
-            //string uploadUrl = await navigation.Client.InitiateFileTransferToGuestAsync(fileMgrMor, vms.First().VM.obj, auth, @"C:\lol.dll", new GuestFileAttributes(), deploymentFile.Length, true);
-            string uploadUrl = "https://*/folder/lol.dll?dcPath=ha-datacenter&dsName=datastore1&vmPathName=lol.dll";
-            uploadUrl = uploadUrl.Replace("*", "192.168.64.128");
-
-            Console.WriteLine();
-            byte[] fileBytes = File.ReadAllBytes(deploymentFile.FullName);
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uploadUrl);
-            request.Method = "PUT";
-            request.ContentLength = fileBytes.Length;
-            request.ContentType = "application/octet-stream";
-
-            // Optional, falls selbstsigniertes Zertifikat auf vCenter/ESXi:
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-
-            // Datei schreiben
-            using (Stream stream = request.GetRequestStream())
+            if(vm.GuestFileTransfer.ApiFileUpload is not null)
             {
-                stream.Write(fileBytes, 0, fileBytes.Length);
-            }
-
-            // Antwort abrufen und prüfen
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
+                using(FileStream fileStream = new FileStream(deploymentFile.FullName, FileMode.Open, FileAccess.Read))
                 {
-                    Console.WriteLine("Datei erfolgreich hochgeladen!");
+                    HttpRequestMessage uploadMessage = new HttpRequestMessage()
+                    {
+                        Method = HttpMethod.Put,
+                        RequestUri = vm.GuestFileTransfer.ApiFileUpload,
+                        Content = new StreamContent(fileStream)
+                        {
+                            Headers =
+                            {
+                                ContentType = new MediaTypeHeaderValue("application/octet-stream"),
+                            }
+                        }
+                    };
+
+                    HttpResponseMessage Response = await client.SendAsync(uploadMessage);
+
+                    if (Response.IsSuccessStatusCode)
+            {
+                        _logger.Information($"Fileupload to {vm.Name} on {vm.GuestFileTransfer.GuestFilePath} was succesfull");
+            }
+                    else
+            {
+                        _logger.Error($"Upload failed with {Response.StatusCode} to {Response.RequestMessage.RequestUri} for {vm.Name} (Is the vm running with working vmware tools?)");
+                    }
+                }
                 }
                 else
                 {
-                    Console.WriteLine($"Fehler beim Upload: {response.StatusCode} {response.StatusDescription}");
+                _logger.Error($"Cannot upload file to vm {vm.Name} because no upload uri could be created. (Check Username/Password)");
                 }
             }
 
