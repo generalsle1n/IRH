@@ -361,7 +361,6 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 {
                     _logger.Warning($"{login.username} doenst worked for {vm.Name}");
                 }
-            }
                 
             }
 
@@ -369,6 +368,31 @@ namespace IRH.Lib.Class.Deployment.VMWare
         }
 
             if(uploadUri is not null)
+        public async Task<VirtualMachine>InstalMsiOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, string installArguments)
+        {
+            ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
+
+            NamePasswordAuthentication loginInfo = new NamePasswordAuthentication()
+            {
+                username = vm.LoginInfo.User,
+                password = vm.LoginInfo.Password
+            };
+
+            GuestProgramSpec startUpInfo = new GuestProgramSpec()
+            {
+                programPath = DefaultValue.DefaultWindowsMsiExecPath,
+                arguments = $"{DefaultValue.DefaultWindowsMsiExecPrefixArguments} \"{vm.GuestFileTransfer.GuestFilePath}\" {installArguments}"
+            };
+
+            _logger.Information($"Start {startUpInfo.programPath} {startUpInfo.arguments} on {vm.Name}");
+
+            long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
+
+            await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
+            
+            return vm;
+        }
+
             {
                 vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
             }
