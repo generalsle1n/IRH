@@ -69,6 +69,11 @@ namespace IRH.Commands.Deployment.Esxi
         private const string GuestOsSelectionAlias = "--Guest";
         private const GuestOs GuestOsSelectionDefaultValue = GuestOs.Windows;
 
+        private const string GuestOsDeploymentTypeName = "-T";
+        private const string GuestOsDeploymentTypeDescription = @"Enter the deployment Type which type should be used to deploy the setup";
+        private const string GuestOsDeploymentTypeAlias = "--Type";
+        private const DeploymentType GuestOsDeploymentTypeDefaultValue = DeploymentType.MSIExec;
+
         private readonly Logger _logger;
 
         internal EsxiDeploymentCommand(Logger Logger)
@@ -148,6 +153,12 @@ namespace IRH.Commands.Deployment.Esxi
                 DefaultValueFactory = (result) => GuestOsSelectionDefaultValue
             };
 
+            Option<DeploymentType> GuestOsDeploymentTypeOption = new Option<DeploymentType>(name: GuestOsDeploymentTypeName, aliases: GuestOsDeploymentTypeAlias)
+            {
+                Description = GuestOsDeploymentTypeDescription,
+                DefaultValueFactory = (result) => GuestOsDeploymentTypeDefaultValue
+            };
+
             Command.Options.Add(DeploymentTypeOption);
             Command.Options.Add(EsxiAdressOption);
             Command.Options.Add(EsxiPortOption);
@@ -158,6 +169,7 @@ namespace IRH.Commands.Deployment.Esxi
             Command.Options.Add(GuestPasswordOption);
             Command.Options.Add(DeploymentFileOption);
             Command.Options.Add(GuestOsSelectionOption);
+            Command.Options.Add(GuestOsDeploymentTypeOption);
 
             Command.SetAction(async parseResult =>
             {
