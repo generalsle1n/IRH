@@ -309,6 +309,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             vm = await ValidateLoginAsync(navigation, vm, loginInfo);
 
+            if(vm.LoginInfo is null)
+            {
             _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
 
             NamePasswordAuthentication auth = new NamePasswordAuthentication()
@@ -330,6 +332,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             if (uploadUri is not null)
             {
                 vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
+            }
             }
 
             return vm;
@@ -361,7 +364,11 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 {
                     _logger.Warning($"{login.username} doenst worked for {vm.Name}");
                 }
+            }
                 
+            if (vm.LoginInfo is null)
+            {
+                _logger.Warning($"No valid credentials found for {vm.Name}");
             }
 
             return vm;
@@ -457,6 +464,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
             ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
             vm = await ValidateLoginAsync(navigation, vm, guestLoginInfo);
             
+            if(vm.LoginInfo is not null)
+            {
             NamePasswordAuthentication loginInfo = new NamePasswordAuthentication()
             {
                 username = vm.LoginInfo.User,
@@ -474,6 +483,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
 
             await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
+            }          
 
             return vm;
         }
