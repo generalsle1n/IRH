@@ -311,28 +311,28 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             if(vm.LoginInfo is null)
             {
-            _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
+                _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
 
-            NamePasswordAuthentication auth = new NamePasswordAuthentication()
-            {
-                username = vm.LoginInfo.User,
-                password = vm.LoginInfo.Password
-            };
+                NamePasswordAuthentication auth = new NamePasswordAuthentication()
+                {
+                    username = vm.LoginInfo.User,
+                    password = vm.LoginInfo.Password
+                };
 
-            try
-            {
-                uploadUri = await navigation.Client.InitiateFileTransferToGuestAsync(fileManager, vm.VM.obj, auth, vm.GuestFileTransfer.GuestFilePath, new GuestFileAttributes(), file.Length, false);
-                _logger.Information($"Successfully created file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
-            }
-            catch (FaultException exception)
-            {
-                _logger.Error($"Unable to login with user {auth.username} to vm {vm.Name}, try next credential when more are submitted", exception);
-            }
+                try
+                {
+                    uploadUri = await navigation.Client.InitiateFileTransferToGuestAsync(fileManager, vm.VM.obj, auth, vm.GuestFileTransfer.GuestFilePath, new GuestFileAttributes(), file.Length, false);
+                    _logger.Information($"Successfully created file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
+                }
+                catch (FaultException exception)
+                {
+                    _logger.Error($"Unable to login with user {auth.username} to vm {vm.Name}, try next credential when more are submitted", exception);
+                }
 
-            if (uploadUri is not null)
-            {
-                vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
-            }
+                if (uploadUri is not null)
+                {
+                    vm.GuestFileTransfer.ApiFileUpload = new Uri(uploadUri.Replace("*", navigation.Client.Endpoint.Address.Uri.Host));
+                }
             }
 
             return vm;
@@ -363,13 +363,13 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 }catch(FaultException e)
                 {
                     _logger.Warning($"{login.username} doenst worked for {vm.Name}");
-                }
+                }   
             }
-                
+
             if (vm.LoginInfo is null)
             {
                 _logger.Warning($"No valid credentials found for {vm.Name}");
-            }
+            }            
 
             return vm;
         }
@@ -466,23 +466,23 @@ namespace IRH.Lib.Class.Deployment.VMWare
             
             if(vm.LoginInfo is not null)
             {
-            NamePasswordAuthentication loginInfo = new NamePasswordAuthentication()
-            {
-                username = vm.LoginInfo.User,
-                password = vm.LoginInfo.Password
-            };
+                NamePasswordAuthentication loginInfo = new NamePasswordAuthentication()
+                {
+                    username = vm.LoginInfo.User,
+                    password = vm.LoginInfo.Password
+                };
 
-            GuestProgramSpec startUpInfo = new GuestProgramSpec()
-            {
-                programPath = DefaultValue.DefaultWindowsCmdPath,
-                arguments = $"{DefaultValue.DefaultWindowsCmdPrefixArguments} \"{Argument}\""
-            };
+                GuestProgramSpec startUpInfo = new GuestProgramSpec()
+                {
+                    programPath = DefaultValue.DefaultWindowsCmdPath,
+                    arguments = $"{DefaultValue.DefaultWindowsCmdPrefixArguments} \"{Argument}\""
+                };
 
-            _logger.Information($"Start {startUpInfo.programPath} {startUpInfo.arguments} on {vm.Name}");
+                _logger.Information($"Start {startUpInfo.programPath} {startUpInfo.arguments} on {vm.Name}");
 
-            long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
+                long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
 
-            await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
+                await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
             }          
 
             return vm;
