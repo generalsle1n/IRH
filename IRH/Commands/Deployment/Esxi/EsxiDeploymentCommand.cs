@@ -93,6 +93,10 @@ namespace IRH.Commands.Deployment.Esxi
         private const string IncludeVMsByNameAlias = "--FilterInclude";
         private readonly List<string> IncludeVMsByNameDefaultValue = new List<string>();
         
+        private const string NewVMNetworkName = "-VMN";
+        private const string NewVMNetworkDescription = @"Enter the name of the vnet which the virtualmachine should be assigned";
+        private const string NewVMNetworkAlias = "--VirtualMachineNetwork";
+
         private readonly Logger _logger;
 
         internal EsxiDeploymentCommand(Logger Logger)
@@ -233,6 +237,11 @@ namespace IRH.Commands.Deployment.Esxi
                 DefaultValueFactory = (result) => IncludeVMsByNameDefaultValue
             };
 
+            Option<string> NewVMNetworkOption = new Option<string>(name: NewVMNetworkName, aliases: NewVMNetworkAlias)
+            {
+                Description = NewVMNetworkDescription
+            };
+
             Command.Options.Add(DeploymentTypeOption);
             Command.Options.Add(EsxiAdressOption);
             Command.Options.Add(EsxiPortOption);
@@ -248,6 +257,7 @@ namespace IRH.Commands.Deployment.Esxi
             Command.Options.Add(GuestOsRawCmdArgumentOption);
             Command.Options.Add(ExcludeVMsByNameOption);
             Command.Options.Add(IncludeVMsByNameOption);
+            Command.Options.Add(NewVMNetworkOption);
 
             Command.SetAction(async parseResult =>
             {
