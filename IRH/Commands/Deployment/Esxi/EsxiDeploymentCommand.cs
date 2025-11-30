@@ -263,6 +263,7 @@ namespace IRH.Commands.Deployment.Esxi
             {
                 List<string> userNameList = parseResult.GetRequiredValue<List<string>>(GuestUserOption);
                 List<string> passwordList = parseResult.GetRequiredValue<List<string>>(GuestPasswordOption);
+                string newVmNetwork = parseResult.GetValue<string>(NewVMNetworkOption) ?? string.Empty;
 
                 if(userNameList.Count == passwordList.Count)
                 {
@@ -310,6 +311,12 @@ namespace IRH.Commands.Deployment.Esxi
                             DeploymentType selectedDeployment = parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption);
                             VirtualMachine vm = null;
                             
+                            if (!newVmNetwork.Equals(string.Empty))
+                            {
+                                _logger.Information($"VM Network config is set so network is changed to {newVmNetwork}");
+                                await EsxiDeployment.SetVMNetworkByNameAsync(navigation, singleVm, parseResult.GetRequiredValue<string>(NewVMNetworkOption));
+                            }
+
                             if (DeploymentType.RawCmd != selectedDeployment)
                             {
                                 vm = await EsxiDeployment.CopyFileToVMAsync(navigation, loginData, singleVm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption), httpClient);
