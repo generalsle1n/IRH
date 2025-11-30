@@ -84,9 +84,15 @@ namespace IRH.Commands.Deployment.Esxi
         private const string GuestOsRawCmdArgumentAlias = "--ArgumentCmd";
 
         private const string ExcludeVMsByNameName = "-FE";
-        private const string ExcludeVMsByNameDescription = @"Enter names from the vms which should be excluded by the deployment process (You can enter multiple serpated by whitespace)";
+        private const string ExcludeVMsByNameDescription = @"Enter names from the vms which should be excluded by the deployment process (You can enter multiple serpated by whitespace), when include and exclude are set the include is processed first and then exclude";
         private const string ExcludeVMsByNameAlias = "--FilterExclude";
+        private readonly List<string> ExcludeVMsByNameDefaultValue = new List<string>();
 
+        private const string IncludeVMsByNameName = "-FI";
+        private const string IncludeVMsByNameDescription = @"Enter names from the vms which should be included by the deployment process (You can enter multiple serpated by whitespace), when include and exclude are set the include is processed first and then exclude";
+        private const string IncludeVMsByNameAlias = "--FilterInclude";
+        private readonly List<string> IncludeVMsByNameDefaultValue = new List<string>();
+        
         private readonly Logger _logger;
 
         internal EsxiDeploymentCommand(Logger Logger)
@@ -217,7 +223,14 @@ namespace IRH.Commands.Deployment.Esxi
             {
                 Description = ExcludeVMsByNameDescription,
                 AllowMultipleArgumentsPerToken = true,
-                DefaultValueFactory = (result) => new List<string>()
+                DefaultValueFactory = (result) => ExcludeVMsByNameDefaultValue
+            };
+            
+            Option<List<string>> IncludeVMsByNameOption = new Option<List<string>>(name: IncludeVMsByNameName, aliases: IncludeVMsByNameAlias)
+            {
+                Description = IncludeVMsByNameDescription,
+                AllowMultipleArgumentsPerToken = true,
+                DefaultValueFactory = (result) => IncludeVMsByNameDefaultValue
             };
 
             Command.Options.Add(DeploymentTypeOption);
@@ -234,6 +247,7 @@ namespace IRH.Commands.Deployment.Esxi
             Command.Options.Add(GuestOsExeArgumentOption);
             Command.Options.Add(GuestOsRawCmdArgumentOption);
             Command.Options.Add(ExcludeVMsByNameOption);
+            Command.Options.Add(IncludeVMsByNameOption);
 
             Command.SetAction(async parseResult =>
             {
@@ -256,7 +270,7 @@ namespace IRH.Commands.Deployment.Esxi
                     EsxiNavigation navigation = await EsxiDeployment.LoginAsync(HypervisorLoginInfo);
                 
                     List<VirtualMachine> AllData = await EsxiDeployment.GetAllVMsAsync(navigation);
-                    List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<List<string>>(ExcludeVMsByNameOption));
+                    List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<List<string>>(ExcludeVMsByNameOption), parseResult.GetRequiredValue<List<string>>(IncludeVMsByNameOption));
 
                     List<GuestOsLoginInfo> loginData = new List<GuestOsLoginInfo>();
 
