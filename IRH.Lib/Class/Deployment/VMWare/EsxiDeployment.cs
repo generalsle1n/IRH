@@ -59,7 +59,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     Value = "ServiceInstance"
                 });
 
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 _logger.Error($"Cannot retrieve service content from ESXi host at {loginInfo.Address}:{loginInfo.Port}. Exception: {ex}");
             }
@@ -220,7 +221,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
         //Overwork
         public async Task<VirtualMachine> CopyFileToVMAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
         {
-            vm = await CreateFileUploadUriAsync(navigation,loginInfo,vm,deploymentFile,guestOs);
+            vm = await CreateFileUploadUriAsync(navigation, loginInfo, vm, deploymentFile, guestOs);
             
             if(vm.GuestFileTransfer.ApiFileUpload is not null)
             {
@@ -372,7 +373,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     _logger.Information($"Found working Credential {login.username} on {vm.Name}");
                     
                     break;
-                }catch(FaultException e)
+                }
+                catch(FaultException e)
                 {
                     _logger.Warning($"{login.username} doenst worked for {vm.Name}");
                 }   
@@ -386,7 +388,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return vm;
         }
 
-        public async Task<VirtualMachine>InstalMsiOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, string installArguments)
+        public async Task<VirtualMachine> InstalMsiOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, string installArguments)
         {
             ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
 
@@ -411,7 +413,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return vm;
         }
 
-        public async Task WaitForProcessToFinishAsync(EsxiNavigation navigation, VirtualMachine vm, ManagedObjectReference processManager,NamePasswordAuthentication loginInfo, long processId)
+        public async Task WaitForProcessToFinishAsync(EsxiNavigation navigation, VirtualMachine vm, ManagedObjectReference processManager, NamePasswordAuthentication loginInfo, long processId)
         {
             bool ProcIsRunning = true;
             
@@ -433,7 +435,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     ProcIsRunning = false;
                     break;
                 }
-                else{
+                else
+                {
                     await Task.Delay(DefaultValue.DefaultWaitTime);
                 }
             }
@@ -471,7 +474,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return vm;
         }
 
-        public async Task<VirtualMachine> ExecuteCmdOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, List<GuestOsLoginInfo> guestLoginInfo,  string Argument)
+        public async Task<VirtualMachine> ExecuteCmdOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, List<GuestOsLoginInfo> guestLoginInfo, string Argument)
         {
             ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
             vm = await ValidateLoginAsync(navigation, vm, guestLoginInfo);
