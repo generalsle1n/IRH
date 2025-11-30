@@ -92,7 +92,7 @@ namespace IRH.Commands.Deployment.Esxi
         private const string IncludeVMsByNameDescription = @"Enter names from the vms which should be included by the deployment process (You can enter multiple serpated by whitespace), when include and exclude are set the include is processed first and then exclude";
         private const string IncludeVMsByNameAlias = "--FilterInclude";
         private readonly List<string> IncludeVMsByNameDefaultValue = new List<string>();
-        
+
         private const string NewVMNetworkName = "-VMN";
         private const string NewVMNetworkDescription = @"Enter the name of the vnet which the virtualmachine should be assigned";
         private const string NewVMNetworkAlias = "--VirtualMachineNetwork";
@@ -310,7 +310,7 @@ namespace IRH.Commands.Deployment.Esxi
                         {
                             DeploymentType selectedDeployment = parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption);
                             VirtualMachine vm = null;
-                            
+
                             if (!newVmNetwork.Equals(string.Empty))
                             {
                                 _logger.Information($"VM Network config is set so network is changed to {newVmNetwork}");
