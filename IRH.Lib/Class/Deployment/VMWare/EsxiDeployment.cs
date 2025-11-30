@@ -503,5 +503,64 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             return vm;
         }
+
+        public async Task<VirtualMachine> GetVMNetByNameAsync(EsxiNavigation navigation, VirtualMachine vm, string newVmNetName)
+        {
+            PropertyFilterSpec rawNetworkPropertySpec = new PropertyFilterSpec
+            {
+                propSet = new PropertySpec[]
+                {
+                    new PropertySpec
+                    {
+                        type = DefaultValue.EsxiPropertyTypeHostSpec,
+                        pathSet = new string[]
+                        {
+                            DefaultValue.EsxiPropertyNetworkPath
+                        }
+                    }
+                },
+                objectSet = new ObjectSpec[]
+                {
+                    new ObjectSpec {
+                        obj = vm.VM.obj,
+                        skip = false,
+                        selectSet = new SelectionSpec[] {
+                            new TraversalSpec{
+                                type = DefaultValue.EsxiPropertyVirtualMachineTypeValue,
+                                path = DefaultValue.EsxiPropertyNetworkHostPathValue,
+                                name = DefaultValue.EsxiPropertyNetworkTraversalValue
+                            }
+                        }
+                    }
+                }
+            };
+
+            PropertyFilterSpec[] networkPropertySpec = new PropertyFilterSpec[]{
+                rawNetworkPropertySpec
+            };
+
+            RetrievePropertiesResponse result = await navigation.Client.RetrievePropertiesAsync(navigation.ServiceContent.propertyCollector, networkPropertySpec);
+
+            ManagedObjectReference[] typedResult = result.returnval.First().propSet.First().val as ManagedObjectReference[];
+
+            foreach (ManagedObjectReference singleNetwork in typedResult)
+            {
+                if (singleNetwork.Value.EndsWith(newVmNetName))
+                {
+                    vm.Network.DestinationNetwork = singleNetwork;
+                    _logger.Information($"Found Network {newVmNetName} for vm {vm.Name}");
+                    break;
+                }
+            }
+
+            if (vm.Network.DestinationNetwork is null)
+            {
+                _logger.Error($"Cannot find Network {newVmNetName} for vm {vm.Name}");
+            }
+
+            return vm;
+        }
+        }
+        }
     }
 }
