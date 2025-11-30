@@ -14,5 +14,6 @@ namespace IRH.Lib.Model.Deployment.Esxi
         public required ObjectContent VM { get; set; }
         public required VirtualMachineGuestFileTransfer GuestFileTransfer { get; set; }
         public GuestOsLoginInfo LoginInfo { get; set; }
+        public required VirtualMachineNetwork Network { get; set; }
     }
 }
