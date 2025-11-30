@@ -560,7 +560,83 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             return vm;
         }
+
+        /// <summary>
+        /// This method sets all Networkadapter from an single vm to an specified Network.
+        /// </summary>
+        /// Need to overwork
+        public async Task<VirtualMachine> SetVMNetworkByNameAsync(EsxiNavigation navigation, VirtualMachine vm, string newVMNet)
+        {
+            vm = await GetVMNetByNameAsync(navigation, vm, newVMNet);
+
+            PropertyFilterSpec[] vmNicFilterSpec = new PropertyFilterSpec[] {
+                new PropertyFilterSpec {
+                    objectSet = new ObjectSpec[] {
+                        new ObjectSpec {
+                            obj = vm.VM.obj
+                        }
+                    },
+                    propSet = new PropertySpec[] {
+                        new PropertySpec{
+                            type = DefaultValue.EsxiPropertyVirtualMachineTypeValue,
+                            pathSet = new [] {
+                                DefaultValue.EsxiPropertyVMHardwareDeviceValue
+                            }
+                        }
+                    }
+                }
+            };
+
+            RetrievePropertiesResponse Result = await navigation.Client.RetrievePropertiesAsync(navigation.ServiceContent.propertyCollector, vmNicFilterSpec);
+            VirtualDevice[] AllDevices = Result.returnval.First().propSet[0].val as VirtualDevice[];
+            IEnumerable<VirtualEthernetCard> AllNetworkDevices = AllDevices.OfType<VirtualEthernetCard>();
+
+            _logger.Information($"Found {AllNetworkDevices.Count()} network adapters on vm {vm.Name}");
+
+            foreach (VirtualEthernetCard singleEthernetCard in AllNetworkDevices)
+            {
+                _logger.Information($"Processing network adapter with MAC {singleEthernetCard.macAddress} in Network {singleEthernetCard.deviceInfo.summary} on vm {vm.Name}");
+                if (singleEthernetCard.connectable.connected == true)
+                {
+                    vm.Network.Adapter.Add(new VirtualMachineNetworkAdapter()
+                    {
+                        MacAddress = singleEthernetCard.macAddress,
+                        OrginalNetwork = singleEthernetCard.deviceInfo.summary,
+                        DestinatioNetwork = vm.Network.DestinationNetwork.Value
+                    });
+
+
+                    var backingInfo = new VirtualEthernetCardNetworkBackingInfo
+                    {
+                        deviceName = vm.Network.DestinationNetwork.Value
+                    };
+
+                    singleEthernetCard.backing = backingInfo;
+                    singleEthernetCard.deviceInfo.summary = newVMNet;
+                    // 5. Modifikationsspec bauen
+                    var nicSpec = new VirtualDeviceConfigSpec
+                    {
+                        device = singleEthernetCard,
+                        operation = VirtualDeviceConfigSpecOperation.edit
+                    };
+
+                    // 6. Reconfig anstoßen
+                    var configSpec = new VirtualMachineConfigSpec
+                    {
+                        deviceChange = new[] { nicSpec }
+                    };
+                    //Hier checken --> macht update aber keine änderung
+                    var lol = await navigation.Client.ReconfigVM_TaskAsync(vm.VM.obj, configSpec);
+
+
+                }
+                else
+                {
+                    _logger.Information($"Skip Nic with mac {singleEthernetCard.macAddress} because on vm {vm.Name} the adapter is disconnected");
+                }
         }
+
+            return vm;
         }
     }
 }
