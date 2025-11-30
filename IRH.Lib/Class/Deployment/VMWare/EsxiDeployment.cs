@@ -64,7 +64,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             {
                 _logger.Error($"Cannot retrieve service content from ESXi host at {loginInfo.Address}:{loginInfo.Port}. Exception: {ex}");
             }
-            
+
 
             if(Result.ServiceContent is not null)
             {
@@ -130,7 +130,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             _logger.Information($"Retrieved {retrieveResponse.returnval.objects.Length} raw VMs data from ESXi");
             _logger.Information($"Processing VM properties and enrich data");
-            
+
             List<VirtualMachine> Result = new List<VirtualMachine>();
 
             foreach(ObjectContent singleVirtualMachine in retrieveResponse.returnval.objects)
@@ -157,9 +157,9 @@ namespace IRH.Lib.Class.Deployment.VMWare
         public async Task<List<VirtualMachine>> FilterVMsAsync(EsxiNavigation navigation, List<VirtualMachine> allVMs, GuestOs guestOsFilter, List<string> excludeVmsByName, List<string> includeVmsByName)
         {
             _logger.Information($"Filtering VMs ({allVMs.Count}) based on Guest OS: {guestOsFilter}");
-            
+
             List<VirtualMachine> RawResult = new List<VirtualMachine>();
-            
+
             foreach(VirtualMachine singleVirtualMachine in allVMs)
             {
                 string guestOsId = (string)singleVirtualMachine.VM.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyConfigGuestIdValue)).First().val;
@@ -204,7 +204,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     _logger.Information($"Removed VM with name {singleVm.Name} because of not being in the include filter");
                 }
             }
-            
+
             foreach (string singleVmToExclude in excludeVmsByName)
             {
                 int removedCount = FilteredResult.RemoveAll(singleVm => singleVm.Name.Equals(singleVmToExclude));
@@ -213,7 +213,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     _logger.Information($"Removed {removedCount} VM with name {singleVmToExclude} because of configured exclude filter");
                 }
             }
-          
+
             _logger.Information($"Found {FilteredResult.Count} processable vms");
 
             return FilteredResult;
@@ -223,7 +223,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
         public async Task<VirtualMachine> CopyFileToVMAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
         {
             vm = await CreateFileUploadUriAsync(navigation, loginInfo, vm, deploymentFile, guestOs);
-            
+
             if(vm.GuestFileTransfer.ApiFileUpload is not null)
             {
                 using(FileStream fileStream = new FileStream(deploymentFile.FullName, FileMode.Open, FileAccess.Read))
@@ -355,7 +355,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
         public async Task<VirtualMachine> ValidateLoginAsync(EsxiNavigation navigation, VirtualMachine vm, List<GuestOsLoginInfo> loginInfo)
         {
             ManagedObjectReference authManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyAuthManagerNameValue);
-            
+
             _logger.Information($"Start searching valid credentials for vm {vm.Name}");
 
             foreach(GuestOsLoginInfo singleLoginInfo in loginInfo)
@@ -372,19 +372,19 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     vm.LoginInfo = singleLoginInfo;
 
                     _logger.Information($"Found working Credential {login.username} on {vm.Name}");
-                    
+
                     break;
                 }
                 catch(FaultException e)
                 {
                     _logger.Warning($"{login.username} doenst worked for {vm.Name}");
-                }   
+                }
             }
 
             if (vm.LoginInfo is null)
             {
                 _logger.Warning($"No valid credentials found for {vm.Name}");
-            }            
+            }
 
             return vm;
         }
@@ -410,14 +410,14 @@ namespace IRH.Lib.Class.Deployment.VMWare
             long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
 
             await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
-            
+
             return vm;
         }
 
         public async Task WaitForProcessToFinishAsync(EsxiNavigation navigation, VirtualMachine vm, ManagedObjectReference processManager, NamePasswordAuthentication loginInfo, long processId)
         {
             bool ProcIsRunning = true;
-            
+
             long[] SearchPid = new long[]
             {
                 processId
@@ -465,7 +465,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             {
                 startUpInfo.arguments += $" {installArgument}";
             }
-            
+
             _logger.Information($"Start {startUpInfo.programPath} {startUpInfo.arguments} on {vm.Name}");
 
             long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
@@ -479,7 +479,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
         {
             ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
             vm = await ValidateLoginAsync(navigation, vm, guestLoginInfo);
-            
+
             if(vm.LoginInfo is not null)
             {
                 NamePasswordAuthentication loginInfo = new NamePasswordAuthentication()
@@ -499,7 +499,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 long processId = await navigation.Client.StartProgramInGuestAsync(processManager, vm.VM.obj, loginInfo, startUpInfo);
 
                 await WaitForProcessToFinishAsync(navigation, vm, processManager, loginInfo, processId);
-            }          
+            }
 
             return vm;
         }
@@ -634,7 +634,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 {
                     _logger.Information($"Skip Nic with mac {singleEthernetCard.macAddress} because on vm {vm.Name} the adapter is disconnected");
                 }
-        }
+            }
 
             return vm;
         }
