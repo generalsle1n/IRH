@@ -31,6 +31,12 @@ namespace IRH.Lib
         public const string EsxiPropertyFileManagerNameValue = "fileManager";
         public const string EsxiPropertyProcessManagerNameValue = "processManager";
         public const string EsxiPropertyAuthManagerNameValue = "authManager";
+        public const string EsxiPropertyTypeHostSpec = "HostSystem";
+        public const string EsxiPropertyNetworkPath = "network";
+        public const string EsxiPropertyVirtualMachineTypeValue = "VirtualMachine";
+        public const string EsxiPropertyNetworkHostPathValue = "runtime.host";
+        public const string EsxiPropertyNetworkTraversalValue = "hostTraversal";
+        public const string EsxiPropertyVMHardwareDeviceValue = "config.hardware.device";
         public const string DefaultWindowsTempPath = @"C:\Windows\Temp";
         public const string DefaultWindowsMsiExecPath = @"C:\Windows\System32\msiexec.exe";
         public const string DefaultWindowsCmdPath = @"C:\Windows\System32\cmd.exe";
