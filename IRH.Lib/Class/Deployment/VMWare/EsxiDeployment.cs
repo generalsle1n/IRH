@@ -4,6 +4,7 @@ using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -607,7 +608,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
                     VirtualEthernetCardNetworkBackingInfo backingInfo = new VirtualEthernetCardNetworkBackingInfo
                     {
-                        deviceName = vm.Network.DestinationNetwork.Value
+                        deviceName = newVMNet,
                     };
 
                     singleEthernetCard.backing = backingInfo;
