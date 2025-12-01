@@ -595,7 +595,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             foreach (VirtualEthernetCard singleEthernetCard in AllNetworkDevices)
             {
-                _logger.Information($"Processing network adapter with MAC {singleEthernetCard.macAddress} in Network {singleEthernetCard.deviceInfo.summary} on vm {vm.Name}");
+                _logger.Information($"Processing network adapter with MAC {singleEthernetCard.macAddress} in Network \"{singleEthernetCard.deviceInfo.summary}\" on vm {vm.Name}");
                 if (singleEthernetCard.connectable.connected == true)
                 {
                     vm.Network.Adapter.Add(new VirtualMachineNetworkAdapter()
