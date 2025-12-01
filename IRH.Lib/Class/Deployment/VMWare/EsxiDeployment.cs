@@ -634,5 +634,60 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             return vm;
         }
+
+        /// <summary>
+        /// Wait for the defined input task to finish.
+        /// </summary>
+        /// <returns>Task</returns>
+        public async Task WaitForVmTaskAsync(EsxiNavigation navigation, ManagedObjectReference taskMor)
+        {
+            PropertyFilterSpec[] filterSpec = new PropertyFilterSpec[]
+            {
+                new PropertyFilterSpec
+                {
+                    objectSet = new ObjectSpec[]
+                    {
+                        new ObjectSpec
+                        {
+                            obj = taskMor
+                        }
+                    },
+                    propSet = new PropertySpec[]
+                    {
+                        new PropertySpec
+                        {
+                            type = DefaultValue.EsxiPropertyTaskValue,
+                            pathSet = new string[]
+                            {
+                                DefaultValue.EsxiPropertyTaskInfoStateValue,
+                                DefaultValue.EsxiPropertyTaskInfoErrorValue, 
+                                DefaultValue.EsxiPropertyTaskInfoProgressValue,
+                                DefaultValue.EsxiPropertyTaskInfoDescriptionValue
+                            }
+                        }
+                    }
+                }
+            };
+
+            while (true)
+            {
+                RetrievePropertiesResponse response = await navigation.Client.RetrievePropertiesAsync(navigation.ServiceContent.propertyCollector, filterSpec);
+                DynamicProperty infoState = response.returnval.First().propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyTaskInfoStateValue)).First();
+                
+                TaskInfoState parsedState = (TaskInfoState)infoState.val;
+
+                if(parsedState == TaskInfoState.success)
+                {
+                    _logger.Information($"Task {taskMor.Value} finished {TaskInfoState.success}");
+                    break;
+                }else if(parsedState == TaskInfoState.error)
+                {
+                    _logger.Error($"Task {taskMor.Value} finished {TaskInfoState.error}");
+                    break;
+                }
+
+                await Task.Delay(DefaultValue.DefaultWaitTime);
+            }
+        }
     }
 }
