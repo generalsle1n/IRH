@@ -602,7 +602,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                     {
                         MacAddress = singleEthernetCard.macAddress,
                         OrginalNetwork = singleEthernetCard.deviceInfo.summary,
-                        DestinatioNetwork = vm.Network.DestinationNetwork.Value
+                        DestinatioNetwork = newVMNet
                     });
 
 
