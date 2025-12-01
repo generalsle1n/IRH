@@ -617,15 +617,12 @@ namespace IRH.Lib.Class.Deployment.VMWare
                         operationSpecified = true,
                         operation = VirtualDeviceConfigSpecOperation.edit,
                         device = singleEthernetCard,
-                        operation = VirtualDeviceConfigSpecOperation.edit
                     };
 
                     VirtualMachineConfigSpec configSpec = new VirtualMachineConfigSpec
                     {
                         deviceChange = new[] { nicSpec }
                     };
-                    //Hier checken --> macht update aber keine änderung
-                    var lol = await navigation.Client.ReconfigVM_TaskAsync(vm.VM.obj, configSpec);
 
 
                 }
