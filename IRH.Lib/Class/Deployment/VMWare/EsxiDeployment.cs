@@ -219,8 +219,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             return FilteredResult;
         }
-
-        //Overwork
+        
         public async Task<VirtualMachine> CopyFileToVMAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
         {
             vm = await CreateFileUploadUriAsync(navigation, loginInfo, vm, deploymentFile, guestOs);

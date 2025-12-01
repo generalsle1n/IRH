@@ -284,7 +284,7 @@ namespace IRH.Commands.Deployment.Esxi
                     List<VirtualMachine> FilteredData = await EsxiDeployment.FilterVMsAsync(navigation, AllData, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<List<string>>(ExcludeVMsByNameOption), parseResult.GetRequiredValue<List<string>>(IncludeVMsByNameOption));
 
                     List<GuestOsLoginInfo> loginData = new List<GuestOsLoginInfo>();
-
+                    
                     int count = 0;
 
                     foreach(string userName in userNameList)
