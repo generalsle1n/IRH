@@ -605,23 +605,20 @@ namespace IRH.Lib.Class.Deployment.VMWare
                         DestinatioNetwork = newVMNet
                     });
 
-
-                    var backingInfo = new VirtualEthernetCardNetworkBackingInfo
+                    VirtualEthernetCardNetworkBackingInfo backingInfo = new VirtualEthernetCardNetworkBackingInfo
                     {
                         deviceName = vm.Network.DestinationNetwork.Value
                     };
 
                     singleEthernetCard.backing = backingInfo;
-                    singleEthernetCard.deviceInfo.summary = newVMNet;
-                    // 5. Modifikationsspec bauen
-                    var nicSpec = new VirtualDeviceConfigSpec
+
+                    VirtualDeviceConfigSpec nicSpec = new VirtualDeviceConfigSpec
                     {
                         device = singleEthernetCard,
                         operation = VirtualDeviceConfigSpecOperation.edit
                     };
 
-                    // 6. Reconfig anstoßen
-                    var configSpec = new VirtualMachineConfigSpec
+                    VirtualMachineConfigSpec configSpec = new VirtualMachineConfigSpec
                     {
                         deviceChange = new[] { nicSpec }
                     };
