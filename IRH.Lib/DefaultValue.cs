@@ -24,6 +24,11 @@ namespace IRH.Lib
         public const string EsxiPropertyConfigUuidValue = "config.uuid";
         public const string EsxiPropertyConfigGuestFullName = "config.guestFullName";
         public const string EsxiPropertyConfigGuestIdValue = "config.guestId";
+        public const string EsxiPropertyTaskValue = "Task";
+        public const string EsxiPropertyTaskInfoStateValue = "info.state";
+        public const string EsxiPropertyTaskInfoErrorValue = "info.error";
+        public const string EsxiPropertyTaskInfoProgressValue = "info.progress";
+        public const string EsxiPropertyTaskInfoDescriptionValue = "info.descriptionId";
         public const string EsxiPropertyRuntimePowerStateValue = "runtime.powerState";
         public const string EsxiPropertyGuestToolsRunningStatusValue = "guest.toolsRunningStatus";
         public const string EsxiPropertyGuestGuestFullNameValue = "guest.guestFullName";
