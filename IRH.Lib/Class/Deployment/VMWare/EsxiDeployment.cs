@@ -624,7 +624,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
                         deviceChange = new[] { nicSpec }
                     };
 
-
+                    ManagedObjectReference vmTask = await navigation.Client.ReconfigVM_TaskAsync(vm.VM.obj, configSpec);
+                    await WaitForVmTaskAsync(navigation, vmTask);
                 }
                 else
                 {
