@@ -614,6 +614,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
                     VirtualDeviceConfigSpec nicSpec = new VirtualDeviceConfigSpec
                     {
+                        operationSpecified = true,
+                        operation = VirtualDeviceConfigSpecOperation.edit,
                         device = singleEthernetCard,
                         operation = VirtualDeviceConfigSpecOperation.edit
                     };
