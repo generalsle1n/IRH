@@ -1,4 +1,5 @@
 ﻿using IRH.Lib.Model.Deployment.Esxi;
+using IRH.Lib.Resource;
 using IRH.Lib.VMWare.Eight;
 using Serilog;
 using System;
