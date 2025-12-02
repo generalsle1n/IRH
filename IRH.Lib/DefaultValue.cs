@@ -49,6 +49,7 @@ namespace IRH.Lib
         public const string DefaultWindowsMsiExecSuffixArguments = "/qn";
         public const string DefaultWindowsCmdPrefixArguments = "/C";
         public const string DefaultWindowsExeSuffixArguments = "";
+        public const string ResourceSetNicIdInRegistryName = "IRH.Lib.Resource.Deployment.VMWare.SetNicIdInRegistry.txt";
         public static readonly AuthType AuthType = AuthType.DeviceCode;
         public static readonly CopyType CopyType = CopyType.Smb;
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\Deployment\VMWare\SetNicIdInRegistry.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.16.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="EzSmb" Version="1.3.10" />
@@ -18,6 +22,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IRH.Lib.VMWare\IRH.Lib.VMWare.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Deployment\VMWare\SetNicIdInRegistry.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>
