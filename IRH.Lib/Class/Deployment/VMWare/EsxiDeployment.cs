@@ -278,7 +278,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
         public async Task<ManagedObjectReference> GetOperationManagerByNameAsync(EsxiNavigation navigation, string managerName)
         {
             _logger.Debug($"Try to get OperationManager with name {managerName}");
-            PropertySpec fileManagerPropSpec = new PropertySpec
+            PropertySpec managerPropertySpec = new PropertySpec
             {
                 type = navigation.ServiceContent.guestOperationsManager.type,
                 pathSet = new string[]
@@ -287,31 +287,31 @@ namespace IRH.Lib.Class.Deployment.VMWare
                 }
             };
 
-            ObjectSpec fileManagerObjSpec = new ObjectSpec
+            ObjectSpec managerObjSpec = new ObjectSpec
             {
                 obj = navigation.ServiceContent.guestOperationsManager,
             };
 
-            PropertyFilterSpec fileManagerfilterSpec = new PropertyFilterSpec
+            PropertyFilterSpec managerfilterSpec = new PropertyFilterSpec
             {
                 propSet = new PropertySpec[]
                 {
-                    fileManagerPropSpec
+                    managerPropertySpec
                 },
                 objectSet = new ObjectSpec[]
                 {
-                    fileManagerObjSpec
+                    managerObjSpec
                 }
             };
 
             ManagedObjectReference propCollectorRef = navigation.ServiceContent.propertyCollector;
 
-            RetrievePropertiesResponse fileManagerPropertyResponse = await navigation.Client.RetrievePropertiesAsync(propCollectorRef, new PropertyFilterSpec[]
+            RetrievePropertiesResponse managerPropertyResponse = await navigation.Client.RetrievePropertiesAsync(propCollectorRef, new PropertyFilterSpec[]
             {
-                fileManagerfilterSpec
+                managerfilterSpec
             });
 
-            ManagedObjectReference manager = (ManagedObjectReference)fileManagerPropertyResponse.returnval.First().propSet.First().val;
+            ManagedObjectReference manager = (ManagedObjectReference)managerPropertyResponse.returnval.First().propSet.First().val;
             return manager;
         }
 
