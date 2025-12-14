@@ -372,22 +372,5 @@ namespace IRH.Commands.Deployment.Esxi
                 }
             }
         }
-        private async Task ExportToJson(List<VirtualMachine> Result)
-        {
-            _logger.Information("Converting List into Json");
-            using (MemoryStream Stream = new MemoryStream())
-            {
-                await JsonSerializer.SerializeAsync(Stream, Result);
-                string FilePath = Path.GetTempFileName();
-
-                using (FileStream FileStream = new FileStream(FilePath, FileMode.Open, FileAccess.ReadWrite))
-                {
-                    Stream.Position = 0;
-                    await Stream.CopyToAsync(FileStream);
-
-                    _logger.Information($"Result saved to {FilePath}");
-                }
-            }
-        }
     }
 }
