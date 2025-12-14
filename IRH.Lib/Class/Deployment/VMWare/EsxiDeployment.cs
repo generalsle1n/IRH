@@ -137,15 +137,16 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             foreach(ObjectContent singleVirtualMachine in retrieveResponse.returnval.objects)
             {
-                Result.Add(new VirtualMachine()
+                VirtualMachine virtualMachine = new VirtualMachine()
                 {
                     Name = (string)singleVirtualMachine.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyNameValue)).First().val,
                     Id = (string)singleVirtualMachine.propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyConfigUuidValue)).First().val,
                     VM = singleVirtualMachine,
                     GuestFileTransfer = new VirtualMachineGuestFileTransfer(),
                     Network = new VirtualMachineNetwork()
-                });
+                };
 
+                Result.Add(virtualMachine);
             }
 
             _logger.Information($"All vms ({Result.Count}) gathered and enriched");
