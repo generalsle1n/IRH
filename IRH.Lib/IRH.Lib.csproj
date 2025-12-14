@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resource\Deployment\VMWare\SetNicIdInRegistry.txt" />
+    <None Remove="Resource\Deployment\VMWare\SetNicAdressToDhcp.txt" />
+    <None Remove="Resource\Deployment\VMWare\SetNicDnsAdressToDhcp.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resource\Deployment\VMWare\SetNicIdInRegistry.txt" />
+    <EmbeddedResource Include="Resource\Deployment\VMWare\SetNicAdressToDhcp.txt" />
+    <EmbeddedResource Include="Resource\Deployment\VMWare\SetNicDnsAdressToDhcp.txt" />
   </ItemGroup>
 
   <ItemGroup>
