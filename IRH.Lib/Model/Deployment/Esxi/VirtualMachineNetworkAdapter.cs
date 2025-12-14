@@ -11,5 +11,8 @@ namespace IRH.Lib.Model.Deployment.Esxi
         public required string MacAddress { get; set; }
         public required string OrginalNetwork { get; set; }
         public required string DestinatioNetwork { get; set; }
+        public string OldStaticIp { get; set; }
+        public int OldSubnetMask { get; set; }
+        public List<string> OldDNSServer { get; set; }
     }
 }
