@@ -222,9 +222,9 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return FilteredResult;
         }
         
-        public async Task<VirtualMachine> CopyFileToVMAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
+        public async Task<VirtualMachine> CopyFileToVMAsync(EsxiNavigation navigation, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
         {
-            vm = await CreateFileUploadUriAsync(navigation, loginInfo, vm, deploymentFile, guestOs);
+            vm = await CreateFileUploadUriAsync(navigation, vm, deploymentFile, guestOs);
 
             if(vm.GuestFileTransfer.ApiFileUpload is not null)
             {
@@ -316,16 +316,14 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return manager;
         }
 
-        public async Task<VirtualMachine> CreateFileUploadUriAsync(EsxiNavigation navigation, List<GuestOsLoginInfo> loginInfo, VirtualMachine vm, FileInfo file, GuestOs guestOs)
+        public async Task<VirtualMachine> CreateFileUploadUriAsync(EsxiNavigation navigation, VirtualMachine vm, FileInfo file, GuestOs guestOs)
         {
             ManagedObjectReference fileManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyFileManagerNameValue);
 
             vm.GuestFileTransfer.GuestFilePath = await CreateTempPathAsync(guestOs, file);
             string uploadUri = null;
 
-            vm = await ValidateLoginAsync(navigation, vm, loginInfo);
-
-            if(vm.LoginInfo is null)
+            if(vm.LoginInfo is not null)
             {
                 _logger.Information($"Trying to create file upload uri for vm {vm.Name} with user {vm.LoginInfo.User}");
 
@@ -477,10 +475,9 @@ namespace IRH.Lib.Class.Deployment.VMWare
             return vm;
         }
 
-        public async Task<VirtualMachine> ExecuteCmdOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, List<GuestOsLoginInfo> guestLoginInfo, string Argument)
+        public async Task<VirtualMachine> ExecuteCmdOnVMAsync(EsxiNavigation navigation, VirtualMachine vm, string Argument)
         {
             ManagedObjectReference processManager = await GetOperationManagerByNameAsync(navigation, DefaultValue.EsxiPropertyProcessManagerNameValue);
-            vm = await ValidateLoginAsync(navigation, vm, guestLoginInfo);
 
             if(vm.LoginInfo is not null)
             {
