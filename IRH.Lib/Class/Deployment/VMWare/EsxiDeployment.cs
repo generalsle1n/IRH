@@ -221,7 +221,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             return FilteredResult;
         }
-        
+
         public async Task<VirtualMachine> CopyFileToVMAsync(EsxiNavigation navigation, VirtualMachine vm, GuestOs guestOs, FileInfo deploymentFile, HttpClient client)
         {
             vm = await CreateFileUploadUriAsync(navigation, vm, deploymentFile, guestOs);
@@ -736,7 +736,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
                             pathSet = new string[]
                             {
                                 DefaultValue.EsxiPropertyTaskInfoStateValue,
-                                DefaultValue.EsxiPropertyTaskInfoErrorValue, 
+                                DefaultValue.EsxiPropertyTaskInfoErrorValue,
                                 DefaultValue.EsxiPropertyTaskInfoProgressValue,
                                 DefaultValue.EsxiPropertyTaskInfoDescriptionValue
                             }
@@ -749,7 +749,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             {
                 RetrievePropertiesResponse response = await navigation.Client.RetrievePropertiesAsync(navigation.ServiceContent.propertyCollector, filterSpec);
                 DynamicProperty infoState = response.returnval.First().propSet.Where(prop => prop.name.Equals(DefaultValue.EsxiPropertyTaskInfoStateValue)).First();
-                
+
                 TaskInfoState parsedState = (TaskInfoState)infoState.val;
 
                 if(parsedState == TaskInfoState.success)
