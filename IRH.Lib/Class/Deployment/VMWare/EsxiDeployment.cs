@@ -636,6 +636,80 @@ namespace IRH.Lib.Class.Deployment.VMWare
         }
 
         /// <summary>
+        /// This method sets all Networkadapter from an single vm to an specified Network.
+        /// </summary>
+        /// Need to overwork
+        public async Task<VirtualMachine> EnableGuestDhcpAsync(EsxiNavigation navigation, VirtualMachine vm)
+        {
+            DynamicProperty netProperty = vm.VM.propSet.Where(property => property.name.Equals(DefaultValue.EsxiPropertyGuestGuestNetNameValue)).First();
+            GuestNicInfo[] virtualMachineNicInfo = (GuestNicInfo[])netProperty.val;
+
+            foreach(var singleNetworkAdapter in vm.Network.Adapter)
+            {
+                IEnumerable<GuestNicInfo> filterNicInfo = virtualMachineNicInfo.Where(singleNic => singleNic.macAddress.Equals(singleNetworkAdapter.MacAddress));
+
+                if(filterNicInfo.Count() == 1)
+                {
+                    GuestNicInfo guestNic = filterNicInfo.First();
+
+                    if(guestNic.ipConfig.dhcp.ipv4.enable == false)
+                    {
+                        foreach(NetIpConfigInfoIpAddress singleIpAdress in guestNic.ipConfig.ipAddress)
+                        {
+                            IPAddress parsedIpAdress = IPAddress.Parse(singleIpAdress.ipAddress);
+                            if (parsedIpAdress.AddressFamily == AddressFamily.InterNetwork)
+                            {
+                                _logger.Information($"Found Static Ip {singleIpAdress.ipAddress}/{singleIpAdress.prefixLength} on Nic with Mac {guestNic.macAddress} on {vm.Name}");
+                                singleNetworkAdapter.OldStaticIp = parsedIpAdress.ToString();
+                                singleNetworkAdapter.OldSubnetMask = singleIpAdress.prefixLength;
+
+                                _logger.Information($"Try to change adapter {guestNic.macAddress} to DHCP on {vm.Name} (With powershell)");
+
+                                string scriptContent = ResourceHelper.GetResourceString(DefaultValue.ResourceSetNicAddressToDhcpName);
+
+                                string enrichedMac = EnrichMacAddress(guestNic.macAddress);
+                                scriptContent = scriptContent.Replace(DefaultValue.ResourceMacAddressPlaceholderName, enrichedMac);
+                                string encodedScript = ConvertPowershellScriptToBase64(scriptContent);
+
+                                string absoluteCommand = $"{DefaultValue.DefaultWindowsPowershellPath} -encodedCommand \"{encodedScript}\"";
+
+                                vm = await ExecuteCmdOnVMAsync(navigation, vm, absoluteCommand);
+                                
+                                if(guestNic.dnsConfig.dhcp == false)
+                                {
+                                    _logger.Information($"There is also an static DNS configured on the adapter {guestNic.macAddress} on {vm.Name}");
+                                    singleNetworkAdapter.OldDNSServer = new List<string>();
+
+                                    _logger.Information($"Found {guestNic.dnsConfig.ipAddress.Length} server for {guestNic.macAddress} on {vm.Name}");
+                                    foreach(string singleDnsServer in guestNic.dnsConfig.ipAddress)
+                                    {
+                                        singleNetworkAdapter.OldDNSServer.Add(singleDnsServer);
+                                    }
+
+                                    scriptContent = ResourceHelper.GetResourceString(DefaultValue.ResourceSetNicDnsAddressToDhcpName);
+                                    
+                                    enrichedMac = EnrichMacAddress(guestNic.macAddress);
+                                    scriptContent = scriptContent.Replace(DefaultValue.ResourceMacAddressPlaceholderName, enrichedMac);
+                                    encodedScript = ConvertPowershellScriptToBase64(scriptContent);
+
+                                    absoluteCommand = $"{DefaultValue.DefaultWindowsPowershellPath} -encodedCommand \"{encodedScript}\"";
+
+                                    vm = await ExecuteCmdOnVMAsync(navigation, vm, absoluteCommand);
+                                    _logger.Information($"DNS server resseted on nic {guestNic.macAddress} on {vm.Name}");
+                                }
+                            }
+                        }
+                        _logger.Information($"Nic with {guestNic.macAddress} static Ip found {vm.Name}");
+                    } 
+                }
+                else
+                {
+                    _logger.Warning($"No Guest Nic found with mac {singleNetworkAdapter.MacAddress}");
+                }
+            }
+
+            return vm;
+        }
         /// Wait for the defined input task to finish.
         /// </summary>
         /// <returns>Task</returns>
