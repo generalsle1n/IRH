@@ -94,7 +94,7 @@ namespace IRH.Commands.Deployment.Esxi
         private readonly List<string> IncludeVMsByNameDefaultValue = new List<string>();
 
         private const string NewVMNetworkName = "-VMN";
-        private const string NewVMNetworkDescription = @"Enter the name of the vnet which the virtualmachine should be assigned";
+        private const string NewVMNetworkDescription = @"Enter the name of the vnet which the virtualmachine should be assigned (When this setting is configured the client is set to dhcp (ip + dns))";
         private const string NewVMNetworkAlias = "--VirtualMachineNetwork";
 
         private readonly Logger _logger;
