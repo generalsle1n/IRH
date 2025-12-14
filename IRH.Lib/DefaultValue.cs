@@ -31,7 +31,7 @@ namespace IRH.Lib
         public const string EsxiPropertyTaskInfoDescriptionValue = "info.descriptionId";
         public const string EsxiPropertyRuntimePowerStateValue = "runtime.powerState";
         public const string EsxiPropertyGuestToolsRunningStatusValue = "guest.toolsRunningStatus";
-        public const string EsxiPropertyGuestGuestFullNameValue = "guest.guestFullName";
+        public const string EsxiPropertyGuestGuestNetNameValue = "guest.net";
         public const string EsxiPropertyGuestToolsRunningRunStatus = "guestToolsRunning";
         public const string EsxiPropertyFileManagerNameValue = "fileManager";
         public const string EsxiPropertyProcessManagerNameValue = "processManager";
@@ -45,11 +45,14 @@ namespace IRH.Lib
         public const string DefaultWindowsTempPath = @"C:\Windows\Temp";
         public const string DefaultWindowsMsiExecPath = @"C:\Windows\System32\msiexec.exe";
         public const string DefaultWindowsCmdPath = @"C:\Windows\System32\cmd.exe";
+        public const string DefaultWindowsPowershellPath = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
         public const string DefaultWindowsMsiExecPrefixArguments = "/I";
         public const string DefaultWindowsMsiExecSuffixArguments = "/qn";
         public const string DefaultWindowsCmdPrefixArguments = "/C";
         public const string DefaultWindowsExeSuffixArguments = "";
-        public const string ResourceSetNicIdInRegistryName = "IRH.Lib.Resource.Deployment.VMWare.SetNicIdInRegistry.txt";
+        public const string ResourceSetNicAddressToDhcpName = "IRH.Lib.Resource.Deployment.VMWare.SetNicAdressToDhcp.txt";
+        public const string ResourceSetNicDnsAddressToDhcpName = "IRH.Lib.Resource.Deployment.VMWare.SetNicDnsAdressToDhcp.txt";
+        public const string ResourceMacAddressPlaceholderName = "MAC_ADDRESS_PLACEHOLDER";
         public static readonly AuthType AuthType = AuthType.DeviceCode;
         public static readonly CopyType CopyType = CopyType.Smb;
         public static readonly List<string> AzureMfaPermissions = new List<string>() { "Directory.Read.All", "UserAuthenticationMethod.Read.All" };
