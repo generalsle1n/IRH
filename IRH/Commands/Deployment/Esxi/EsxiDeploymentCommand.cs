@@ -306,6 +306,8 @@ namespace IRH.Commands.Deployment.Esxi
 
                     using (HttpClient httpClient = new HttpClient(handler))
                     {
+                        List<VirtualMachine> processedVms = new List<VirtualMachine>();
+
                         foreach (VirtualMachine singleVm in FilteredData)
                         {
                             DeploymentType selectedDeployment = parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption);
@@ -337,7 +339,10 @@ namespace IRH.Commands.Deployment.Esxi
                                     _logger.Error($"Deployment type {parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption)} not supported");
                                     break;
                             }
+
+                            processedVms.Add(vm);
                         }
+                        await ExportToJson(processedVms);
                     }
                 }
                 else
@@ -347,6 +352,23 @@ namespace IRH.Commands.Deployment.Esxi
             });
 
             return Command;
+        }
+        private async Task ExportToJson(List<VirtualMachine> Result)
+        {
+            _logger.Information("Converting List into Json");
+            using (MemoryStream Stream = new MemoryStream())
+            {
+                await JsonSerializer.SerializeAsync(Stream, Result);
+                string FilePath = Path.GetTempFileName();
+
+                using (FileStream FileStream = new FileStream(FilePath, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    Stream.Position = 0;
+                    await Stream.CopyToAsync(FileStream);
+
+                    _logger.Information($"Result saved to {FilePath}");
+                }
+            }
         }
     }
 }
