@@ -710,6 +710,8 @@ namespace IRH.Lib.Class.Deployment.VMWare
 
             return vm;
         }
+
+        /// <summary>
         /// Wait for the defined input task to finish.
         /// </summary>
         /// <returns>Task</returns>
