@@ -38,6 +38,7 @@
                         <icons:SymbolIconSource Symbol="MailDismiss" />
                     </ui:NavigationViewItem.IconSource>
                 </ui:NavigationViewItem>
+                <Separator/>
             </ui:NavigationView.MenuItems>
             <ui:Frame Name="CurrentPage" Content="{Binding CurrentPage}"/>
         </ui:NavigationView>
