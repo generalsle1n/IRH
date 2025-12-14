@@ -1,0 +1,1 @@
+﻿Get-NetAdapter | Where-Object {$_.PermanentAddress -eq "MAC_ADDRESS_PLACEHOLDER"} | Set-DnsClientServerAddress -ResetServerAddresses

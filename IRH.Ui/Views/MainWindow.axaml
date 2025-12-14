@@ -1,0 +1,47 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:IRH.Ui.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="IRH.Ui.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/IRH-icon.ico"
+        Title="IRH.Ui">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*">
+        <ui:NavigationView x:Name="MainNavigation" Grid.Row="1" SelectedItem="{Binding SelectedItem}" PaneDisplayMode="LeftCompact" Name="MainNavigation" IsSettingsVisible="True">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="Azure MFA" Tag="IRH.Ui.Views.AzureMfaView;IRH.Ui.ViewModels.AzureMFAViewModel">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="LockShield" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Azure Session Revoke" Tag="IRH.Ui.Views.AzureRevokeUserSessionView;IRH.Ui.ViewModels.AzureRevokeUserSessionViewModel">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="PeopleError" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Azure Audit Access" Tag="IRH.Ui.Views.AzureLoginAuditView;IRH.Ui.ViewModels.AzureLoginAuditViewModel" IsVisible="{Binding ExperimentalFeaturesEnabled}">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="CloudCheckmark" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Azure Mail Processing" Tag="IRH.Ui.Views.AzureMailView;IRH.Ui.ViewModels.AzureMailViewModel">
+                    <ui:NavigationViewItem.IconSource>
+                        <icons:SymbolIconSource Symbol="MailDismiss" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <Separator/>
+            </ui:NavigationView.MenuItems>
+            <ui:Frame Name="CurrentPage" Content="{Binding CurrentPage}"/>
+        </ui:NavigationView>
+    </Grid>
+
+</Window>

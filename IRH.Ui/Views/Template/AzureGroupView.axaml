@@ -1,0 +1,43 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModel="using:IRH.Ui.ViewModels.Template"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:lang="using:IRH.Ui.Resources"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModel:AzureGroupViewModel"
+             x:Class="IRH.Ui.Views.Template.AzureGroupView">
+    <StackPanel Spacing="10" MinWidth="381">
+        <TextBlock Text="{x:Static lang:Strings.Azure_GroupFilter_Label}" FontWeight="Bold" />
+        <!-- <Separator /> -->
+        <ItemsControl ItemsSource="{Binding AllGroupFilter}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="5">
+                        <StackPanel Orientation="Horizontal" Spacing="0">
+                            <TextBox Width="275" Text="{Binding Label}"
+                                     Watermark="{x:Static lang:Strings.Azure_GroupFilter_Placeholder}" />
+                            <ui:CommandBarSeparator />
+                            <StackPanel Orientation="Horizontal" Spacing="3">
+                                <Button
+                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureGroupViewModel)DataContext).AddNewGroupFilterCommand}"
+                                    ToolTip.Tip="{x:Static lang:Strings.Azure_GroupFilter_Button_Add_ToolTip}">
+                                    <icons:SymbolIcon Symbol="PeopleTeamAdd" />
+                                </Button>
+                                <Button IsVisible="{Binding ShowDelete}"
+                                        Command="{Binding $parent[ItemsControl].((viewModel:AzureGroupViewModel)DataContext).DeleteGroupFilterCommand}"
+                                        CommandParameter="{Binding $self}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_GroupFilter_Button_Remove_ToolTip}">
+                                    <icons:SymbolIcon Symbol="Delete" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Separator />
+    </StackPanel>
+</UserControl>

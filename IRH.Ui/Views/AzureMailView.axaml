@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:template="using:IRH.Ui.Views.Template"
+             xmlns:viewModel="using:IRH.Ui.ViewModels"
+             xmlns:lang="using:IRH.Ui.Resources"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModel:AzureMailViewModel"
+             x:Class="IRH.Ui.Views.AzureMailView">
+    
+    <Design.DataContext>
+        <viewModel:AzureMailViewModel/>
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="*, Auto">
+        <Grid ColumnDefinitions="Auto,*">
+            <ScrollViewer Grid.Column="0">
+                <StackPanel Margin="10" Spacing="10">
+                    <template:AzureGroupView DataContext="{Binding AzureGroupViewModel}" />
+                    <template:AzureDateView DataContext="{Binding AzureDateViewModel}" />
+                    <template:AzureScopeView DataContext="{Binding AzureScopeViewModel}" />
+                    <template:AzureSubjectView DataContext="{Binding AzureSubjectViewModel}" />
+                    <template:AzureDeleteItemView DataContext="{Binding AzureDeleteItemViewModel}" /> 
+                </StackPanel>
+            </ScrollViewer>
+            <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
+                <DataGrid ItemsSource="{Binding AllItems}" GridLinesVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_UPN_DataGridHeader}"
+                                            Binding="{Binding User.UserPrincipalName}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_Mail_Subject_DataGridHeader}"
+                                            Binding="{Binding MailStatus.Mail.Subject}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_Mail_Received_DataGridHeader}"
+                                            Binding="{Binding MailStatus.Mail.ReceivedDateTime}" />
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_Mail_From_DataGridHeader}"
+                                            Binding="{Binding MailStatus.Mail.From.EmailAddress.Address}"
+                                            IsReadOnly="True" />
+                        <DataGridCheckBoxColumn Header="{x:Static lang:Strings.Azure_Mail_Deleted_DataGridHeader}"
+                                                Binding="{Binding Deleted}" IsReadOnly="True" />
+                        <DataGridTemplateColumn Header="Open">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Open"
+                                            Command="{Binding $parent[DataGrid].((viewModel:AzureMailViewModel)DataContext).OpenMailCommand}"
+                                            CommandParameter="{Binding MailStatus}" 
+                                            ToolTip.Tip="{x:Static lang:Strings.Azure_Mail_OpenMail_ToolTip}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+        <template:AzureActionBarView Grid.Row="1" DataContext="{Binding AzureActionBarViewModel}" />
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,61 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:template="using:IRH.Ui.Views.Template"
+             xmlns:viewModel="using:IRH.Ui.ViewModels"
+             xmlns:lang="using:IRH.Ui.Resources"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModel:AzureMFAViewModel"
+             x:Class="IRH.Ui.Views.AzureMfaView">
+    
+    <Design.DataContext>
+        <viewModel:AzureMFAViewModel/>
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="*, Auto">
+        <Grid ColumnDefinitions="Auto,*">
+            <ScrollViewer Grid.Column="0">
+                <StackPanel Margin="10" Spacing="10">
+                    <template:AzureGroupView DataContext="{Binding AzureGroupViewModel}" />
+                    <template:AzureScopeView DataContext="{Binding AzureScopeViewModel}" />
+                </StackPanel>
+            </ScrollViewer>
+            <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
+                <DataGrid ItemsSource="{Binding AllItems}" GridLinesVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_UPN_DataGridHeader}" Binding="{Binding User.UserPrincipalName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.AzureMFA_MFACount_DataGrid}" Binding="{Binding AllMFACount}" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header="{x:Static lang:Strings.AzureMFA_MFAHeader_Label}" >
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <Expander Header="Show Items">
+                                        <ItemsControl ItemsSource="{Binding MFA}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Expander Header="{Binding Method.OdataType}">
+                                                        <ItemsControl ItemsSource="{Binding MethodProperties}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                                                        <TextBox Width="150" Text="{Binding PropertyName}"/>
+                                                                        <TextBox Text="{Binding PropertyValue}"/>
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </Expander>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Expander> 
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+        <template:AzureActionBarView Grid.Row="1" DataContext="{Binding AzureActionBarViewModel}" />
+    </Grid>
+</UserControl>

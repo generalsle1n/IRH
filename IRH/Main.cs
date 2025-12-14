@@ -1,11 +1,12 @@
-﻿using IRH.Commands.Azure.MFA;
+﻿//using IRH.Commands.Azure.MFA;
 using IRH.Commands.Azure.AuditLog;
 using IRH.Commands.LDAPMonitor;
 using Serilog;
 using Serilog.Core;
 using System.CommandLine;
 using IRH.Commands.Azure;
-using IRH.Remote;
+using IRH.Commands.Remote;
+using IRH.Commands.Deployment;
 
 const string _commandDescription = "suite of some little helper tools within incident response when dealing with security breaches. These tools provide essential features for IT security professionals, making it easier to manage and respond to incidents effectively.";
 
@@ -17,15 +18,19 @@ Logger Logger = new LoggerConfiguration()
 RootCommand RootCommand = new RootCommand(_commandDescription);
 
 LDAPMonitor LM = new LDAPMonitor(Logger);
-RemoteExecution RM = new RemoteExecution(Logger);
+RemoteFunctions RM = new RemoteFunctions(Logger);
 AzureFunctions AF = new AzureFunctions(Logger);
+DeploymentFunctions DF = new DeploymentFunctions(Logger);
 
 Command LdapMonitor = LM.CreateCommand(RootCommand);
-Command RemoteExecution = RM.CreateCommand(RootCommand);
+Command RemoteFunction = RM.CreateCommand(RootCommand);
 Command AzureFunctions = AF.CreateCommand(RootCommand);
+Command DeploymentFunctions = DF.CreateCommand(RootCommand);
 
-RootCommand.AddCommand(LdapMonitor);
-RootCommand.AddCommand(RemoteExecution);
-RootCommand.AddCommand(AzureFunctions);
+RootCommand.Subcommands.Add(LdapMonitor);
+RootCommand.Subcommands.Add(RemoteFunction);
+RootCommand.Subcommands.Add(AzureFunctions);
+RootCommand.Subcommands.Add(DeploymentFunctions);
 
-await RootCommand.InvokeAsync(args);
+ParseResult result = RootCommand.Parse(args);
+await result.InvokeAsync();

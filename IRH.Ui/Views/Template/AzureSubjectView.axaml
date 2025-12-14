@@ -1,0 +1,43 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModel="using:IRH.Ui.ViewModels.Template"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:lang="using:IRH.Ui.Resources"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModel:AzureSubjectViewModel"
+             x:Class="IRH.Ui.Views.Template.AzureSubjectView">
+    <StackPanel Spacing="10" MinWidth="381">
+        <TextBlock Text="{x:Static lang:Strings.Azure_SubjectFilter_Label}" FontWeight="Bold" />
+        <!-- <Separator /> -->
+        <ItemsControl ItemsSource="{Binding AllSubjectFilter}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="5">
+                        <StackPanel Orientation="Horizontal" Spacing="0">
+                            <TextBox Width="275" Text="{Binding Label}"
+                                     Watermark="{x:Static lang:Strings.Azure_SubjectFilter_Placeholder}" />
+                            <ui:CommandBarSeparator />
+                            <StackPanel Orientation="Horizontal" Spacing="3">
+                                <Button
+                                    Command="{Binding $parent[ItemsControl].((viewModel:AzureSubjectViewModel)DataContext).AddNewSubjectFilterCommand}"
+                                    ToolTip.Tip="{x:Static lang:Strings.Azure_SubjectFilter_Add_ToolTip}">
+                                    <icons:SymbolIcon Symbol="MailInboxAdd" />
+                                </Button>
+                                <Button IsVisible="{Binding ShowDelete}"
+                                        Command="{Binding $parent[ItemsControl].((viewModel:AzureSubjectViewModel)DataContext).DeleteSubjectFilterCommand}"
+                                        CommandParameter="{Binding $self}"
+                                        ToolTip.Tip="{x:Static lang:Strings.Azure_SubjectFilter_Remove_ToolTip}">
+                                    <icons:SymbolIcon Symbol="MailInboxDismiss" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Separator />
+    </StackPanel>
+</UserControl>

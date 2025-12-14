@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_GitHubUrl" xml:space="preserve">
+    <value>https://github.com/generalsle1n/IRH/</value>
+  </data>
+  <data name="Common_ProgramName" xml:space="preserve">
+    <value>IRH.Ui</value>
+  </data>
+  <data name="Common_Version" xml:space="preserve">
+    <value>Version 0.1</value>
+  </data>
+  <data name="Setting_ProjectUrl" xml:space="preserve">
+    <value>Project Url</value>
+  </data>
+  <data name="Setting_AppTheme_Main" xml:space="preserve">
+    <value>App Theme</value>
+  </data>
+  <data name="Setting_AppTheme_Description" xml:space="preserve">
+    <value>Change the current app theme</value>
+  </data>
+  <data name="Setting_AuthType_Main" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
+  <data name="Setting_AuthType_Description" xml:space="preserve">
+    <value>Change the used authentication Type</value>
+  </data>
+  <data name="Setting_TenantID_Main" xml:space="preserve">
+    <value>Tenant ID</value>
+  </data>
+  <data name="Setting_TenantID_Description" xml:space="preserve">
+    <value>Change the Tenant ID, usally this is dont required and "common" is the right</value>
+  </data>
+  <data name="Setting_TenantID_Default" xml:space="preserve">
+    <value>common</value>
+  </data>
+  <data name="Setting_AppID_Main" xml:space="preserve">
+    <value>App ID</value>
+  </data>
+  <data name="Setting_AppID_Description" xml:space="preserve">
+    <value>Change the App ID to an custom ID, usally this is dont required and default is the right</value>
+  </data>
+  <data name="Setting_AppID_Default" xml:space="preserve">
+    <value>c0849608-c8b9-4e86-b37d-fce972a0a7f6</value>
+  </data>
+  <data name="Setting_Name_AppTheme" xml:space="preserve">
+    <value>Setting_AppTheme</value>
+  </data>
+  <data name="Setting_Name_AuthType" xml:space="preserve">
+    <value>Setting_AuthType</value>
+  </data>
+  <data name="Setting_Name_TenantID" xml:space="preserve">
+    <value>Setting_TenantID</value>
+  </data>
+  <data name="Setting_Name_AppID" xml:space="preserve">
+    <value>Setting_AppID</value>
+  </data>
+  <data name="Setting_Name_TenantIDEditEnabled" xml:space="preserve">
+    <value>Setting_TenantIDEditEnabled</value>
+  </data>
+  <data name="Setting_Name_AppIDEditEnabled" xml:space="preserve">
+    <value>Setting_Name_AppIDEditEnabled</value>
+  </data>
+  <data name="Azure_StartProcess_Label" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Azure_ReportLevel_Main" xml:space="preserve">
+    <value>Printlevel</value>
+  </data>
+  <data name="Azure_GroupFilter_Label" xml:space="preserve">
+    <value>Group Filter</value>
+  </data>
+  <data name="Azure_GroupFilter_Placeholder" xml:space="preserve">
+    <value>Group ID</value>
+  </data>
+  <data name="Azure_Scope_Label" xml:space="preserve">
+    <value>All Permissions</value>
+  </data>
+  <data name="Azure_Scope_Placeholder" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="Azure_OpenBrowser_ButtonToolTip" xml:space="preserve">
+    <value>Open Browser to enter Code</value>
+  </data>
+  <data name="Azure_UPN_DataGridHeader" xml:space="preserve">
+    <value>UserPrincipleName</value>
+  </data>
+  <data name="AzureMFA_MFACount_DataGrid" xml:space="preserve">
+    <value>MFA Count</value>
+  </data>
+  <data name="Azure_ExportData_Label" xml:space="preserve">
+    <value>Export Data</value>
+  </data>
+  <data name="AzureMFA_SaveFile_Title" xml:space="preserve">
+    <value>Save MFA Data</value>
+  </data>
+  <data name="Azure_LoadFile_Title" xml:space="preserve">
+    <value>Load existing MFA Data</value>
+  </data>
+  <data name="AzureMFA_MFAName_DataGrid" xml:space="preserve">
+    <value>Methods</value>
+  </data>
+  <data name="Setting_Reset_Main" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Setting_Reset_Description" xml:space="preserve">
+    <value>Delete all stored Backend Config</value>
+  </data>
+  <data name="AzureSession_ResetSession_DataGridHeader" xml:space="preserve">
+    <value>User Session revoked</value>
+  </data>
+  <data name="AzureLoginAudit_StartDate_Label" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="AzureLoginAudit_DateMenu_Label" xml:space="preserve">
+    <value>Configure Dates</value>
+  </data>
+  <data name="AzureLoginAudit_EndDate_Label" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="Azure_Minute_Placeholder" xml:space="preserve">
+    <value>Minute</value>
+  </data>
+  <data name="Azure_Hour_Placeholder" xml:space="preserve">
+    <value>Hour</value>
+  </data>
+  <data name="Azure_AuditActivity_Label" xml:space="preserve">
+    <value>All Activities</value>
+  </data>
+  <data name="Azure_Activity_Placeholder" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="Azure_AuditQueryID_PlaceHolder" xml:space="preserve">
+    <value>Query ID</value>
+  </data>
+  <data name="Azure_AuditQuery_Label" xml:space="preserve">
+    <value>Existing Query</value>
+  </data>
+  <data name="Azure_AuditCreated_Label" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Azure_AuditType_Label" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Azure_AuditUser_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Azure_AuditUPN_Label" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="AzureMFA_MFAHeader_Label" xml:space="preserve">
+    <value>Multifactor</value>
+  </data>
+  <data name="Azure_Mail_Subject_DataGridHeader" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="Azure_Mail_From_DataGridHeader" xml:space="preserve">
+    <value>From Mail</value>
+  </data>
+  <data name="Azure_Mail_Deleted_DataGridHeader" xml:space="preserve">
+    <value>Mail deleted</value>
+  </data>
+  <data name="Azure_Mail_Received_DataGridHeader" xml:space="preserve">
+    <value>Received</value>
+  </data>
+  <data name="Azure_Action_Label" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Azure_Mail_Action_Preview_Text" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Azure_Mail_Action_Delete_Text" xml:space="preserve">
+    <value>View And Delete</value>
+  </data>
+  <data name="Azure_SubjectFilter_Label" xml:space="preserve">
+    <value>Subject Filter</value>
+  </data>
+  <data name="Azure_SubjectFilter_Placeholder" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="Azure_DeleteItem_Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Azure_DeleteItem_On_Label" xml:space="preserve">
+    <value>Items getting deleted</value>
+  </data>
+  <data name="Azure_DeleteItem_Off_Label" xml:space="preserve">
+    <value>No Items will be deleted</value>
+  </data>
+  <data name="Azure_GroupFilter_Button_Add_ToolTip" xml:space="preserve">
+    <value>Add new Group Filter (Entra ID Group Guid)</value>
+  </data>
+  <data name="Azure_GroupFilter_Button_Remove_ToolTip" xml:space="preserve">
+    <value>Delete current Group Filter</value>
+  </data>
+  <data name="Azure_DateFilter_Date_Start_ToolTip" xml:space="preserve">
+    <value>Configure the start Date where Search should begin</value>
+  </data>
+  <data name="Azure_DateFilter_Date_End_ToolTip" xml:space="preserve">
+    <value>Configure the end Date where Search should end</value>
+  </data>
+  <data name="Azure_DateFilter_Time_End_ToolTip" xml:space="preserve">
+    <value>Configure the end Time where the Search should end</value>
+  </data>
+  <data name="Azure_DateFilter_Time_Start_ToolTip" xml:space="preserve">
+    <value>Configure the start Time where the Search should start</value>
+  </data>
+  <data name="Azure_Scope_Add_ToolTip" xml:space="preserve">
+    <value>Add an new Scope (Permission which IRH.Ui should use)</value>
+  </data>
+  <data name="Azure_Scope_Remove_ToolTip" xml:space="preserve">
+    <value>Remove the current Scope (Permission)</value>
+  </data>
+  <data name="Azure_SubjectFilter_Add_ToolTip" xml:space="preserve">
+    <value>Add an new Subject Text where should be used to filter for Mails (The filter is an contains NOT Equals)</value>
+  </data>
+  <data name="Azure_SubjectFilter_Remove_ToolTip" xml:space="preserve">
+    <value>Remove the current Subject Filter</value>
+  </data>
+  <data name="Azure_ActionBar_Start_ToolTip" xml:space="preserve">
+    <value>Start the selected Azure Process to evaluate the data</value>
+  </data>
+  <data name="Azure_ActionBar_CopyDeviceCode_ToolTip" xml:space="preserve">
+    <value>Copy the Device Code that is displayed to the Clipboard</value>
+  </data>
+  <data name="Azure_ActionBar_OpenDeviceCodePage_ToolTip" xml:space="preserve">
+    <value>Open the Microsoft Device Login Page in the default Browser</value>
+  </data>
+  <data name="Azure_ActionBar_ThreeDotsMenu_ToolTip" xml:space="preserve">
+    <value>More Options</value>
+  </data>
+  <data name="Azure_Mail_OpenMail_ToolTip" xml:space="preserve">
+    <value>Open the current Mail in the browser</value>
+  </data>
+  <data name="Setting_AppLanguage_Main" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Setting_AppLanguage_Description" xml:space="preserve">
+    <value>Change the current language</value>
+  </data>
+  <data name="Setting_Name_AppLanguage" xml:space="preserve">
+    <value>Setting_Name_AppLanguage</value>
+  </data>
+  <data name="Setting_Experimental_Main" xml:space="preserve">
+    <value>Experimental Feature</value>
+  </data>
+  <data name="Setting_Experimental_Description" xml:space="preserve">
+    <value>Activate features that are not tested completly, use at youre own risk. When this setting is changed, the app need to be restarted</value>
+  </data>
+  <data name="Setting_Name_ExperimentalEnabled" xml:space="preserve">
+    <value>Setting_ExperimentalEnabled</value>
+  </data>
+</root>

@@ -1,0 +1,141 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:lang="using:IRH.Ui.Resources"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             xmlns:models="using:IRH.Lib.Model.Azure.Result"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:IRH.Ui.ViewModels"
+             x:DataType="vm:AzureLoginAuditViewModel"
+             x:Class="IRH.Ui.Views.AzureLoginAuditView">
+    <Design.DataContext>
+        <vm:AzureLoginAuditViewModel/>
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="*, Auto">
+        <Grid ColumnDefinitions="Auto,*">
+            <ScrollViewer Grid.Column="0">
+                <StackPanel Margin="10" Spacing="10">
+                    <StackPanel Spacing="10" MinWidth="381">
+                        <TextBlock Text="{x:Static lang:Strings.AzureLoginAudit_DateMenu_Label}" FontWeight="Bold"/>
+                        <Separator/>
+                        <Border Padding="5">
+                            <StackPanel Spacing="5">
+                                <TextBlock MinWidth="75" Text="{x:Static lang:Strings.AzureLoginAudit_StartDate_Label}" /><StackPanel Orientation="Horizontal" Spacing="5" >
+                                    <CalendarDatePicker SelectedDate="{Binding SelectedStartDate}" />
+                                    <ui:CommandBarSeparator/>
+                                    <TimePicker SelectedTime="{Binding SelectedStartTime}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="5">
+                            <StackPanel Spacing="5">
+                                <TextBlock MinWidth="75" Text="{x:Static lang:Strings.AzureLoginAudit_EndDate_Label}" />
+                                <StackPanel Orientation="Horizontal" Spacing="5" >
+                                    <CalendarDatePicker SelectedDate="{Binding SelectedEndDate}" />
+                                    <ui:CommandBarSeparator/>
+                                    <TimePicker SelectedTime="{Binding SelectedEndTime}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                            <Separator/>
+                            <TextBlock Text="{x:Static lang:Strings.Azure_AuditActivity_Label}"/>
+                            <ItemsControl ItemsSource="{Binding AllActivities}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="5">
+                                            <StackPanel Orientation="Horizontal" Spacing="0">
+                                                <TextBox Width="275" Text="{Binding Label}" Watermark="{x:Static lang:Strings.Azure_Activity_Placeholder}"/>
+                                                <ui:CommandBarSeparator/>
+                                                <StackPanel Orientation="Horizontal" Spacing="3">
+                                                    <Button Command="{Binding $parent[ItemsControl].((vm:AzureLoginAuditViewModel)DataContext).AddNewActivityCommand}">
+                                                        <icons:SymbolIcon Symbol="GlobeAdd"/>
+                                                    </Button>
+                                                    <Button IsVisible="{Binding ShowDelete}" Command="{Binding $parent[ItemsControl].((vm:AzureLoginAuditViewModel)DataContext).DeleteActivityCommand}" CommandParameter="{Binding $self}" >
+                                                        <icons:SymbolIcon Symbol="Delete"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Separator/>
+                        <Border Padding="5">
+                            <StackPanel Spacing="5">
+                                <TextBlock MinWidth="75" Text="{x:Static lang:Strings.Azure_AuditQuery_Label}" />
+                                <TextBox Watermark="{x:Static lang:Strings.Azure_AuditQueryID_PlaceHolder}" Text="{Binding ExistingQueryID}"/>
+                            </StackPanel>
+                        </Border>
+                        <Separator/>
+                        <TextBlock Text="{x:Static lang:Strings.Azure_Scope_Label}"/>
+                        <ItemsControl ItemsSource="{Binding AllScopes}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="5">
+                                        <StackPanel Orientation="Horizontal" Spacing="0">
+                                            <TextBox Width="275" Text="{Binding Label}" Watermark="{x:Static lang:Strings.Azure_Scope_Placeholder}"/>
+                                            <ui:CommandBarSeparator/>
+                                            <StackPanel Orientation="Horizontal" Spacing="3">
+                                                <Button Command="{Binding $parent[ItemsControl].((vm:AzureLoginAuditViewModel)DataContext).AddNewScopeCommand}">
+                                                    <icons:SymbolIcon Symbol="GlobeAdd"/>
+                                                </Button>
+                                                <Button IsVisible="{Binding ShowDelete}" Command="{Binding $parent[ItemsControl].((vm:AzureLoginAuditViewModel)DataContext).DeleteScopeCommand}" CommandParameter="{Binding $self}" >
+                                                    <icons:SymbolIcon Symbol="Delete"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+            </ScrollViewer>
+            <Border Grid.Column="1" BorderThickness="2,0,0,2" BorderBrush="#1c1c1c">
+                <DataGrid ItemsSource="{Binding AllAuditData}" GridLinesVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_AuditCreated_Label}" Binding="{Binding CreatedDateTime}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_AuditType_Label}" Binding="{Binding Operation}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="{x:Static lang:Strings.Azure_AuditUPN_Label}" Binding="{Binding UserPrincipalName}" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+        <ui:CommandBar Grid.Row="1" DefaultLabelPosition="Right">
+            <ui:CommandBar.PrimaryCommands>
+                <ui:CommandBarButton VerticalAlignment="Center" Label="{x:Static lang:Strings.Azure_StartProcess_Label}" Command="{Binding StartAzureAuditingGatheringCommand}">
+                    <ui:CommandBarButton.IconSource>
+                        <icons:SymbolIconSource Symbol="Play"/>
+                    </ui:CommandBarButton.IconSource>
+                </ui:CommandBarButton>
+                <ui:CommandBarSeparator />
+                <ui:CommandBarElementContainer VerticalContentAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="10">
+                        <TextBlock Text="{x:Static lang:Strings.Azure_ReportLevel_Main}" VerticalAlignment="Center"/>
+                        <ComboBox MinWidth="110" ItemsSource="{Binding AllReportLevel}" SelectedItem="{Binding SelectedReportLevel}"/>
+                    </StackPanel>
+                </ui:CommandBarElementContainer>
+                <ui:CommandBarSeparator/>
+                <ui:CommandBarElementContainer>
+                    <StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
+                        <TextBox Text="{Binding UserCode}" IsReadOnly="True" MinWidth="100"/>
+                        <Button IsEnabled="{Binding CopyUserCodeEnabled}" Command="{Binding SetUserCodeToClipboardCommand}">
+                            <icons:SymbolIcon Symbol="ClipboardPaste"/>
+                        </Button>
+                        <Button ToolTip.Tip="{x:Static lang:Strings.Azure_OpenBrowser_ButtonToolTip}" IsEnabled="{Binding OpenBrowserEnabled}" Command="{Binding OpenBrowserCommand}">
+                            <icons:SymbolIcon Symbol="Globe"/>
+                        </Button>
+                        <ui:ProgressRing IsVisible="{Binding LoadingRingEnabled}"/>
+                    </StackPanel>
+                </ui:CommandBarElementContainer>
+            </ui:CommandBar.PrimaryCommands>
+            <ui:CommandBar.SecondaryCommands>
+                <ui:CommandBarButton Label="{x:Static lang:Strings.Azure_ExportData_Label}" IsEnabled="{Binding ExportEnabled}" Command="{Binding SaveDataToFileCommand}" />
+                <ui:CommandBarButton Label="{x:Static lang:Strings.Azure_LoadFile_Title}" Command="{Binding LoadDataFileCommand}" />
+            </ui:CommandBar.SecondaryCommands>
+        </ui:CommandBar>
+    </Grid>
+</UserControl>

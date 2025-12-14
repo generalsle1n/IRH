@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using System.Text.Json;
-using System.Threading.Tasks;
 using IRH.Commands.Azure.Reporting.Model;
-using IRH.Commands.Azure.Reporting;
 using Microsoft.Graph.Beta.Models.Security;
-using Microsoft.Kiota.Abstractions.Serialization;
 using Serilog.Core;
-using Microsoft.Graph.Beta;
-using Microsoft.Graph.Beta.Models.Security;
 using System.Text.RegularExpressions;
 using IRH.Commands.Azure.AuditLog;
+using IRH.Lib.Model.Azure.Reporting;
 
 namespace IRH.Commands.Azure.Helper
 {
@@ -21,7 +13,6 @@ namespace IRH.Commands.Azure.Helper
     {
         private readonly Logger _logger;
         private const string _methodToStringName = "ToString";
-        private const int _timeMultiplyer = 1000;
         private const string _tmpFileTypeName = ".tmp";
         private const string _jsonFileTypeName = ".json";
 
@@ -184,72 +175,6 @@ namespace IRH.Commands.Azure.Helper
 
                     _logger.Information($"Result saved to {FilePath}");
                 }
-            }
-        }
-
-        internal async Task<AuditLogQuery> CreateQuery(GraphServiceClient Client, DateTime Start, DateTime End, string[] Activities, string[] UserLoginFilter = null)
-        {
-            Guid Id = Guid.NewGuid();
-
-            AuditLogQuery Query = new AuditLogQuery()
-            {
-                FilterStartDateTime = Start,
-                FilterEndDateTime = End,
-                OperationFilters = Activities.ToList()
-            };
-
-            if (UserLoginFilter is not null)
-            {
-                Query.UserPrincipalNameFilters = UserLoginFilter.ToList();
-            }
-
-            Query.DisplayName = $"Created by IRH_Scanner {Id}";
-
-            string LogText = $"Try to Create an Audit Search with activties {string.Join(", ", Activities)} Id:{Id} and in Timeframe {Start} - {End}";
-
-            if(UserLoginFilter is not null)
-            {
-                LogText += $" and with Userfilter {string.Join(", ", UserLoginFilter)}";
-            }
-
-            _logger.Information(LogText);
-
-            AuditLogQuery Processed = await Client.Security.AuditLog.Queries.PostAsync(Query);
-            return Processed;
-        }
-
-        internal async Task<AuditLogQuery> WaitOnQuery(GraphServiceClient Client, AuditLogQuery Query, int WaitTime)
-        {
-            _logger.Information($"Start for Waiting Query (This can take some minutes, up to 10min): {Query.DisplayName}");
-
-            while (Query.Status == AuditLogQueryStatus.NotStarted || Query.Status == AuditLogQueryStatus.Running)
-            {
-                _logger.Information($"Query not finished, current State: {Query.Status}");
-                await Task.Delay(WaitTime * _timeMultiplyer);
-                Query = await Client.Security.AuditLog.Queries[Query.Id].GetAsync(req => req.QueryParameters.Expand = new string[] { "*" });
-            }
-
-            _logger.Information($"Query finished: {Query.DisplayName}");
-            return Query;
-        }
-
-        internal async Task<AuditLogRecordCollectionResponse> GetResultFromQuery(GraphServiceClient Client, AuditLogQuery Query)
-        {
-            return await Client.Security.AuditLog.Queries[Query.Id].Records.GetAsync();
-        }
-
-        internal async Task<AuditLogQuery> GetQueryFromName(GraphServiceClient Client, string QueryName)
-        {
-            AuditLogQueryCollectionResponse Collection = await Client.Security.AuditLog.Queries.GetAsync();
-
-            IEnumerable<AuditLogQuery> Result = Collection.Value.Where(item => item.DisplayName.Equals(QueryName));
-            if (Result.Count() >= 1)
-            {
-                return Result.First();
-            }
-            else
-            {
-                return null;
             }
         }
     }

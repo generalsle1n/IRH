@@ -2,8 +2,9 @@
 using IRH.Commands.Azure.AuditLog;
 using Serilog.Core;
 using System.CommandLine;
-using IRH.Commands.Azure.Auth;
 using IRH.Commands.Azure.Session;
+using IRH.Lib.Model.Azure.Auth;
+using IRH.Commands.Azure.MCU;
 
 namespace IRH.Commands.Azure
 {
@@ -12,18 +13,18 @@ namespace IRH.Commands.Azure
         private const string _commandName = "-Azure";
         private const string _commandDescription = "All available Azure Commands";
 
-        private const string _publicAppID = "-A";
+        internal const string _publicAppID = "-A";
         private const string _publicAppIDDescription = "Enter the ID of the App ID";
         private const string _publicAppIDAlias = "--AppID";
         private const bool _publicAppIDIsRequired = true;
         private const string _publicAppIDDefaultValue = "c0849608-c8b9-4e86-b37d-fce972a0a7f6";
 
-        private const string _publicTenantID = "-T";
+        internal const string _publicTenantID = "-T";
         private const string _publicTenantIDDescription = "Enter the ID of the Tenant ID (In the default you dont need to change this)";
         private const string _publicTenantIDAlias = "--Tenant";
         private const string _publicTenantIDDefaultValue = "common";
 
-        private const string _authClientProvider = "-AU";
+        internal const string _authClientProvider = "-AU";
         private const string _authClientProviderDescription = "Enter the the process how you want to authenticate";
         private const string _authClientProviderAlias = "--AuthType";
         private const AuthType _authClientProviderDefaultValue = AuthType.DeviceCode;
@@ -39,37 +40,49 @@ namespace IRH.Commands.Azure
         {
             Command Command = new Command(name: _commandName, description: _commandDescription);
 
-            Option<string> AppID = new Option<string>(name: _publicAppID, description: _publicAppIDDescription);
-            Option<string> TenantID = new Option<string>(name: _publicTenantID, description: _publicTenantIDDescription);
-            Option<AuthType> AuthType = new Option<AuthType>(name: _authClientProvider, description: _authClientProviderDescription);
+            Option<string> AppID = new Option<string>(name: _publicAppID, aliases: _publicAppIDAlias)
+            {
+                Description = _publicAppIDDescription,
+                Required = _publicAppIDIsRequired,
+                DefaultValueFactory = (result) => _publicAppIDDefaultValue,
+                Recursive = true
+            };
 
-            AppID.IsRequired = _publicAppIDIsRequired;
+            Option<string> TenantID = new Option<string>(name: _publicTenantID, aliases: _publicTenantIDAlias)
+            {
+                Description = _publicTenantIDDescription,
+                DefaultValueFactory = (result) => _publicTenantIDDefaultValue,
+                Recursive = true
+            };
 
-            AppID.AddAlias(_publicAppIDAlias);
-            TenantID.AddAlias(_publicTenantIDAlias);
-            AuthType.AddAlias(_authClientProviderAlias);
+            Option<AuthType> AuthType = new Option<AuthType>(name: _authClientProvider, aliases: _authClientProviderAlias) 
+            {
+                Description = _authClientProviderDescription,
+                DefaultValueFactory = (result) => _authClientProviderDefaultValue,
+                Recursive = true
+            };
 
-            AppID.SetDefaultValue(_publicAppIDDefaultValue);
-            TenantID.SetDefaultValue(_publicTenantIDDefaultValue);
-            AuthType.SetDefaultValue(_authClientProviderDefaultValue);
+            Command.Options.Add(AppID);
+            Command.Options.Add(TenantID);
+            Command.Options.Add(AuthType);
 
-            Command.AddGlobalOption(AppID);
-            Command.AddGlobalOption(TenantID);
-            Command.AddGlobalOption(AuthType);
-
-            AzureMFA AzureMFACommand = new AzureMFA(_logger);
+            AzureMFACommand AzureMFACommand = new AzureMFACommand(_logger);
             Command AzureMFA = AzureMFACommand.CreateCommand(RootCommand);
 
-            AzureSession AzureSessionCommand = new AzureSession(_logger);
+            AzureSessionCommand AzureSessionCommand = new AzureSessionCommand(_logger);
             Command AzureSession = AzureSessionCommand.CreateCommand(RootCommand);
 
             AzureAuditLog AzureAuditLogCommand = new AzureAuditLog(_logger);
             Command AzureAuditLog = AzureAuditLogCommand.CreateCommand(RootCommand);
 
-            Command.AddCommand(AzureMFA);
-            Command.AddCommand(AzureSession);
-            Command.AddCommand(AzureAuditLog);
-            
+            AzureMailCommand AzureMailCleanupCommand = new AzureMailCommand(_logger);
+            Command AzureMCU = AzureMailCleanupCommand.CreateCommand(RootCommand);
+
+            Command.Add(AzureMFA);
+            Command.Add(AzureSession);
+            Command.Add(AzureAuditLog);
+            Command.Add(AzureMCU);
+
             return Command;
         }
     }
