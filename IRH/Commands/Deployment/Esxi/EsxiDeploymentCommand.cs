@@ -322,7 +322,7 @@ namespace IRH.Commands.Deployment.Esxi
 
                             if (DeploymentType.RawCmd != selectedDeployment)
                             {
-                                vm = await EsxiDeployment.CopyFileToVMAsync(navigation, loginData, singleVm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption), httpClient);
+                                vm = await EsxiDeployment.CopyFileToVMAsync(navigation, vm, parseResult.GetRequiredValue<GuestOs>(GuestOsSelectionOption), parseResult.GetRequiredValue<FileInfo>(DeploymentFileOption), httpClient);
                             }
                             
                             switch (parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption))
@@ -334,7 +334,7 @@ namespace IRH.Commands.Deployment.Esxi
                                     await EsxiDeployment.InstallExeOnVMAsync(navigation, vm, parseResult.GetRequiredValue<string>(GuestOsExeArgumentOption));
                                     break;
                                 case DeploymentType.RawCmd:
-                                    await EsxiDeployment.ExecuteCmdOnVMAsync(navigation, singleVm, loginData, parseResult.GetRequiredValue<string>(GuestOsRawCmdArgumentOption));
+                                    await EsxiDeployment.ExecuteCmdOnVMAsync(navigation, vm, parseResult.GetRequiredValue<string>(GuestOsRawCmdArgumentOption));
                                     break;
                                 default:
                                     _logger.Error($"Deployment type {parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption)} not supported");
