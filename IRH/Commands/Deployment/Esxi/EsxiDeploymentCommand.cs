@@ -316,7 +316,8 @@ namespace IRH.Commands.Deployment.Esxi
                             if (!newVmNetwork.Equals(string.Empty))
                             {
                                 _logger.Information($"VM Network config is set so network is changed to {newVmNetwork}");
-                                await EsxiDeployment.SetVMNetworkByNameAsync(navigation, singleVm, parseResult.GetRequiredValue<string>(NewVMNetworkOption));
+                                vm = await EsxiDeployment.SetVMNetworkByNameAsync(navigation, vm, parseResult.GetRequiredValue<string>(NewVMNetworkOption));
+                                vm = await EsxiDeployment.EnableGuestDhcpAsync(navigation, vm);
                             }
 
                             if (DeploymentType.RawCmd != selectedDeployment)
