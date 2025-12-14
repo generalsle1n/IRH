@@ -1,15 +1,16 @@
 ﻿using IRH.Lib;
+using IRH.Lib.Class.Deployment.VMWare;
 using IRH.Lib.Model.Deployment.Esxi;
+using IRH.Lib.Model.General;
 using IRH.Lib.Model.Remote.CopyFile;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Serilog.Core;
-using IRH.Lib.Class.Deployment.VMWare;
-using IRH.Lib.Model.General;
 
 namespace IRH.Commands.Deployment.Esxi
 {
