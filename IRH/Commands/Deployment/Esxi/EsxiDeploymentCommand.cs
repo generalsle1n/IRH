@@ -311,7 +311,7 @@ namespace IRH.Commands.Deployment.Esxi
                         foreach (VirtualMachine singleVm in FilteredData)
                         {
                             DeploymentType selectedDeployment = parseResult.GetRequiredValue<DeploymentType>(DeploymentTypeOption);
-                            VirtualMachine vm = null;
+                            VirtualMachine vm = await EsxiDeployment.ValidateLoginAsync(navigation, singleVm, loginData);
 
                             if (!newVmNetwork.Equals(string.Empty))
                             {
