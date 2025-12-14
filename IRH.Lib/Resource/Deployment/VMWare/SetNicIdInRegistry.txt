@@ -1,3 +1,0 @@
-﻿$guids = (Get-WmiObject -Class "Win32_NetworkAdapter" | Where-Object {$_.PhysicalAdapter -eq $true -and $_.NetConnectionStatus -eq 2}).Guid
-New-Item -Path "HKLM:\SOFTWARE" -Name "IRH" -Force | Out-Null
-New-ItemProperty -Path "HKLM:\SOFTWARE\IRH" -Name "NicIds" -PropertyType "MultiString" -Value $guids -Force | Out-Null
