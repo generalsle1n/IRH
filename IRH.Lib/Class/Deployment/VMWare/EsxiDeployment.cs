@@ -691,22 +691,18 @@ namespace IRH.Lib.Class.Deployment.VMWare
         }
 
         /// <summary>
-        /// Save VM Nic IDs to the guest registry.
+        /// Convert the macadress in the correct format
         /// </summary>
-        /// <param name="navigation"></param>
-        /// <param name="vm"></param>
-        /// <returns></returns>
-        public async Task<VirtualMachine> SaveNicGuidsVMGuestRegistryAsync(EsxiNavigation navigation, VirtualMachine vm, List<GuestOsLoginInfo> loginInfo)
+        /// <returns>string</returns>
+        private string EnrichMacAddress(string macAddress)
         {
-            string powershellScript = ResourceHelper.GetResourceString(DefaultValue.ResourceSetNicIdInRegistryName);
-            byte[] encodedScript = Encoding.Unicode.GetBytes(powershellScript);
-            string base64Script = Convert.ToBase64String(encodedScript);
-
-            vm = await ExecuteCmdOnVMAsync(navigation, vm, loginInfo, $"powershell.exe -encodedCommand \"{base64Script}\"");
-            _logger.Information($"Saved Nic Guids to registry");
-
-            return vm;
+            return macAddress.Replace(":", string.Empty);
         }
+
+        private string ConvertPowershellScriptToBase64(string scriptContent)
+        {
+            byte[] rawScriptContent = Encoding.Unicode.GetBytes(scriptContent);
+            return Convert.ToBase64String(rawScriptContent);
         }
     }
 }
