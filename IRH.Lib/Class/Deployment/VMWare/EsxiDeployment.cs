@@ -40,7 +40,7 @@ namespace IRH.Lib.Class.Deployment.VMWare
             DefaultValue.EsxiPropertyConfigGuestIdValue,
             DefaultValue.EsxiPropertyRuntimePowerStateValue,
             DefaultValue.EsxiPropertyGuestToolsRunningStatusValue,
-            DefaultValue.EsxiPropertyGuestGuestFullNameValue,
+            DefaultValue.EsxiPropertyGuestGuestNetNameValue,
         };
 
         public async Task<EsxiNavigation> LoginAsync(HypervisorLoginInfo loginInfo)
