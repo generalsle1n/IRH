@@ -357,4 +357,13 @@
   <data name="Setting_Name_AppLanguage" xml:space="preserve">
     <value>Setting_Name_AppLanguage</value>
   </data>
+  <data name="Setting_Experimental_Main" xml:space="preserve">
+    <value>Experimental Feature</value>
+  </data>
+  <data name="Setting_Experimental_Description" xml:space="preserve">
+    <value>Activate features that are not tested completly, use at youre own risk. When this setting is changed, the app need to be restarted</value>
+  </data>
+  <data name="Setting_Name_ExperimentalEnabled" xml:space="preserve">
+    <value>Setting_ExperimentalEnabled</value>
+  </data>
 </root>

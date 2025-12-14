@@ -37,6 +37,8 @@ internal partial class SettingViewModel : ViewModelBase
     private bool _tenantIDEditEnabled = Preferences.Get<bool>(Strings.Setting_Name_TenantIDEditEnabled, false);
     [ObservableProperty]
     private bool _appIDEditEnabled = Preferences.Get<bool>(Strings.Setting_Name_AppIDEditEnabled, false);
+    [ObservableProperty]
+    private bool _experimentalFeaturesEnabled = Preferences.Get<bool>(Strings.Setting_Name_ExperimentalEnabled, false);
     
     internal List<AppTheme> AllAppThemes { get; } = Enum.GetValues<AppTheme>().Cast<AppTheme>().ToList();
     internal List<AuthType> AllAuthTypes { get; } = Enum.GetValues<AuthType>().Cast<AuthType>().ToList();
@@ -48,6 +50,7 @@ internal partial class SettingViewModel : ViewModelBase
         await Preferences.SetAsync<string>(Strings.Setting_Name_TenantID, DefaultValue.TenantId);
         CurrentTenantID = DefaultValue.TenantId;
     }
+    
     [RelayCommand]
     private async Task ResetAppID()
     {
@@ -66,30 +69,38 @@ internal partial class SettingViewModel : ViewModelBase
         Preferences.Set<AuthType>(Strings.Setting_Name_AuthType, value);
         SelectedAuthType = value;
     }
-
+    
     partial void OnCurrentTenantIDChanged(string value)
     {
         Preferences.Set<string>(Strings.Setting_Name_TenantID, value);
         CurrentTenantID = value;
     }
+    
     partial void OnCurrentAppIDChanged(string value)
     {
         Preferences.Set<string>(Strings.Setting_Name_AppID, value);
         CurrentAppID = value;
     }
-
+    
     partial void OnTenantIDEditEnabledChanged(bool value)
     {
         Preferences.Set<bool>(Strings.Setting_Name_TenantIDEditEnabled, value);
         TenantIDEditEnabled = value;
     }
-
+    
     partial void OnAppIDEditEnabledChanged(bool value)
     {
         Preferences.Set<bool>(Strings.Setting_Name_AppIDEditEnabled, value);
         AppIDEditEnabled = value;
     }
 
+    partial void OnExperimentalFeaturesEnabledChanged(bool value)
+    {
+        Preferences.Set<bool>(Strings.Setting_Name_ExperimentalEnabled, value);
+        ExperimentalFeaturesEnabled = value;
+        
+    }
+    
     private void SetAppTheme()
     {
         switch (SelectedAppTheme)
@@ -113,7 +124,7 @@ internal partial class SettingViewModel : ViewModelBase
         
         SetAppTheme();
     }
-
+    
     partial void OnSelectedAppLanguageChanged(AppLanguage value)
     {
         Preferences.Set<AppLanguage>(Strings.Setting_Name_AppLanguage, value);

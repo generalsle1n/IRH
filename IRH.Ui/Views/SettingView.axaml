@@ -46,6 +46,14 @@
                     <ui:FAComboBox MinWidth="200" ItemsSource="{Binding AllAuthTypes}" SelectedItem="{Binding SelectedAuthType}"/>
                 </ui:SettingsExpander.Footer>
             </ui:SettingsExpander>
+            <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_Experimental_Main}" Description="{x:Static lang:Strings.Setting_Experimental_Description}">
+                <ui:SettingsExpander.IconSource>
+                    <icons:SymbolIconSource Symbol="PersonAccounts" />
+                </ui:SettingsExpander.IconSource>
+                <ui:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding ExperimentalFeaturesEnabled}"/>
+                </ui:SettingsExpander.Footer>
+            </ui:SettingsExpander>
             <ui:SettingsExpander Header="{x:Static lang:Strings.Setting_TenantID_Main}" Description="{x:Static lang:Strings.Setting_TenantID_Description}">
                 <ui:SettingsExpander.IconSource>
                     <icons:SymbolIconSource Symbol="Building" />

@@ -663,6 +663,24 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activate features that are not tested completly, use at youre own risk. When this setting is changed, the app need to be restarted.
+        /// </summary>
+        public static string Setting_Experimental_Description {
+            get {
+                return ResourceManager.GetString("Setting_Experimental_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Experimental Feature.
+        /// </summary>
+        public static string Setting_Experimental_Main {
+            get {
+                return ResourceManager.GetString("Setting_Experimental_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Setting_AppID.
         /// </summary>
         public static string Setting_Name_AppID {
@@ -704,6 +722,15 @@ namespace IRH.Ui.Resources {
         public static string Setting_Name_AuthType {
             get {
                 return ResourceManager.GetString("Setting_Name_AuthType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_ExperimentalEnabled.
+        /// </summary>
+        public static string Setting_Name_ExperimentalEnabled {
+            get {
+                return ResourceManager.GetString("Setting_Name_ExperimentalEnabled", resourceCulture);
             }
         }
         

@@ -354,4 +354,13 @@
   <data name="Setting_Name_AppLanguage" xml:space="preserve">
     <value>Setting_Name_AppLanguage</value>
   </data>
+  <data name="Setting_Experimental_Main" xml:space="preserve">
+    <value>Experimentelle Funktionen</value>
+  </data>
+  <data name="Setting_Experimental_Description" xml:space="preserve">
+    <value>Aktivieren sie die experimentellen Funktionen, welche noch nicht vollständig getestest sind, verwenden auf eigene Gefahr. Das ändern der Option fordert ein Neustart der anwendung</value>
+  </data>
+  <data name="Setting_Name_ExperimentalEnabled" xml:space="preserve">
+    <value>Setting_ExperimentalEnabled</value>
+  </data>
 </root>

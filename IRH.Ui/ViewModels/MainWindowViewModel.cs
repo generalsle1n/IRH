@@ -1,7 +1,9 @@
 ﻿using System;
 using Avalonia.Controls;
+using Avalonia.SimplePreferences;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAvalonia.UI.Controls;
+using IRH.Ui.Resources;
 using IRH.Ui.Views;
 
 namespace IRH.Ui.ViewModels
@@ -17,6 +19,9 @@ namespace IRH.Ui.ViewModels
         [ObservableProperty]
         private NavigationViewItem _selectedItem;
 
+        [ObservableProperty]
+        private bool _experimentalFeaturesEnabled = Preferences.Get<bool>(Strings.Setting_Name_ExperimentalEnabled, false);
+        
         partial void OnSelectedItemChanged(NavigationViewItem value)
         {
             string ViewTypeName, ViewModelTypeName = null;

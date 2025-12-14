@@ -654,6 +654,24 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aktivieren sie die experimentellen Funktionen, welche noch nicht vollständig getestest sind, verwenden auf eigene Gefahr. Das ändern der Option fordert ein Neustart der anwendung.
+        /// </summary>
+        public static string Setting_Experimental_Description {
+            get {
+                return ResourceManager.GetString("Setting_Experimental_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Experimentelle Funktionen.
+        /// </summary>
+        public static string Setting_Experimental_Main {
+            get {
+                return ResourceManager.GetString("Setting_Experimental_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Setting_AppID.
         /// </summary>
         public static string Setting_Name_AppID {
@@ -695,6 +713,15 @@ namespace IRH.Ui.Resources {
         public static string Setting_Name_AuthType {
             get {
                 return ResourceManager.GetString("Setting_Name_AuthType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting_ExperimentalEnabled.
+        /// </summary>
+        public static string Setting_Name_ExperimentalEnabled {
+            get {
+                return ResourceManager.GetString("Setting_Name_ExperimentalEnabled", resourceCulture);
             }
         }
         
