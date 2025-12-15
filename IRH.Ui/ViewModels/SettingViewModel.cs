@@ -9,8 +9,10 @@ using Avalonia.SimplePreferences;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using IRH.Lib;
 using IRH.Lib.Model.Azure.Auth;
+using IRH.Ui.Models.Message.Send;
 using IRH.Ui.Models.UI;
 using Strings = IRH.Ui.Resources.Strings;
 
@@ -99,6 +101,7 @@ internal partial class SettingViewModel : ViewModelBase
         Preferences.Set<bool>(Strings.Setting_Name_ExperimentalEnabled, value);
         ExperimentalFeaturesEnabled = value;
         
+        WeakReferenceMessenger.Default.Send<SettingsExperimentalMessage>(new SettingsExperimentalMessage());
     }
     
     private void SetAppTheme()
