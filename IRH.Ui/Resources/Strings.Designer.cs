@@ -663,7 +663,7 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Activate features that are not tested completly, use at youre own risk. When this setting is changed, the app need to be restarted.
+        ///   Looks up a localized string similar to Activate features that are not tested completly, use at youre own risk. When this setting is changed.
         /// </summary>
         public static string Setting_Experimental_Description {
             get {
