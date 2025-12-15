@@ -654,7 +654,7 @@ namespace IRH.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aktivieren sie die experimentellen Funktionen, welche noch nicht vollständig getestest sind, verwenden auf eigene Gefahr. Das ändern der Option fordert ein Neustart der anwendung.
+        ///   Looks up a localized string similar to Aktivieren sie die experimentellen Funktionen, welche noch nicht vollständig getestest sind, verwenden auf eigene Gefahr.
         /// </summary>
         public static string Setting_Experimental_Description {
             get {

@@ -2,7 +2,9 @@
 using Avalonia.Controls;
 using Avalonia.SimplePreferences;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAvalonia.UI.Controls;
+using IRH.Ui.Models.Message.Send;
 using IRH.Ui.Resources;
 using IRH.Ui.Views;
 
@@ -10,6 +12,14 @@ namespace IRH.Ui.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        public MainWindowViewModel()
+        {
+            WeakReferenceMessenger.Default.Register<SettingsExperimentalMessage>(this, (r, message) =>
+            {
+                ExperimentalFeaturesEnabled = Preferences.Get<bool>(Strings.Setting_Name_ExperimentalEnabled, false);
+            });    
+        }
+        
         [ObservableProperty]
         private UserControl _currentPage = new SettingView()
         {
