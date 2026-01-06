@@ -21,5 +21,7 @@ jobs:
         uses: actions/setup-dotnet@v5
         with: 
           dotnet-version: ${{ env.CurrentDotnetVersion }}
+      - name: "dir"
+        run: dir
       - name: BuildIRH
-        run: "dotnet publish IRH.Ui\\IRH.csproj"
+        run: "dotnet publish ./src/IRH/IRH.csproj"
