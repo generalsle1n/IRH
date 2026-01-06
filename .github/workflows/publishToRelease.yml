@@ -1,4 +1,9 @@
 name: "Build Release and Push to Release"
+
+env:
+  CurrentDotnetVersion: 9
+
+
 on:
   push:
     branches: 
@@ -9,4 +14,12 @@ jobs:
   build_win-x64:
     runs-on: "windows-latest" 
     steps:
+      #Clone Repository
       - uses: actions/checkout@v6.0.1
+      #Install .Net with Version 9.X
+      - name: CreateDotNetEnvironment
+        uses: actions/setup-dotnet@v5
+        with: 
+          dotnet-version: ${{ env.CurrentDotnetVersion }}
+      - name: BuildIRH
+        run: "dotnet publish IRH.Ui\\IRH.csproj"
