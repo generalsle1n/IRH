@@ -24,4 +24,4 @@ jobs:
       - name: "dir"
         run: dir
       - name: BuildIRH
-        run: "dotnet publish ./src/IRH/IRH.csproj"
+        run: "dotnet publish IRH\\IRH.csproj"
