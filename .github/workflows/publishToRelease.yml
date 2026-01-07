@@ -58,6 +58,7 @@ jobs:
       - name: CreateVeloPackRelease
         run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ env.PublishIRHCLIReleaseFolder }}"
 
+      #Upload to Artifacts
       - name: UploadInstaller
         uses: actions/upload-artifact@v4
         with:
