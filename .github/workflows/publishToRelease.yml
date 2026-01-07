@@ -65,7 +65,5 @@ jobs:
           name: ${{ env.IRHCLIPackedName }}
           path: ${{ env.IRHCLIPackedFolder }}${{ env.IRHCLIPackedName }}
 
-      - name: list
-        run: dir ${{ env.IRHCLIPackedFolder }}
       - name: list2
         run: dir "IRH\\Release\\"
