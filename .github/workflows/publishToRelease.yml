@@ -60,10 +60,8 @@ jobs:
 
       #Upload to Artifacts
       - name: UploadInstaller
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.IRHCLIPackedName }}
           path: ${{ env.IRHCLIPackedFolder }}${{ env.IRHCLIPackedName }}
-
-      - name: list2
-        run: dir ${{ env.IRHCLIPackedFolder }}
+          compression-level: 0
