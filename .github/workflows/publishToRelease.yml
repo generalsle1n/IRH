@@ -7,7 +7,7 @@ env:
   PublishIRHCLIReleaseFolder: "IRH\\bin\\Release\\net9.0\\publish\\"
   DefaultNextReleaseMode: "patch"
   IRHCLIPackedName: "IRH-win-Setup.exe"
-  IRHCLIPackedFolder: "IRH\\Release\\"
+  IRHCLIPackedFolder: "IRH\\IRH\\Release\\"
   
 on:
   push:
