@@ -5,6 +5,7 @@ env:
   InstallVPKCommand: "dotnet tool install -g vpk"
   PublishIRHCLI: "dotnet publish IRH\\IRH.csproj"
   PublishIRHCLIReleaseFolder: "IRH\\IRH\\bin\\Release\\net9.0\\publish\\"
+  DefaultNextReleaseMode: "minor"
   
 on:
   push:
@@ -17,20 +18,20 @@ jobs:
     runs-on: "windows-latest" 
     steps:
       #Clone Repository
-      - uses: actions/checkout@v6.0.1
-        with:
-          lfs: true
+      #- uses: actions/checkout@v6.0.1
+      #  with:
+      #    lfs: true
           
       #Install .Net with Version 9.X
-      - name: CreateDotNetEnvironment
-        uses: actions/setup-dotnet@v5
-        with: 
-          dotnet-version: ${{ env.CurrentDotnetVersion }}
+      #- name: CreateDotNetEnvironment
+      #  uses: actions/setup-dotnet@v5
+      #  with: 
+      #    dotnet-version: ${{ env.CurrentDotnetVersion }}
           
       #- name: BuildIRH
       #  run: ${{ env.PublishIRHCLI }}
-      - name: InstallVeloPack
-        run: ${{ env.InstallVPKCommand }}
+      #- name: InstallVeloPack
+      #  run: ${{ env.InstallVPKCommand }}
         
       - name: GetVersion
         id: GetVersion
