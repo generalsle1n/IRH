@@ -24,12 +24,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with: 
           dotnet-version: ${{ env.CurrentDotnetVersion }}
-      - name: BuildIRH
-        run: ${{ env.PublishIRHCLI }}
+      #- name: BuildIRH
+      #  run: ${{ env.PublishIRHCLI }}
       - name: InstallVeloPack
         run: ${{ env.InstallVPKCommand }}
       - name: GetVersion
-        uses: paulhatch/semantic-version@v5.4.0
+        uses: pozetroninc/github-action-get-latest-release@master
         with:
-          tag_prefix: "V"
-          bump_each_commit: true
+          repo: ${{ github.repository }}
