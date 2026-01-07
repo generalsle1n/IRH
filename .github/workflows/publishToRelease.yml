@@ -17,7 +17,8 @@ on:
 
 jobs:
   build_win-x64:
-    runs-on: "windows-latest" 
+    #runs-on: "windows-latest" 
+    runs-on: "self-hosted"
     steps:
       #Clone Repository
       - uses: actions/checkout@v6.0.1
