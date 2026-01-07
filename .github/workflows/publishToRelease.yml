@@ -6,6 +6,8 @@ env:
   PublishIRHCLI: "dotnet publish IRH\\IRH.csproj"
   PublishIRHCLIReleaseFolder: "IRH\\bin\\Release\\net9.0\\publish\\"
   DefaultNextReleaseMode: "patch"
+  IRHCLIPackedName: "IRH-win-Setup.exe"
+  IRHCLIPackedFolder: "IRH\\Release\\"
   
 on:
   push:
@@ -54,3 +56,9 @@ jobs:
       #Pack Application
       - name: CreateVeloPackRelease
         run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ env.PublishIRHCLIReleaseFolder }}"
+
+      - name: UploadInstaller
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IRHCLIPackedName }}
+          path: ${{ env.IRHCLIPackedFolder }}${{ env.IRHCLIPackedName }}
