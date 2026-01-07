@@ -16,6 +16,8 @@ jobs:
     steps:
       #Clone Repository
       - uses: actions/checkout@v6.0.1
+        with:
+          lfs: true
       #Install .Net with Version 9.X
       - name: CreateDotNetEnvironment
         uses: actions/setup-dotnet@v5
