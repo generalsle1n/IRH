@@ -2,7 +2,8 @@ name: "Build Release and Push to Release"
 
 env:
   CurrentDotnetVersion: 9
-
+  InstallVPKCommand: "dotnet tool install vpk"
+  PublishIRHCLI: "dotnet publish IRH\\IRH.csproj"
 
 on:
   push:
@@ -23,7 +24,9 @@ jobs:
         uses: actions/setup-dotnet@v5
         with: 
           dotnet-version: ${{ env.CurrentDotnetVersion }}
-      - name: "dir"
-        run: dir
       - name: BuildIRH
-        run: "dotnet publish IRH\\IRH.csproj"
+        run: ${{ env.PublishIRHCLI }}
+      - name: InstallVeloPack
+        run: ${{ env.InstallVPKCommand }}
+      - name: GetVersion
+        uses: codacy/git-version@2.4.0
