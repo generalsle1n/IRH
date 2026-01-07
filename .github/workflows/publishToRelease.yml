@@ -18,33 +18,39 @@ jobs:
     runs-on: "windows-latest" 
     steps:
       #Clone Repository
-      #- uses: actions/checkout@v6.0.1
-      #  with:
-      #    lfs: true
+      - uses: actions/checkout@v6.0.1
+        with:
+          lfs: true
           
       #Install .Net with Version 9.X
-      #- name: CreateDotNetEnvironment
-      #  uses: actions/setup-dotnet@v5
-      #  with: 
-      #    dotnet-version: ${{ env.CurrentDotnetVersion }}
-          
-      #- name: BuildIRH
-      #  run: ${{ env.PublishIRHCLI }}
-      #- name: InstallVeloPack
-      #  run: ${{ env.InstallVPKCommand }}
+      - name: CreateDotNetEnvironment
+        uses: actions/setup-dotnet@v5
+        with: 
+          dotnet-version: ${{ env.CurrentDotnetVersion }}
+
+      #Build
+      - name: BuildIRH
+        run: ${{ env.PublishIRHCLI }}
         
+      #Install DotnetTool
+      - name: InstallVeloPack
+        run: ${{ env.InstallVPKCommand }}
+      
+      #Get Version from Release  
       - name: GetVersion
         id: GetVersion
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: ${{ github.repository }}
-          
+
+      #Increase Version from Release
       - name: IncreaseRelease
         id: IncreaseRelease
         uses: christian-draeger/increment-semantic-version@1.2.3
         with:
           current-version: ${{ steps.GetVersion.outputs.release }}
           version-fragment: ${{ env.DefaultNextReleaseMode }}
-          
+
+      #Pack Application
       - name: CreateVeloPackRelease
         run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ env.PublishIRHCLIReleaseFolder }}"
