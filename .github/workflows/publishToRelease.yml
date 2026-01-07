@@ -4,7 +4,8 @@ env:
   CurrentDotnetVersion: 9
   InstallVPKCommand: "dotnet tool install -g vpk"
   PublishIRHCLI: "dotnet publish IRH\\IRH.csproj"
-
+  PublishIRHCLIReleaseFolder: "IRH\\IRH\\bin\\Release\\net9.0\\publish\\"
+  
 on:
   push:
     branches: 
@@ -32,3 +33,10 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: ${{ github.repository }}
+      - name: IncreaseRelease
+        uses: christian-draeger/increment-semantic-version@1.2.3
+        with:
+          current-version: ${{ steps.GetVersion.outputs.release }}
+          version-fragment: ${{ env.DefaultNextReleaseMode }}
+      - name: CreateVeloPackRelease
+        run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ env.PublishIRHCLIReleaseFolder }}"
