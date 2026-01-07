@@ -7,8 +7,11 @@ using System.CommandLine;
 using IRH.Commands.Azure;
 using IRH.Commands.Remote;
 using IRH.Commands.Deployment;
+using Velopack;
 
 const string _commandDescription = "suite of some little helper tools within incident response when dealing with security breaches. These tools provide essential features for IT security professionals, making it easier to manage and respond to incidents effectively.";
+
+VelopackApp.Build().Run();
 
 Logger Logger = new LoggerConfiguration()
     .WriteTo.Console()
