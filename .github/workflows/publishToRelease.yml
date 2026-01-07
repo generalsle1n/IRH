@@ -31,4 +31,4 @@ jobs:
       - name: GetVersion
         uses: pozetroninc/github-action-get-latest-release@master
         with:
-          repo: ${{ github.repository }}
+          repository: ${{ github.repository }}
