@@ -4,7 +4,7 @@ env:
   CurrentDotnetVersion: 9
   InstallVPKCommand: "dotnet tool install -g vpk"
   PublishIRHCLI: "dotnet publish IRH\\IRH.csproj"
-  PublishIRHCLIReleaseFolder: "IRH\\IRH\\bin\\Release\\net9.0\\publish\\"
+  PublishIRHCLIReleaseFolder: "IRH\\bin\\Release\\net9.0\\publish\\"
   DefaultNextReleaseMode: "patch"
   
 on:
