@@ -1,3 +1,4 @@
+name: Compute Next Sematic Version
 on:
   workflow_call:
     inputs:
@@ -5,12 +6,15 @@ on:
         required: true
         type: string
     outputs:
-      nextVersion: 
-        value: ${{ jobs.IncreaseRelease.outputs.next-version }}
+      nextVersion:
+        description: "Next semantic version"
+        value: ${{ jobs.computeNextRelease.outputs.nextVersion }}
         
 jobs:
   computeNextRelease:
     runs-on: self-hosted
+    outputs:
+      nextVersion: ${{ steps.IncreaseRelease.outputs.next-version }}
     steps:
       #Get Version from Release  
       - name: GetVersion
