@@ -5,7 +5,7 @@ on:
         required: true
         type: string
     outputs:
-      nextVersion: ${{ steps.IncreaseRelease.outputs.next-version }}
+      nextVersion: ${{ jobs.IncreaseRelease.outputs.next-version }}
 
 jobs:
   computeNextRelease:
