@@ -25,6 +25,9 @@ on:
       nextVersion:
         type: string
         required: true
+      irhCliFinalSetupName:
+        type: string
+        required: true
         
 jobs:
   buildAndUpload:
@@ -53,6 +56,10 @@ jobs:
       - name: CreateVeloPackRelease
         run: "vpk pack --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
 
+      #Rename File
+      - name: Rename Setup File
+        run: "move ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }} ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliFinalSetupName }}"
+      
       #Upload to Artifacts
       - name: UploadInstaller
         uses: actions/upload-artifact@v6
