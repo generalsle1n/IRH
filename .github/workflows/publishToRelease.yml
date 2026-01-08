@@ -20,12 +20,15 @@ jobs:
     uses: "./.github/workflows/computeNextRelease.yml"
     with:
       nextReleaseMode: "patch"
-  #win-64:
-  #  uses: "./.github/workflows/buildAndUploud_win-x64.yml"
-  #  with: 
-  #    dotnetVersion: 9
-  #    nextReleaseMode: patch
-  #    irhCliPackName: "IRH-win-Setup.exe"
+  
+  win-64:
+    uses: "./.github/workflows/buildAndUploud_win-x64.yml"
+    with: 
+      dotnetVersion: 9
+      nextReleaseMode: patch
+      irhCliPackName: "IRH-win-Setup.exe"
+      nextVersion: ${{ steps.getNextVersion.outputs.nextVersion }}
+      
   release:
     needs: getNextVersion
     runs-on: self-hosted
