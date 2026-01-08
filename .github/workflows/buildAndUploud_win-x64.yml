@@ -72,11 +72,3 @@ jobs:
           name: ${{ inputs.irhCliPackName }}
           path: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }}
           compression-level: 0
-
-      - name: CreateRelease
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.IncreaseRelease.outputs.next-version }}
-          generate_release_notes: true
-          make_latest: true
-          files: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }}
