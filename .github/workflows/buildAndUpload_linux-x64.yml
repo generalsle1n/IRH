@@ -9,7 +9,7 @@ on:
         type: string
       irhCliReleaseCommand:
         type: string
-        default: "dotnet publish IRH\\IRH.csproj"
+        default: "dotnet publish IRH/IRH.csproj"
       vpkInstallCommand:
         type: string
         default: "dotnet tool install -g vpk"
@@ -18,10 +18,10 @@ on:
         required: true
       irhCliPackedFolder:
         type: string
-        default: "Releases\\"
+        default: "Releases/"
       irhCliReleaseFolder:
         type: string
-        default: "IRH\\bin\\Release\\net9.0\\publish\\"
+        default: "IRH/bin/Release/net9.0/publish/"
       nextVersion:
         type: string
         required: true
@@ -65,4 +65,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: ${{ inputs.irhCliFinalSetupName }}
-          path: "Releases\\${{ inputs.irhCliFinalSetupName }}"
+          path: "Releases/${{ inputs.irhCliFinalSetupName }}"
