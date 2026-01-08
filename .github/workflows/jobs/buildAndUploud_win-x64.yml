@@ -1,1 +1,79 @@
+on:
+  workflow_call:
+    inputs:
+      dotnetVersion:
+        required: true
+        type: string
+      nextReleaseMode:
+        required: true
+        type: string
+      irhCliReleaseCommand:
+        required: true
+        type: string
+      vpkInstallCommand:
+        type: string
+        default: "dotnet tool install -g vpk"
+      irhCliPackName:
+        type: string
+        default: "IRH-win-Setup.exe"
+      irhCliPackedFolder:
+        type: string
+        default: "Releases\\"
+        
+jobs:
+  buildAndUpload:
+    runs-on: self-hosted
+    steps:
+      #Clone Repository
+      - uses: actions/checkout@v6.0.1
+        with:
+          lfs: true
+          
+      #Install .Net with Version 9.X
+      - name: CreateDotNetEnvironment
+        uses: actions/setup-dotnet@v5
+        with: 
+          dotnet-version: ${{ inputs.dotnetVersion }}
 
+      #Build
+      - name: BuildIRHCli
+        run: ${{ inputs.irhCliReleaseCommand }}
+        
+      #Install DotnetTool
+      - name: InstallVeloPack
+        run: ${{ inputs.vpkInstallCommand }}
+      
+      #Get Version from Release  
+      - name: GetVersion
+        id: GetVersion
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: ${{ github.repository }}
+
+      #Increase Version from Release
+      - name: IncreaseRelease
+        id: IncreaseRelease
+        uses: christian-draeger/increment-semantic-version@1.2.3
+        with:
+          current-version: ${{ steps.GetVersion.outputs.release }}
+          version-fragment: ${{ inputs.nextReleaseMode }}
+
+      #Pack Application
+      - name: CreateVeloPackRelease
+        run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ env.PublishIRHCLIReleaseFolder }}"
+
+      #Upload to Artifacts
+      - name: UploadInstaller
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ inputs.irhCliPackName }}
+          path: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }}
+          compression-level: 0
+
+      - name: CreateRelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.IncreaseRelease.outputs.next-version }}
+          generate_release_notes: true
+          make_latest: true
+          files: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }}
