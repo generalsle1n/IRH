@@ -31,6 +31,8 @@ jobs:
   #    nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
       
   release:
+    permissions:
+      contents: write
     needs: [getNextVersion]
     runs-on: self-hosted
     steps:
