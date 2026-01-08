@@ -23,6 +23,7 @@ jobs:
   
   win-64:
     needs: getNextVersion
+    runs-on: self-hosted
     steps:
       - run: echo ${{ needs.getNextVersion.outputs.nextVersion }}
     #uses: "./.github/workflows/buildAndUploud_win-x64.yml"
