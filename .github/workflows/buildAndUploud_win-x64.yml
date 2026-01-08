@@ -19,6 +19,9 @@ on:
       irhCliPackedFolder:
         type: string
         default: "Releases\\"
+      irhCliReleaseFolder:
+        type: string
+        default: "IRH\\bin\\Release\\net9.0\\publish\\"
         
 jobs:
   buildAndUpload:
@@ -60,7 +63,7 @@ jobs:
 
       #Pack Application
       - name: CreateVeloPackRelease
-        run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ env.PublishIRHCLIReleaseFolder }}"
+        run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ inputs.irhCliReleaseFolder }}"
 
       #Upload to Artifacts
       - name: UploadInstaller
