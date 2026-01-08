@@ -21,3 +21,14 @@ jobs:
     with: 
       dotnetVersion: 9
       nextReleaseMode: patch
+  release:
+    needs: win-64
+    runs-on: self-hosted
+    steps:
+      - name: CreateRelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.IncreaseRelease.outputs.next-version }}
+          generate_release_notes: true
+          make_latest: true
+          files: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }}
