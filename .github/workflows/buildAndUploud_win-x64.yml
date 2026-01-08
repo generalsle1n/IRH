@@ -8,8 +8,8 @@ on:
         required: true
         type: string
       irhCliReleaseCommand:
-        required: true
         type: string
+        default: "dotnet publish IRH\\IRH.csproj"
       vpkInstallCommand:
         type: string
         default: "dotnet tool install -g vpk"
