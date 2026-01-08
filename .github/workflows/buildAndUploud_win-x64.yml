@@ -22,6 +22,9 @@ on:
       irhCliReleaseFolder:
         type: string
         default: "IRH\\bin\\Release\\net9.0\\publish\\"
+      nextVersion:
+        type: string
+        required: true
         
 jobs:
   buildAndUpload:
@@ -45,25 +48,10 @@ jobs:
       #Install DotnetTool
       - name: InstallVeloPack
         run: ${{ inputs.vpkInstallCommand }}
-      
-      #Get Version from Release  
-      - name: GetVersion
-        id: GetVersion
-        uses: pozetroninc/github-action-get-latest-release@master
-        with:
-          repository: ${{ github.repository }}
-
-      #Increase Version from Release
-      - name: IncreaseRelease
-        id: IncreaseRelease
-        uses: christian-draeger/increment-semantic-version@1.2.3
-        with:
-          current-version: ${{ steps.GetVersion.outputs.release }}
-          version-fragment: ${{ inputs.nextReleaseMode }}
 
       #Pack Application
       - name: CreateVeloPackRelease
-        run: "vpk pack --packId IRH --packVersion ${{ steps.IncreaseRelease.outputs.next-version }} --packDir ${{ inputs.irhCliReleaseFolder }}"
+        run: "vpk pack --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
 
       #Upload to Artifacts
       - name: UploadInstaller
