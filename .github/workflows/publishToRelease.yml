@@ -23,12 +23,14 @@ jobs:
   
   win-64:
     needs: getNextVersion
-    uses: "./.github/workflows/buildAndUploud_win-x64.yml"
-    with: 
-      dotnetVersion: 9
-      nextReleaseMode: patch
-      irhCliPackName: "IRH-win-Setup.exe"
-      nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
+    steps:
+      - run: echo ${{ needs.getNextVersion.outputs.nextVersion }}
+    #uses: "./.github/workflows/buildAndUploud_win-x64.yml"
+    #with: 
+    #  dotnetVersion: 9
+    #  nextReleaseMode: patch
+    #  irhCliPackName: "IRH-win-Setup.exe"
+    #  nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
       
   release:
     needs: [win-64]
