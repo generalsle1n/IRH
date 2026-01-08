@@ -34,7 +34,7 @@ jobs:
   release:
     permissions: 
       contents: write
-    needs: [win-64]
+    needs: [win-64, getNextVersion]
     uses: "./.github/workflows/createRelease.yml"
     with:
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
