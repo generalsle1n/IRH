@@ -20,13 +20,13 @@ jobs:
     steps:
       #- name: DownloadArtifact
       #  uses: actions/download-artifact@v7
-
-      uses: xom9ikk/split@v1
-      id: split
-      with:
-        string: ${{ inputs.setupFiles }}
-        separator: ","
-        limit: -1
+      - name: yee
+        uses: xom9ikk/split@v1
+        id: split
+        with:
+          string: ${{ inputs.setupFiles }}
+          separator: ","
+          limit: -1
 
       #- name: CreateRelease
       #  uses: softprops/action-gh-release@v2
