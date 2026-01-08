@@ -32,6 +32,6 @@ jobs:
       
   release:
     needs: [getNextVersion]
-    uses: "./.github/workflows/computeNextRelease.yml"
+    uses: "./.github/workflows/createRelease.yml"
     with:
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
