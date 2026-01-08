@@ -4,6 +4,8 @@ on:
       nextReleaseMode:
         required: true
         type: string
+    outputs:
+      nextVersion: ${{ steps.IncreaseRelease.outputs.next-version }}
 
 jobs:
   computeNextRelease:
@@ -23,7 +25,5 @@ jobs:
         with:
           current-version: ${{ steps.GetVersion.outputs.release }}
           version-fragment: ${{ inputs.nextReleaseMode }}
-    outputs:
-      nextVersion: ${{ steps.IncreaseRelease.outputs.next-version }}
         
       
