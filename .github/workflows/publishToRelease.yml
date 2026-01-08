@@ -14,9 +14,10 @@ on:
     branches: 
       - "master"
       - "Issue#62"
-#Calling Reusable
+
 jobs:
   win-64:
     uses: "./.github/workflows/buildAndUploud_win-x64.yml"
-
- 
+    with: 
+      dotnetVersion: ${{ env.CurrentDotnetVersion }}
+      nextReleaseMode: ${{ env.DefaultNextReleaseMode }} 
