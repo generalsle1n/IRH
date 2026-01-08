@@ -5,6 +5,10 @@ on:
       nextVersion:
         type: string
         required: true
+
+env: 
+  BinaryPatternName: "IRH-*-Setup.*"
+  
 jobs:
   createRelease:
     name: Create Release
@@ -26,18 +30,10 @@ jobs:
           tag_name: ${{ inputs.nextVersion }}
           generate_release_notes: true
           make_latest: true
-          files: "IRH-*-Setup.*"
-
-      
-      
-      #- name: Release
-      #  uses: ncipollo/release-action@v1
-      #  with:
-      #    artifacts: "IRH-*-Setup.*"
-      #    tag: ${{ inputs.nextVersion }}
-      #    makeLatest: true
-      #    generateReleaseNotes: true
-
+          files: ${{ env.BinaryPatternName }}
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ${{ env.BinaryPatternName }}
+
