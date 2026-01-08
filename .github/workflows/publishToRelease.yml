@@ -21,7 +21,7 @@ jobs:
     with: 
       dotnetVersion: 9
       nextReleaseMode: patch
-      irhCliPackName: "IRH-win-Setup-x64.exe"
+      irhCliPackName: "IRH-win-Setup.exe"
   release:
     needs: win-64
     runs-on: self-hosted
@@ -29,7 +29,7 @@ jobs:
       - name: DownloadArtifact
         uses: actions/download-artifact@v7
         with:
-          name: "win-64_IRH-win-Setup_.exe"
+          name: "win-64_IRH-win-Setup.exe"
       #- name: CreateRelease
       #  uses: softprops/action-gh-release@v2
       #  with:
