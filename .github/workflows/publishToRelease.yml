@@ -17,6 +17,6 @@ on:
 #Calling Reusable
 jobs:
   win-64:
-    uses: "./.github/workflows/buildAndUpload_win-x64.yml"
+    uses: "./.github/workflows/buildAndUploud_win-x64.yml"
 
  
