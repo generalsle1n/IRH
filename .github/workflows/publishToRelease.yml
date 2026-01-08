@@ -31,21 +31,7 @@ jobs:
   #    nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
       
   release:
-    permissions:
-      contents: write
     needs: [getNextVersion]
-    runs-on: self-hosted
-    steps:
-      - name: DownloadArtifact
-        uses: actions/download-artifact@v7
-        #with:
-          #name: "win-64_IRH-win-Setup.exe"
-      - name: echo
-        run: "echo ${{ needs.getNextVersion.outputs.nextVersion }}"
-      - name: CreateRelease
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ needs.getNextVersion.outputs.nextVersion }}
-          generate_release_notes: true
-          make_latest: true
-          files: "*"
+    uses: "./.github/workflows/computeNextRelease.yml"
+    with:
+      nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
