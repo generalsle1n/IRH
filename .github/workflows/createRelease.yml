@@ -22,7 +22,7 @@ jobs:
       - name: Download Setup Files
         uses: actions/download-artifact@v7
         with:
-          pattern: "IRH-*-Setup.*"
+          pattern: ${{ env.BinaryPatternName }}
       
       - name: CreateRelease
         uses: softprops/action-gh-release@v2
