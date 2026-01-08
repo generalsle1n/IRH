@@ -59,10 +59,7 @@ jobs:
       #Rename File
       - name: Rename Setup File
         run: "move ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }} ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliFinalSetupName }}"
-      - name: dir
-        run: "dir ${{ inputs.irhCliPackedFolder }}"
-      - name: dir2
-        run: "dir"
+
       #Upload to Artifacts
       - name: UploadInstaller
         uses: actions/upload-artifact@v6
