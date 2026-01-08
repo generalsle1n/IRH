@@ -32,12 +32,12 @@ jobs:
     steps:
       - name: DownloadArtifact
         uses: actions/download-artifact@v7
-        with:
-          name: "win-64_IRH-win-Setup.exe"
+        #with:
+          #name: "win-64_IRH-win-Setup.exe"
       - name: CreateRelease
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.getNextVersion.outputs.nextVersion }}
           generate_release_notes: true
           make_latest: true
-          files: "win-64_IRH-win-Setup.exe"
+          files: "*"
