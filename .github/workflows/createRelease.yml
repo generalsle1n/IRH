@@ -26,6 +26,11 @@ jobs:
       #    make_latest: true
       #    files: "IRH-*-Setup.*"
 
+      - name: Download Setup Files
+        uses: actions/download-artifact@v7
+        with:
+          pattern: "IRH-*-Setup.*
+      
       - name: Release
         uses: ncipollo/release-action@v1
         with:
