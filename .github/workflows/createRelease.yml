@@ -1,0 +1,32 @@
+name: Create Release
+on:
+  workflow_call:
+    inputs:
+      nextVersion:
+        type: string
+        required: true
+jobs:
+  createRelease:
+    name: Create Release
+    
+    permissions: 
+      contents: write
+    
+    runs-on: self-hosted
+    
+    steps:
+      - name: DownloadArtifact
+        uses: actions/download-artifact@v7
+        #with:
+          #name: "win-64_IRH-win-Setup.exe"
+      - name: echo
+        run: "echo ${{ needs.getNextVersion.outputs.nextVersion }}"
+      - name: CreateRelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ intpus.nextVersion }}
+          generate_release_notes: true
+          make_latest: true
+          files: "*"
+    
+        
