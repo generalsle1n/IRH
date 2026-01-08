@@ -16,20 +16,24 @@ on:
       - "Issue#62"
 
 jobs:
-  win-64:
-    uses: "./.github/workflows/buildAndUploud_win-x64.yml"
-    with: 
-      dotnetVersion: 9
-      nextReleaseMode: patch
-      irhCliPackName: "IRH-win-Setup.exe"
-  release:
-    needs: win-64
-    runs-on: self-hosted
-    steps:
-      - name: DownloadArtifact
-        uses: actions/download-artifact@v7
-        with:
-          name: "win-64_IRH-win-Setup.exe"
+  getNextVersion:
+    uses: "./.github/workflows/computeNextRelease.yml"
+    with:
+      nextReleaseMode: "patch"
+  #win-64:
+  #  uses: "./.github/workflows/buildAndUploud_win-x64.yml"
+  #  with: 
+  #    dotnetVersion: 9
+  #    nextReleaseMode: patch
+  #    irhCliPackName: "IRH-win-Setup.exe"
+  #release:
+  #  needs: win-64
+  #  runs-on: self-hosted
+  #  steps:
+  #    - name: DownloadArtifact
+  #      uses: actions/download-artifact@v7
+  #      with:
+  #        name: "win-64_IRH-win-Setup.exe"
       #- name: CreateRelease
       #  uses: softprops/action-gh-release@v2
       #  with:
