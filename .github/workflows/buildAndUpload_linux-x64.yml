@@ -1,0 +1,68 @@
+on:
+  workflow_call:
+    inputs:
+      dotnetVersion:
+        required: true
+        type: string
+      nextReleaseMode:
+        required: true
+        type: string
+      irhCliReleaseCommand:
+        type: string
+        default: "dotnet publish IRH\\IRH.csproj"
+      vpkInstallCommand:
+        type: string
+        default: "dotnet tool install -g vpk"
+      irhCliPackName:
+        type: string
+        required: true
+      irhCliPackedFolder:
+        type: string
+        default: "Releases\\"
+      irhCliReleaseFolder:
+        type: string
+        default: "IRH\\bin\\Release\\net9.0\\publish\\"
+      nextVersion:
+        type: string
+        required: true
+      irhCliFinalSetupName:
+        type: string
+        required: true
+        
+jobs:
+  buildAndUpload:
+    runs-on: ubuntu-latest
+    steps:
+      #Clone Repository
+      - uses: actions/checkout@v6.0.1
+        with:
+          lfs: true
+          
+      #Install .Net with Version 9.X
+      - name: CreateDotNetEnvironment
+        uses: actions/setup-dotnet@v5
+        with: 
+          dotnet-version: ${{ inputs.dotnetVersion }}
+
+      #Build
+      - name: BuildIRHCli
+        run: ${{ inputs.irhCliReleaseCommand }}
+        
+      #Install DotnetTool
+      - name: InstallVeloPack
+        run: ${{ inputs.vpkInstallCommand }}
+
+      #Pack Application
+      - name: CreateVeloPackRelease
+        run: "vpk pack --noPortable --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
+
+      #Rename File
+      - name: Rename Setup File
+        run: "mv ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }} ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliFinalSetupName }}"
+
+      #Upload to Artifacts
+      - name: UploadInstaller
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ inputs.irhCliFinalSetupName }}
+          path: "Releases\\${{ inputs.irhCliFinalSetupName }}"
