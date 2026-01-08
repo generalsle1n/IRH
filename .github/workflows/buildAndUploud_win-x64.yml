@@ -69,6 +69,6 @@ jobs:
       - name: UploadInstaller
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.irhCliPackName }}
-          path: ${{ inputs.irhCliPackedFolder }}win-64_${{ inputs.irhCliPackName }}
+          name: win-64_${{ inputs.irhCliPackName }}
+          path: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }}
           compression-level: 0
