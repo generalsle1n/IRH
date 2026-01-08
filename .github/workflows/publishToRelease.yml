@@ -22,6 +22,7 @@ jobs:
       nextReleaseMode: "patch"
   
   win-64:
+    needs: getNextVersion
     uses: "./.github/workflows/buildAndUploud_win-x64.yml"
     with: 
       dotnetVersion: 9
@@ -30,7 +31,7 @@ jobs:
       nextVersion: ${{ steps.getNextVersion.outputs.nextVersion }}
       
   release:
-    needs: getNextVersion
+    needs: [win-64]
     runs-on: self-hosted
     steps:
       - name: DownloadArtifact
