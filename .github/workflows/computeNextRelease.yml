@@ -5,8 +5,9 @@ on:
         required: true
         type: string
     outputs:
-      nextVersion: ${{ jobs.IncreaseRelease.outputs.next-version }}
-
+      nextVersion: 
+        value: ${{ jobs.IncreaseRelease.outputs.next-version }}
+        
 jobs:
   computeNextRelease:
     runs-on: self-hosted
