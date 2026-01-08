@@ -15,7 +15,7 @@ on:
         default: "dotnet tool install -g vpk"
       irhCliPackName:
         type: string
-        default: "IRH-win-Setup.exe"
+        required: true
       irhCliPackedFolder:
         type: string
         default: "Releases\\"
@@ -70,5 +70,5 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: ${{ inputs.irhCliPackName }}
-          path: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliPackName }}
+          path: ${{ inputs.irhCliPackedFolder }}win-64_${{ inputs.irhCliPackName }}
           compression-level: 0
