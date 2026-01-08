@@ -18,13 +18,23 @@ jobs:
     runs-on: self-hosted
     
     steps:
-      - name: CreateRelease
-        uses: softprops/action-gh-release@v2
+      #- name: CreateRelease
+      #  uses: softprops/action-gh-release@v2
+      #  with:
+      #    tag_name: ${{ inputs.nextVersion }}
+      #    generate_release_notes: true
+      #    make_latest: true
+      #    files: "IRH-*-Setup.*"
+
+      - name: Release
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ inputs.nextVersion }}
-          generate_release_notes: true
-          make_latest: true
-          files: "IRH-*-Setup.*"
+          artifacts: "IRH-*-Setup.*"
+          bodyFile: "body.md"
+          tag: ${{ inputs.nextVersion }}
+          makeLatest: true
+          generateReleaseNotes: true
+
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v5
