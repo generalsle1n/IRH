@@ -54,7 +54,7 @@ jobs:
 
       #Pack Application
       - name: CreateVeloPackRelease
-        run: "vpk pack --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
+        run: "vpk pack --noPortable --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
 
       #Rename File
       - name: Rename Setup File
@@ -67,5 +67,5 @@ jobs:
       - name: UploadInstaller
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.irhCliFinalSetupName }}"
-          path: ${{ inputs.irhCliFinalSetupName }}"
+          name: ${{ inputs.irhCliFinalSetupName }}
+          path: "Releases\\${{ inputs.irhCliFinalSetupName }}"
