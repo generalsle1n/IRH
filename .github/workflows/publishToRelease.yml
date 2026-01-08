@@ -15,5 +15,8 @@ on:
       - "master"
       - "Issue#62"
 
-#jobs:
+jobs:
+  win-64:
+    uses: "./.github/workflows/jobs/buildAndUpload_win-x64.yml"
+
  
