@@ -18,26 +18,28 @@ jobs:
     runs-on: self-hosted
     
     steps:
-      #- name: CreateRelease
-      #  uses: softprops/action-gh-release@v2
-      #  with:
-      #    tag_name: ${{ inputs.nextVersion }}
-      #    generate_release_notes: true
-      #    make_latest: true
-      #    files: "IRH-*-Setup.*"
-
       - name: Download Setup Files
         uses: actions/download-artifact@v7
         with:
           pattern: "IRH-*-Setup.*"
       
-      - name: Release
-        uses: ncipollo/release-action@v1
+      - name: CreateRelease
+        uses: softprops/action-gh-release@v2
         with:
-          artifacts: "IRH-*-Setup.*"
-          tag: ${{ inputs.nextVersion }}
-          makeLatest: true
-          generateReleaseNotes: true
+          tag_name: ${{ inputs.nextVersion }}
+          generate_release_notes: true
+          make_latest: true
+          files: "IRH-*-Setup.*"
+
+      
+      
+      #- name: Release
+      #  uses: ncipollo/release-action@v1
+      #  with:
+      #    artifacts: "IRH-*-Setup.*"
+      #    tag: ${{ inputs.nextVersion }}
+      #    makeLatest: true
+      #    generateReleaseNotes: true
 
 
       - name: Delete Artifacts
