@@ -19,5 +19,5 @@ jobs:
   win-64:
     uses: "./.github/workflows/buildAndUploud_win-x64.yml"
     with: 
-      dotnetVersion: ${{ env.CurrentDotnetVersion }}
-      nextReleaseMode: ${{ env.DefaultNextReleaseMode }} 
+      dotnetVersion: 9
+      nextReleaseMode: patch
