@@ -28,7 +28,7 @@ jobs:
       dotnetVersion: 9
       nextReleaseMode: patch
       irhCliPackName: "IRH-win-Setup.exe"
-      nextVersion: ${{ steps.getNextVersion.outputs.nextVersion }}
+      nextVersion: ${{ jobs.getNextVersion.outputs.nextVersion }}
       
   release:
     needs: [win-64]
