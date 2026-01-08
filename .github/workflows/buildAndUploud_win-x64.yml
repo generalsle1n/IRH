@@ -65,4 +65,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: ${{ inputs.irhCliFinalSetupName }}"
-          path: ${{ inputs.irhCliPackedFolder }}${{ inputs.irhCliFinalSetupName }}"
+          path: ${{ inputs.irhCliFinalSetupName }}"
