@@ -30,7 +30,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "IRH-*-Setup.*"
-          bodyFile: "body.md"
           tag: ${{ inputs.nextVersion }}
           makeLatest: true
           generateReleaseNotes: true
