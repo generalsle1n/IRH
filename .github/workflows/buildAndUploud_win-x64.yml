@@ -4,9 +4,6 @@ on:
       dotnetVersion:
         required: true
         type: string
-      nextReleaseMode:
-        required: true
-        type: string
       irhCliReleaseCommand:
         type: string
         default: "dotnet publish IRH\\IRH.csproj"
