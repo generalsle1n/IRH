@@ -21,7 +21,6 @@ jobs:
     uses: "./.github/workflows/buildAndUploud_win-x64.yml"
     with: 
       dotnetVersion: 9
-      nextReleaseMode: patch
       irhCliPackName: "IRH-win-Setup.exe"
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
       irhCliFinalSetupName: "IRH-win_64-Setup.exe"
@@ -31,7 +30,6 @@ jobs:
     uses: "./.github/workflows/buildAndUpload_linux-x64.yml"
     with: 
       dotnetVersion: 9
-      nextReleaseMode: patch
       irhCliPackName: "IRH-linux-Setup.out"
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
       irhCliFinalSetupName: "IRH-linux_64-Setup.out"
