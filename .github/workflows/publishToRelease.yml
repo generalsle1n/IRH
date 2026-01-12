@@ -31,9 +31,9 @@ jobs:
     uses: "./.github/workflows/buildAndUpload_linux-x64.yml"
     with: 
       dotnetVersion: 9
-      irhCliPackName: "IRH-linux-Setup.out"
+      irhCliPackName: "IRH.AppImage"
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
-      irhCliFinalSetupName: "IRH-linux_64-Setup.out"
+      irhCliFinalSetupName: "IRH-linux_64.out"
       irhCliPackId: "IRH"
       
   release:
