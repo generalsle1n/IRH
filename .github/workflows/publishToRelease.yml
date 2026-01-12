@@ -18,7 +18,7 @@ jobs:
   
   win-64:
     needs: getNextVersion
-    uses: "./.github/workflows/buildAndUploud_win-x64.yml"
+    uses: "./.github/workflows/buildAndUpload_win-x64.yml"
     with: 
       dotnetVersion: 9
       irhCliPackName: "IRH-win-Setup.exe"
