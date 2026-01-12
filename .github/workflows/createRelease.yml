@@ -5,9 +5,9 @@ on:
       nextVersion:
         type: string
         required: true
-
-env: 
-  BinaryPatternName: "IRH-*-Setup.*"
+      binaryPatternName:
+        type: string
+        required: true
   
 jobs:
   createRelease:
@@ -30,10 +30,10 @@ jobs:
           tag_name: ${{ inputs.nextVersion }}
           generate_release_notes: true
           make_latest: true
-          files: ${{ env.BinaryPatternName }}
+          files: ${{ inputs.binaryPatternName }}
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v5
         with:
-          name: ${{ env.BinaryPatternName }}
+          name: ${{ inputs.binaryPatternName }}
 
