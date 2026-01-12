@@ -43,4 +43,4 @@ jobs:
     uses: "./.github/workflows/createRelease.yml"
     with:
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
-      binaryPathPattern: "IRH-*-Setup.*"
+      binaryPatternName: "IRH-*-Setup.*"
