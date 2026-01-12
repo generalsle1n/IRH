@@ -25,6 +25,9 @@ on:
       irhCliFinalSetupName:
         type: string
         required: true
+      irhCliPackId:
+        type: string
+        required: true
         
 jobs:
   buildAndUpload:
@@ -51,7 +54,7 @@ jobs:
 
       #Pack Application
       - name: CreateVeloPackRelease
-        run: "vpk pack --noPortable --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
+        run: "vpk pack --packId ${{ inputs.irhCliPackId }} --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
 
       #Rename File
       - name: Rename Setup File
