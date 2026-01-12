@@ -28,7 +28,7 @@ on:
         
 jobs:
   buildAndUpload:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     steps:
       #Clone Repository
       - uses: actions/checkout@v6.0.1
