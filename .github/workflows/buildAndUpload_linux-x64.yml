@@ -51,7 +51,7 @@ jobs:
 
       #Pack Application
       - name: CreateVeloPackRelease
-        run: "dotnet tool run vpk pack --noPortable --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
+        run: "dotnet tool run vpk pack --packId IRH --packVersion ${{ inputs.nextVersion }} --packDir ${{ inputs.irhCliReleaseFolder }}"
 
       #Rename File
       - name: Rename Setup File
