@@ -1,5 +1,5 @@
 name: "Build Release and Push to Release"
-#
+
 env:
   CurrentDotnetVersion: 9
   InstallVPKCommand: "dotnet tool install -g vpk"
