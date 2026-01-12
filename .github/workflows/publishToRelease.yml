@@ -33,7 +33,7 @@ jobs:
       dotnetVersion: 9
       irhCliPackName: "IRH.AppImage"
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
-      irhCliFinalSetupName: "IRH-linux_64.out"
+      irhCliFinalSetupName: "IRH-linux_64-Setup.out"
       irhCliPackId: "IRH"
       
   release:
@@ -43,3 +43,4 @@ jobs:
     uses: "./.github/workflows/createRelease.yml"
     with:
       nextVersion: ${{ needs.getNextVersion.outputs.nextVersion }}
+      binaryPathPattern: "IRH-*-Setup.*"
